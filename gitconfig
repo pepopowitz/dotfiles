@@ -1,0 +1,16 @@
+[user]
+	name = Steven Hicks
+	email = steven.j.hicks@gmail.com
+[alias]
+	log1 = "!git --no-pager log --oneline -n 10"
+	logtree = "!git --no-pager log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -n 10"
+	syncup = "!git checkout master && git pull upstream master && git push origin"
+	s = "status -s"
+	st = "stash push --include-untracked"
+	discard = "!git clean -df && git checkout -- ."
+	branch-name = rev-parse --abbrev-ref HEAD
+	publish = !"git push --set-upstream origin $(git branch-name)"
+	fix = "commit --amend --no-edit"
+	delete-merged-branches = !git branch --merged master | grep -v -e 'master' -e '\\*' | xargs -n 1 git nuke
+	list-merged-branches = !git branch --merged master | grep -v -e 'master' -e '\\*'
+	nuke = !git branch -D $1 && git push origin --delete
