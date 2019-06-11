@@ -14,3 +14,4 @@
 	delete-merged-branches = !git branch --merged master | grep -v -e 'master' -e '\\*' | xargs -n 1 git nuke
 	list-merged-branches = !git branch --merged master | grep -v -e 'master' -e '\\*'
 	nuke = !git branch -D $1 && git push origin --delete
+	alias = config --get-regexp ^alias\\.
