@@ -34,3 +34,5 @@ alias gcam='git add . && git commit -am'
 alias today='jrnl -from today --export json | jq '"'"'.entries[] | "- \(.title) \(.body)" | rtrimstr("\n") | rtrimstr("\n")'"'"' -r '
 
 alias today-slack='today | pbcopy'
+
+alias stashes="git stash list | head -n 5" 

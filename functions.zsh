@@ -38,3 +38,28 @@ function branch() {
 function gkm() {
   git commit -m $1
 }
+
+function stash() {
+  git add .
+  if [[ $1 ]] then 
+    git stash push -m "$1"
+  else
+    git stash push
+  fi
+}
+
+function unstash() {
+  re='^[0-9]+$'
+  if [[ $1 ]] then
+    if [[ $1 =~ $re ]] then
+      echo "Applying stash@{$1}..."
+      git stash apply stash@{$1}
+    else
+      echo "Applying stash named "$1"..."
+      git stash apply $(git stash list | grep "$1" | cut -d: -f1)
+    fi
+  else
+    echo "Applying most recent stash..."
+    git stash apply
+  fi
+}
