@@ -35,4 +35,6 @@ alias today='jrnl -from today --export json | jq '"'"'.entries[] | "- \(.title) 
 
 alias today-slack='today | pbcopy'
 
+alias yesterday='jrnl -from yesterday -to yesterday --export json | jq '"'"'.entries[] | "- \(.title) \(.body)" | rtrimstr("\n") | rtrimstr("\n")'"'"' -r '
+
 alias stashes="git stash list | head -n 5" 
