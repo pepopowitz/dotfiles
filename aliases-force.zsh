@@ -23,10 +23,10 @@ alias unlk-p="artsy palette && yarn workspace @artsy/palette unlink"
 alias watch-p="artsy palette && yarn workspace @artsy/palette watch"
 
 # Panic buttons
-alias tableflip="yarn cache clean && rm -rf ./node_modules && yarn --check-files"
+alias tableflip="echo '(╯°□°)╯︵ ┻━┻' && yarn cache clean && rm -rf ./node_modules && yarn --check-files && yarn test --clearCache"
 alias unlk-all="unlk-fr && unlk-rp && unlk-r && unlk-p"
 
-# TODO: 
+# TODO:
 
 # dev-palette/dev-p
 # dev-palette-docs/dev-pd

@@ -27,10 +27,6 @@ function pulls() {
   fi
 }
 
-function gdc() {
-  git-duet commit -m $1
-}
-
 function branch() {
   git checkout -b $1
 }
@@ -41,7 +37,7 @@ function gkm() {
 
 function stash() {
   git add .
-  if [[ $1 ]] then 
+  if [[ $1 ]] then
     git stash push -m "$1"
   else
     git stash push
@@ -62,4 +58,40 @@ function unstash() {
     echo "Applying most recent stash..."
     git stash apply
   fi
+}
+
+function mkd () {
+    mkdir -p "$1"
+    cd "$1"
+}
+
+function rebaseonmaster() {
+  if [[ `git status --porcelain` ]]; then
+    local needToStashAndUnstash=true
+  else
+    local needToStashAndUnstash=false
+  fi
+
+  if [[ "$needToStashAndUnstash" = true ]]
+  then
+    stash
+  fi
+
+  echo "syncing master branch to upstream...."
+  syncup
+
+  git checkout -
+
+  echo "rebasing on master...."
+  git rebase master
+
+  if [[ "$needToStashAndUnstash" = true ]]
+  then
+    unstash
+  fi
+}
+
+function branches() {
+  COUNT=${1:-5}
+  git branch --sort=-committerdate | head -n $COUNT
 }

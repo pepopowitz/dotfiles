@@ -2,7 +2,7 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # This adds the python bin folder to the $PATH  
-export PATH=~/Library/Frameworks/Python.framework/Versions/2.7/bin/:$PATH
+export PATH=~/Library/Frameworks/Python.framework/Versions/2.7/bin/:/usr/local/bin:~/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/stevenhicks/.oh-my-zsh"
@@ -67,44 +67,21 @@ ZSH_THEME="simple"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  osx
 )
 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# export MANPATH="/usr/local/man:$MANPATH"
+# sjh remove me
+# eval "$(rbenv init -)"
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-eval "$(rbenv init -)"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+# sjh todo - remove nvm https://github.com/nvm-sh/nvm/issues/298
+# sjh remove me
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/macos-install.html
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home
@@ -117,3 +94,5 @@ source ~/.aliases-force.zsh
 source ~/.private.zshrc
 
 ZSH_THEME_TERM_TITLE_IDLE="%~"
+
+. $(brew --prefix asdf)/asdf.sh
