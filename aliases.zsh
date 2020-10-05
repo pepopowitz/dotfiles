@@ -5,9 +5,6 @@ alias pgstop="pg_ctl -D /usr/local/var/postgres stop -s -m fast && echo 'postgre
 
 alias lsg="echo 'npm ls -g --depth=0\n' && npm ls -g --depth=0"
 
-alias syncup="git syncup"
-alias sync="git sync"
-
 # alias pr="open `git config remote.origin.url`/compare/$(git rev-parse --abbrev-ref HEAD)"
 
 gh(){

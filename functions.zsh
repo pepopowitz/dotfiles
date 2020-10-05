@@ -65,6 +65,16 @@ function mkd () {
     cd "$1"
 }
 
+function sync() {
+  if [[ `git remote -v | grep upstream` ]]; then 
+    echo "syncing to upstream..."
+    git syncup
+  else 
+    echo "syncing to origin..."
+    git sync
+  fi
+}
+
 function rebaseonmaster() {
   if [[ `git status --porcelain` ]]; then
     local needToStashAndUnstash=true
@@ -78,7 +88,7 @@ function rebaseonmaster() {
   fi
 
   echo "syncing master branch to upstream...."
-  syncup
+  sync
 
   git checkout -
 
