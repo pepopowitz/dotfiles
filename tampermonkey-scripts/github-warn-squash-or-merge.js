@@ -3,7 +3,7 @@
 // @namespace    http://stevenhicks.me/
 // @version      0.1
 // @description  Draw attention to merge/squash button
-// @author       You
+// @author       Steven Hicks
 // @match        https://github.com/artsy/*/pull/*
 // @grant        none
 // ==/UserScript==
