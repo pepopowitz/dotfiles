@@ -18,3 +18,15 @@
 	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 [pull]
 	ff = only
+[github]
+	user = pepopowitz
+
+# delta as a replacement for diff:
+[core]
+  pager = delta
+[delta]
+  syntax-theme = Monokai Extended Light
+	side-by-side = true
+	line-numbers = true
+[interactive]
+  diffFilter = delta --color-only
