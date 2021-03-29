@@ -66,16 +66,23 @@ function mkd () {
 }
 
 function sync() {
-  if [[ `git remote -v | grep upstream` ]]; then 
+
+  local mainline=$(main_or_master)
+
+  git checkout $mainline
+
+  if [[ `git remote -v | grep upstream` ]]; then
     echo "syncing to upstream..."
-    git syncup
-  else 
+    git pull upstream $mainline
+    git push origin
+  else
     echo "syncing to origin..."
-    git sync
+    git pull origin $mainline
   fi
 }
 
 function rebaseonmaster() {
+  local mainline=$(main_or_master)
   if [[ `git status --porcelain` ]]; then
     local needToStashAndUnstash=true
   else
@@ -87,13 +94,13 @@ function rebaseonmaster() {
     stash
   fi
 
-  echo "syncing master branch to upstream...."
+  echo "syncing $mainline branch to upstream...."
   sync
 
   git checkout -
 
-  echo "rebasing on master...."
-  git rebase master
+  echo "rebasing on $mainline...."
+  git rebase $mainline
 
   if [[ "$needToStashAndUnstash" = true ]]
   then
@@ -104,4 +111,23 @@ function rebaseonmaster() {
 function branches() {
   COUNT=${1:-5}
   git branch --sort=-committerdate | head -n $COUNT
+}
+
+function branch_exists() {
+    local branch=${1}
+    local exists=$(git branch --list ${branch})
+
+    if [[ -z ${exists} ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+function main_or_master() {
+  if (branch_exists main); then
+    echo 'main'
+  else
+    echo 'master'
+  fi
 }
