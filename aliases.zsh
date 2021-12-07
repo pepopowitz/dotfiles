@@ -22,10 +22,12 @@ alias pr='gh compare/$(git symbolic-ref --quiet --short HEAD )'
 
 # git aliases
 alias gpo='git push origin'
-
 alias gpo1='git push --set-upstream origin $(git symbolic-ref --quiet --short HEAD )'
 
 alias gcam='git add . && git commit -am'
+alias gcam!='git add . && git commit --no-verify -am'
+alias gkm='git commit -m'
+alias gkm!='git commit --no-verify -m'
 
 # jrnl aliases
 #alias today='jrnl -from today --export json | jq .entries[].title -r | awk '"'"'{print "- "$0""}'"'"' '
@@ -37,7 +39,7 @@ alias yesterday='jrnl -from yesterday -to yesterday --export json | jq '"'"'.ent
 
 alias edit-jrnl='code ~/journal.txt'
 
-alias stashes="git stash list | head -n 5" 
+alias stashes="git stash list | head -n 5"
 
 # hokusai consoles
 
@@ -46,6 +48,7 @@ alias console-prod="hokusai production run \"bundle exec rails console\" --tty"
 
 alias use-xcode-10="sudo xcode-select -s /Applications/XCode10/XCode.app"
 alias use-xcode-11="sudo xcode-select -s /Applications/XCode11/XCode.app"
+alias ios-sim="open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app"
 
 # more memorable name for osx plugin commands
 alias finder="ofd"
@@ -58,3 +61,4 @@ alias bxr="bundle exec rspec"
 # brew aliases
 alias bsl="brew services list"
 alias bs="brew services"
+alias flip_mongo_table="rm /usr/local/var/mongodb/mongod.lock && brew services restart mongodb-community@4.0"

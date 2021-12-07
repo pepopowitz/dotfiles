@@ -31,10 +31,6 @@ function branch() {
   git checkout -b $1
 }
 
-function gkm() {
-  git commit -m $1
-}
-
 function stash() {
   git add .
   if [[ $1 ]] then

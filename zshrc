@@ -1,7 +1,7 @@
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# This adds the python bin folder to the $PATH  
+# This adds the python bin folder to the $PATH
 export PATH=~/Library/Frameworks/Python.framework/Versions/2.7/bin/:/usr/local/bin:~/bin:$PATH
 
 # Path to your oh-my-zsh installation.
@@ -74,17 +74,16 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
-# sjh remove me
-# eval "$(rbenv init -)"
-
-# sjh todo - remove nvm https://github.com/nvm-sh/nvm/issues/298
-# sjh remove me
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
 # https://docs.aws.amazon.com/corretto/latest/corretto-8-ug/macos-install.html
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/amazon-corretto-8.jdk/Contents/Home
+
+# Android development: https://github.com/artsy/eigen/blob/877327b810ba4ab9fc630c231a912d70368ed2e1/docs/getting_started.md#android-studio-version
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$JAVA_HOME/bin
 
 source ~/.aliases.zsh
 source ~/.functions.zsh

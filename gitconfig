@@ -6,7 +6,7 @@
 	logtree = "!git --no-pager log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit -n 10"
 	s = "status -s"
 	st = "stash push --include-untracked"
-	discard = "!git clean -df && git checkout -- ."
+	discard = !git clean -df . && git restore --staged --worktree .
 	branch-name = rev-parse --abbrev-ref HEAD
 	publish = !"git push --set-upstream origin $(git branch-name)"
 	fix = "commit --amend --no-edit"
@@ -28,3 +28,5 @@
 	line-numbers = true
 [interactive]
   diffFilter = delta --color-only
+[init]
+	defaultBranch = main
