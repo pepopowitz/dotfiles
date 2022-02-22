@@ -62,3 +62,7 @@ alias bxr="bundle exec rspec"
 alias bsl="brew services list"
 alias bs="brew services"
 alias flip_mongo_table="rm /usr/local/var/mongodb/mongod.lock && brew services restart mongodb-community@4.0"
+
+# calendar magic
+alias upcoming="cal -A 2"
+alias past="cal -B 2"
