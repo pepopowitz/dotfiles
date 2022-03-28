@@ -10,8 +10,8 @@
 	branch-name = rev-parse --abbrev-ref HEAD
 	publish = !"git push --set-upstream origin $(git branch-name)"
 	fix = "commit --amend --no-edit"
-	delete-merged-branches = !git branch --merged master | grep -v -e 'master' -e '\\*' | xargs -n 1 git nuke
-	list-merged-branches = !git branch --merged master | grep -v -e 'master' -e '\\*'
+	delete-merged-branches = !git branch --merged main | grep -v -e 'main' -e '\\*' | xargs -n 1 git nuke
+	list-merged-branches = !git branch --merged main | grep -v -e 'main' -e '\\*'
 	nuke = !git branch -D $1 && git push origin --delete
 	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 [pull]
