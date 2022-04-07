@@ -1,11 +1,5 @@
 {
-  "current": [
-    {
-      "email": "oksana@artsymail.com",
-      "name": "Oksana",
-      "username": "oksana"
-    }
-  ],
+  "current": [],
   "known": [
     {
       "email": "anandaroop.roy+github@gmail.com",
@@ -13,94 +7,9 @@
       "username": "roop"
     },
     {
-      "email": "christina@artsymail.com",
-      "name": "Christina Thompson",
-      "username": "christina"
-    },
-    {
-      "email": "arjelks@gmail.com",
-      "name": "Ashley Jelks",
-      "username": "ashley"
-    },
-    {
       "email": "jon.allured@gmail.com",
       "name": "Jon Allured",
       "username": "jon"
-    },
-    {
-      "email": "zephraph@gmail.com",
-      "name": "Justin Bennett",
-      "username": "justin"
-    },
-    {
-      "email": "barry@artsymail.com",
-      "name": "Barry Hoggard",
-      "username": "barry"
-    },
-    {
-      "email": "damassi.pappas@gmail.com",
-      "name": "Christopher Pappas",
-      "username": "chris"
-    },
-    {
-      "email": "ash@artsymail.com",
-      "name": "Ash Furrow",
-      "username": "ash"
-    },
-    {
-      "email": "sutherlandanalisa@gmail.com",
-      "name": "Ana Lisa Sutherland",
-      "username": "analisa"
-    },
-    {
-      "email": "brian.beckerle@artsymail.com",
-      "name": "Brian Beckerle",
-      "username": "brian"
-    },
-    {
-      "email": "flavioclesio@yahoo.com",
-      "name": "Flavio Clesio",
-      "username": "flavio"
-    },
-    {
-      "email": "sweir27@gmail.com",
-      "name": "Sarah Weir",
-      "username": "sarah"
-    },
-    {
-      "email": "anna.carey@artsymail.com",
-      "name": "Anna Carey",
-      "username": "anna"
-    },
-    {
-      "email": "ole.richter91@gmail.com",
-      "name": "Ole Richter",
-      "username": "ole"
-    },
-    {
-      "email": "ansor4@gmail.com",
-      "name": "Anson Wang",
-      "username": "anson"
-    },
-    {
-      "email": "mdole7@gmail.com",
-      "name": "Matt Dole",
-      "username": "mdole"
-    },
-    {
-      "email": "sarah.haq@artsymail.com",
-      "name": "Sarah Haq",
-      "username": "shaq"
-    },
-    {
-      "email": "laura@artsymail.com",
-      "name": "Laura Bhayani",
-      "username": "laura"
-    },
-    {
-      "email": "oksana@artsymail.com",
-      "name": "Oksana",
-      "username": "oksana"
     },
     {
       "email": "pvinis@gmail.com",
