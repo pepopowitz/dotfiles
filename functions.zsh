@@ -1,14 +1,14 @@
-
-function artsy() {
-  cd ~/_sjh/dev/artsy/$1
-}
-
-function talks() {
-  cd ~/_sjh/dev/personal/talks/$1
+function camunda() {
+  cd ~/sjh/dev/camunda/$1
 }
 
 function sjh() {
-  cd ~/_sjh/dev/personal/$1
+  cd ~/sjh/dev/personal/$1
+}
+
+function mkd () {
+    mkdir -p "$1"
+    cd "$1"
 }
 
 function findport() {
@@ -19,111 +19,26 @@ function killport() {
   kill $(lsof -t -i :$1)
 }
 
-function pulls() {
-  if [[ $1 ]] then
-    (artsy $1; hub browse -- pulls)
-  else
-    hub browse -- pulls
-  fi
+# ---
+
+# borrowed from macos oh-my-zsh plugin
+
+# pfd: gets the path from Finder
+#  https://github.com/ohmyzsh/ohmyzsh/blob/b3999a4b156185b617a5608317497399f88dc8fe/plugins/macos/macos.plugin.zsh#L178
+function pfd() {
+  osascript 2>/dev/null <<EOF
+    tell application "Finder"
+      return POSIX path of (insertion location as alias)
+    end tell
+EOF
 }
 
-function branch() {
-  git checkout -b $1
+# cd-finder: cd to the path from Finder
+#  named cdf in oh-my-zsh/macos plugin
+#  https://github.com/ohmyzsh/ohmyzsh/blob/b3999a4b156185b617a5608317497399f88dc8fe/plugins/macos/macos.plugin.zsh#L199
+function cd-finder() {
+  cd "$(pfd)"
 }
 
-function stash() {
-  git add .
-  if [[ $1 ]] then
-    git stash push -m "$1"
-  else
-    git stash push
-  fi
-}
-
-function unstash() {
-  re='^[0-9]+$'
-  if [[ $1 ]] then
-    if [[ $1 =~ $re ]] then
-      echo "Applying stash@{$1}..."
-      git stash apply stash@{$1}
-    else
-      echo "Applying stash named "$1"..."
-      git stash apply $(git stash list | grep "$1" | cut -d: -f1)
-    fi
-  else
-    echo "Applying most recent stash..."
-    git stash apply
-  fi
-}
-
-function mkd () {
-    mkdir -p "$1"
-    cd "$1"
-}
-
-function sync() {
-
-  local mainline=$(main_or_master)
-
-  git checkout $mainline
-
-  if [[ `git remote -v | grep upstream` ]]; then
-    echo "syncing to upstream..."
-    git pull upstream $mainline
-    git push origin
-  else
-    echo "syncing to origin..."
-    git pull origin $mainline
-  fi
-}
-
-function rebaseonmaster() {
-  local mainline=$(main_or_master)
-  if [[ `git status --porcelain` ]]; then
-    local needToStashAndUnstash=true
-  else
-    local needToStashAndUnstash=false
-  fi
-
-  if [[ "$needToStashAndUnstash" = true ]]
-  then
-    stash
-  fi
-
-  echo "syncing $mainline branch to upstream...."
-  sync
-
-  git checkout -
-
-  echo "rebasing on $mainline...."
-  git rebase $mainline
-
-  if [[ "$needToStashAndUnstash" = true ]]
-  then
-    unstash
-  fi
-}
-
-function branches() {
-  COUNT=${1:-5}
-  git branch --sort=-committerdate | head -n $COUNT
-}
-
-function branch_exists() {
-    local branch=${1}
-    local exists=$(git branch --list ${branch})
-
-    if [[ -z ${exists} ]]; then
-        return 1
-    else
-        return 0
-    fi
-}
-
-function main_or_master() {
-  if (branch_exists main); then
-    echo 'main'
-  else
-    echo 'master'
-  fi
-}
+# hey steve you also used to use a function named ofd from oh-my-zsh/macos, it opened finder in the current directory.
+#   you don't need that anymore, just use `open _path_`. 
