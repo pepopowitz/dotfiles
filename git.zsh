@@ -5,7 +5,7 @@ alias web='gh repo view --web'
 alias webbranch='gh repo view --web --branch $(git symbolic-ref --quiet --short HEAD )'
 
 # Open PR for current branch in browser
-alias pr='gh pr create --web'
+alias open-pr='gh pr create --web'
 
 # Browse pulls for current repo
 alias pulls='gh pr list --web'
