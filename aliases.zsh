@@ -13,3 +13,6 @@ alias bs="brew services"
 # calendar magic
 alias upcoming="cal -A 2"
 alias past="cal -B 2"
+
+# technology is disappointing
+alias flip-audio-table="sudo killall coreaudiod && sudo launchctl stop com.apple.bluetoothd && sudo launchctl start com.apple.bluetoothd"
