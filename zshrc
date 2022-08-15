@@ -10,9 +10,10 @@ setopt HIST_EXPIRE_DUPS_FIRST
 ## initialize autocompletion
 autoload -U compinit && compinit
 eval "$(starship init zsh)"
-## autocompletion using arrow keys (based on history)
-bindkey '\e[A' history-search-backward
-bindkey '\e[B' history-search-forward
+## See https://github.com/zsh-users/zsh-history-substring-search for docs
+source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
+bindkey '^[[A' history-substring-search-up
+bindkey '^[[B' history-substring-search-down
 
 # turn off annoying bell sound (actually a blip)
 unsetopt BEEP
