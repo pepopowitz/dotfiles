@@ -9,8 +9,12 @@
 	discard = !git clean -df . && git restore --staged --worktree .
 	branch-name = rev-parse --abbrev-ref HEAD
 	fix = "commit --amend --no-edit"
-	delete-merged-branches = !git branch --merged main | grep -v -e 'main' -e '\\*' | xargs -n 1 git nuke
-	list-merged-branches = !git branch --merged main | grep -v -e 'main' -e '\\*'
+	# these two work when PRs are squash-merged. (source: https://stackoverflow.com/a/30494276)
+  list-merged-branches = !git branch -vv | grep ': gone]' | awk '{print $1}'
+	delete-merged-branches = !git list-merged-branches | xargs git branch -D
+  # these two work when PRs are not squash-merged.
+	# delete-merged-branches = !git branch --merged main | grep -v -e 'main' -e '\\*' | xargs -n 1 git nuke
+	# list-merged-branches = !git branch --merged main | grep -v -e 'main' -e '\\*'
 	nuke = !git branch -D $1 && git push origin --delete
 	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 [pull]
