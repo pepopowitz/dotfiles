@@ -23,6 +23,9 @@ alias gkm!='git commit --no-verify -m'
 
 alias stashes="git stash list | head -n 5"
 
+# Thanks, [Elijah](https://twitter.com/elijahmanor/status/1562077209321512965)!
+alias branchy="branches 10 | fzf --header \"Switch to recent branch\" --pointer=\"\" | xargs git switch"
+
 function branch() {
   git checkout -b $1
 }
