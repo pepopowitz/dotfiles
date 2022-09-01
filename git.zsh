@@ -21,10 +21,9 @@ alias gcam!='git add . && git commit --no-verify -am'
 alias gkm='git commit -m'
 alias gkm!='git commit --no-verify -m'
 
-alias stashes="git stash list | head -n 5"
-
 # Thanks, [Elijah](https://twitter.com/elijahmanor/status/1562077209321512965)!
 alias branchy="branches 10 | fzf --header \"Switch to recent branch\" --pointer=\"\" | xargs git switch"
+alias unstashy="stashes 10 | fzf --header \"Apply recent stash\" --pointer=\"\" | cut -d: -f1 | xargs git stash apply"
 
 function branch() {
   git checkout -b $1
@@ -82,6 +81,11 @@ function main_or_master() {
 function branches() {
   COUNT=${1:-5}
   git branch --sort=-committerdate | head -n $COUNT
+}
+
+function stashes() {
+  COUNT=${1:-5}
+  git stash list | head -n $COUNT
 }
 
 function branch_exists() {
