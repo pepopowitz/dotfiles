@@ -44,7 +44,7 @@ function cd-finder() {
 #   you don't need that anymore, just use `open _path_`. 
 
 function doit() {
-  $@
-  open raycast://confetti
-  say "all done" -v Karen
+  $@ # executes all arguments as a command
+  open raycast://confetti # sprays confetti on the screen
+  say "all done" -v Karen # announces that it's done
 }
