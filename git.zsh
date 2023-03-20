@@ -22,8 +22,8 @@ alias gkm='git commit -m'
 alias gkm!='git commit --no-verify -m'
 
 # Thanks, [Elijah](https://twitter.com/elijahmanor/status/1562077209321512965)!
-alias branchy="branches 10 | fzf --header \"Switch to recent branch\" --pointer=\"\" | xargs git switch"
-alias unstashy="stashes 10 | fzf --header \"Apply recent stash\" --pointer=\"\" | cut -d: -f1 | xargs git stash apply"
+alias branchy="branches 20 | fzf --header \"Switch to recent branch\" --pointer=\"\" | xargs git switch"
+alias unstashy="stashes 100 | fzf --header \"Apply recent stash\" --pointer=\"\" | cut -d: -f1 | xargs git stash apply"
 
 function branch() {
   git checkout -b $1
