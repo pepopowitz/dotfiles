@@ -42,3 +42,9 @@ function cd-finder() {
 
 # hey steve you also used to use a function named ofd from oh-my-zsh/macos, it opened finder in the current directory.
 #   you don't need that anymore, just use `open _path_`. 
+
+function doit() {
+  $@
+  open raycast://confetti
+  say "all done" -v Karen
+}
