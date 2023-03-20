@@ -33,3 +33,5 @@
   diffFilter = delta --color-only
 [init]
 	defaultBranch = main
+[push]
+	autoSetupRemote = true
