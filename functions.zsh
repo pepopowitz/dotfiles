@@ -46,5 +46,9 @@ function cd-finder() {
 function doit() {
   $@ # executes all arguments as a command
   open raycast://confetti # sprays confetti on the screen
-  say "all done" -v Karen # announces that it's done
+  say "the dishes are done man" -v Karen # announces that it's done
+}
+
+function jwt_decode(){
+    jq -R 'split(".") | .[1] | @base64d | fromjson' <<< "$1"
 }
