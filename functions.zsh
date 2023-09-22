@@ -52,3 +52,10 @@ function doit() {
 function jwt_decode(){
     jq -R 'split(".") | .[1] | @base64d | fromjson' <<< "$1"
 }
+
+# Find all reference links in a doc and stub them out at the end of the file.
+#  Not yet smart enough to ignore links that are already defined.
+function md_links() {
+  # $1: a file path
+  grep -o '\[[^]]*\]\[[^]]*\]' "$1" | sed 's/\(\[[^]]*\]\)\(\[[^]]*\]\)/\2:/g' >> "$1"
+}
