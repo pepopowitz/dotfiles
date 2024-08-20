@@ -32,3 +32,7 @@ source ~/.git.zsh
 # ZSH_THEME_TERM_TITLE_IDLE="%~"
 
 . /usr/local/opt/asdf/libexec/asdf.sh
+
+# envswitch, for swapping between different .env files
+#   thx https://github.com/sitepoint/envswitch!
+eval "$(envswitch -i)"

@@ -1,0 +1,206 @@
+#!/usr/bin/env bash
+# -*- mode: sh; fill-column: 79; indent-tabs-mode: t; -*-
+#
+# Copyright 2015,2019 SitePoint Pty Ltd.
+# Author: Adam Bolte <adam.bolte@sitepoint.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+declare -r config_dir="${HOME}/.config/envswitch"
+shopt -s nullglob
+
+
+function export_environment()
+{
+	if [ -n "${ENVSWITCH_PROFILE}" ]
+	then
+		sed -e 's/^\([^#]\+\)/export \1/g' \
+			"${config_dir}/${ENVSWITCH_PROFILE}.conf"
+	else
+		echo "No environment loaded."
+		exit 1
+	fi
+}
+
+function print_help()
+{
+	cat <<- EOF
+	Usage: $(basename "${0}") OPTION
+
+	-i      initialize (for use with eval)
+	-I      same as -i, but don't alter \$PS1
+	-l      list available environments
+	-s      show loaded environment variables
+	-e      show loaded environment variables (export mode)
+	-h      show this help message
+	EOF
+}
+
+function init()
+{
+	cat <<- EOF
+	envreset()
+	{
+	    local -r env_file="${config_dir}/\${ENVSWITCH_PROFILE}.conf"
+	    if [ -n "\${ENVSWITCH_PROFILE}" ]
+	    then
+	        for line in \$(grep -v '^#' "\${env_file}")
+	        do
+	            unset "\${line%=*}"
+	        done
+	        unset ENVSWITCH_PROFILE
+	        if [ -n "\${ENVSWITCH_OLDPS1}" ]
+	        then
+	            export PS1="\${ENVSWITCH_OLDPS1}"
+	            unset ENVSWITCH_OLDPS1
+	        fi
+	    fi
+	}
+
+	envrunning()
+	{
+		if [ -n "\${ENVSWITCH_PROFILE}" ]
+		then
+			echo "\${ENVSWITCH_PROFILE}"
+		else
+			echo "No environment loaded." 1>&2
+		fi
+	}
+	EOF
+
+	for env_file in "${config_dir}"/*.conf
+	do
+		env_file_base="$(basename "${env_file%.conf}")"
+		cat <<- EOF
+		${env_file_base}()
+		{
+		    local -r env_file="${env_file}"
+		    if [ -n "\${ENVSWITCH_PROFILE}" ]
+		    then
+		        envreset
+		    fi
+		    export ENVSWITCH_PROFILE='${env_file_base}'
+		    for line in \$(grep -v '^#' "\${env_file}")
+		    do
+		        eval export \${line}
+		    done
+		EOF
+		if [ "${1}" = "set_prompt" ]
+		then
+			cat <<- EOF
+			    export ENVSWITCH_OLDPS1="\${PS1}"
+			    export PS1="(${env_file_base}) \${PS1}"
+			EOF
+		fi
+		echo "}"
+	done
+}
+
+function list_environments()
+{
+	for env_file in "${config_dir}"/*.conf
+	do
+		basename "${env_file%.conf}"
+	done
+}
+
+function show_environment()
+{
+	if [ -n "${ENVSWITCH_PROFILE}" ]
+	then
+		cat "${config_dir}/${ENVSWITCH_PROFILE}.conf"
+	else
+		echo "No environment loaded."
+		exit 1
+	fi
+}
+
+declare -i export_opt=0
+declare -i help_opt=0
+declare -i init_opt=0
+declare -i init_opt_nops1=0
+declare -i env_opt=0
+declare -i show_env=0
+declare -i score=0
+
+if [ ! -d "${config_dir}" ]
+then
+	umask 0077
+	mkdir -m 0700 "${config_dir}"
+fi
+
+while getopts "ehiIls" option
+do
+	case ${option} in
+		e )
+			export_opt=1
+			;;
+		h )
+			help_opt=1
+			;;
+		i )
+			init_opt=1
+			;;
+		I )
+			init_opt_nops1=1
+			;;
+		l )
+			env_opt=1
+			;;
+		s )
+			show_env=1
+			;;
+		* )
+			print_help
+			exit 1
+			;;
+	esac
+done
+
+shift $(( OPTIND - 1))
+
+score=$(( export_opt + help_opt + init_opt + env_opt + \
+	show_env + init_opt_nops1 ))
+if [ ${score} -eq 0 ]
+then
+	echo "${0}: required option missing"
+	print_help
+	exit 1
+elif [ ${score} -gt 1 ]
+then
+	echo "${0}: multiple options selected"
+	print_help
+	exit 1
+else
+	if [ "${export_opt}" -eq 1 ]
+	then
+		export_environment
+	elif [ "${help_opt}" -eq 1 ]
+	then
+		print_help
+	elif [ "${init_opt}" -eq 1 ]
+	then
+		init set_prompt
+	elif [ "${init_opt_nops1}" -eq 1 ]
+	then
+		init
+	elif [ "${env_opt}" -eq 1 ]
+	then
+		list_environments
+	elif [ "${show_env}" -eq 1 ]
+	then
+		show_environment
+	fi
+fi
