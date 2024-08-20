@@ -11,12 +11,10 @@ brew "mas"
 brew "python@3.9"
 brew "rcm"
 brew "starship"
+brew "gh"
+brew "yabai" # tiling window manager, required for move to next/previous desktop scripts.
 cask "fork"
 cask "insomnia"
 cask "sensiblesidebuttons"
 cask "spotify"
-mas "GarageBand", id: 682658836
-mas "Keynote", id: 409183694
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541
 mas "Perculia", id: 1462633284
