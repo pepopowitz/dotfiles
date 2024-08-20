@@ -17,6 +17,7 @@
 	# list-merged-branches = !git branch --merged main | grep -v -e 'main' -e '\\*'
 	nuke = !git branch -D $1 && git push origin --delete
 	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
+	unstage = !git restore --staged $1
 [pull]
 	ff = only
 [github]
