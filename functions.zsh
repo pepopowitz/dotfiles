@@ -59,3 +59,36 @@ function md_links() {
   # $1: a file path
   grep -o '\[[^]]*\]\[[^]]*\]' "$1" | sed 's/\(\[[^]]*\]\)\(\[[^]]*\]\)/\2:/g' >> "$1"
 }
+
+# This is a function I used to enable quick cherry-picking of a ton of commits from `main` to `unsupported/1.3`.
+#   I had created the `unsupported/1.3` branch from `main`, then it sat dormant for a year and a half. 
+#   This allowed me to not start over.
+function pickit() {
+  local sha=$1
+  local mode=$2
+
+  case $mode in
+    1)
+      # list only the files changed in a specific commit
+      git show --name-only "$sha"
+      ;;
+    2)
+      # cherry-pick the commit onto the current branch
+      git cherry-pick "$sha"
+
+      # remove files from the index that I've already deleted in this branch
+      git rm -r --ignore-unmatch ./docs sidebars.js ./versioned_docs/version-8.{0..6}/ ./versioned_sidebars/version-8.{0..6}-sidebars.json
+      git rm -r --ignore-unmatch ./optimize ./optimize_sidebars.js ./optimize_versioned_docs/version-3.{8..14}.0/ ./optimize_versioned_sidebars/version-3.{8..14}.0-sidebars.json 
+
+      # eyeball the remaining changes
+      git status
+      ;;
+    3)
+      # commit the cherry-pick
+      git cherry-pick --continue --no-edit
+      ;;
+    *)
+      echo "Invalid mode. Please use 1, 2, or 3."
+      ;;
+  esac
+}
