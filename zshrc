@@ -36,3 +36,8 @@ source ~/.git.zsh
 # envswitch, for swapping between different .env files
 #   thx https://github.com/sitepoint/envswitch!
 eval "$(envswitch -i)"
+
+# Set up fzf key bindings and fuzzy completion
+#  ctrl-R: search history
+#  ctrl-T: search files
+source <(fzf --zsh)
