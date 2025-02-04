@@ -1,0 +1,26 @@
+{
+  "folders": [
+    {
+      "path": "camunda-docs"
+    }
+  ],
+  "settings": {
+    "workbench.colorCustomizations": {
+      "titleBar.activeBackground": "#a84efd",
+      "titleBar.activeForeground": "#ffffff",
+      "titleBar.inactiveBackground": "#a84efd",
+      "titleBar.inactiveForeground": "#cccccc",
+      "statusBar.background": "#a84efd",
+      "statusBar.foreground": "#ffffff"
+    },
+    "files.exclude": {
+      "**/.git": true,
+      "**/.svn": true,
+      "**/.hg": true,
+      "**/CVS": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": false
+    },
+    "explorerExclude.backup": {}
+  }
+}
