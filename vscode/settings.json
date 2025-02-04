@@ -1,6 +1,6 @@
 {
-  "workbench.colorTheme": "Feather",
   "workbench.colorCustomizations": {
+    "selection.background": "#e4af8c" // so that I can read selected text in search input fields
     // "list.activeSelectionBackground": "#dddddd",
     // "list.activeSelectionForeground": "#395063",
     // "list.focusBackground": "#dddddd",
@@ -9,22 +9,14 @@
     // "list.inactiveSelectionBackground": "#eeeeee",
     // "list.inactiveSelectionForeground": "#395063"
   },
-  "editor.fontFamily": "'Office Code Pro', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontFamily": "'Source Code Pro', Menlo, Monaco, 'Courier New', monospace",
   "editor.tabSize": 2,
   "editor.minimap.enabled": false,
-  "markdown-pdf.scale": 0.8,
   "window.title": "${rootName}${separator}${activeEditorMedium}",
   "prettier.singleQuote": true,
   "prettier.trailingComma": "es5",
-  "ruby.rubocop.executePath": "/Users/stevenhicks/.asdf/shims/",
-  "ruby.intellisense": "rubyLocate",
-  "ruby.codeCompletion": "rcodetools",
-  "ruby.format": "rubocop",
   "explorer.confirmDragAndDrop": false,
-  "terminal.integrated.rendererType": "dom",
   "files.defaultLanguage": "markdown",
-  "liveshare.featureSet": "insiders",
-  "editor.gotoLocation.multiple": "goto",
   "workbench.tree.renderIndentGuides": "none",
   "terminal.integrated.fontWeight": "500",
   "breadcrumbs.enabled": true,
@@ -35,9 +27,6 @@
   "[javascript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "[ruby]": {
-    "editor.defaultFormatter": "misogi.ruby-rubocop"
-  },
   "editor.gotoLocation.multipleDeclarations": "goto",
   "editor.gotoLocation.multipleDefinitions": "goto",
   "editor.gotoLocation.multipleImplementations": "goto",
@@ -46,19 +35,15 @@
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "editor.codeActionsOnSave": { "source.fixAll": false },
-  "journal.base": "~/_sjh/notes/foamington/daily",
-  "vscodeMarkdownNotes.newNoteDirectory": "WORKSPACE_ROOT",
-  "foam.openDailyNote.directory": "daily",
-  "foam.openDailyNote.filenameFormat": "yyyy-mm-dd",
-  "foam.openDailyNote.titleFormat": "mmmm d, yyyy (dddd)",
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "never"
+  },
   "editor.wrappingIndent": "indent",
   "diffEditor.ignoreTrimWhitespace": false,
   "[typescriptreact]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "git.alwaysShowStagedChangesResourceGroup": true,
-  "cSpell.userWords": ["performantly"],
   "screencastMode.onlyKeyboardShortcuts": true,
   "githubPullRequests.queries": [
     {
@@ -82,17 +67,48 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "editor.formatOnSave": true,
-  "highlightLine.borderColor": "#395063",
-  "highlightLine.borderWidth": "1px",
   "editor.renderLineHighlight": "all",
-  "highlightLine.borderStyle": "inset",
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "jestrunner.disableCodeLens": true,
   "git.confirmSync": false,
-  "workbench.sideBar.location": "right",
   "svg.preview.transparencyGrid": false,
   "svg.preview.boundingBox": true,
-  "editor.inlineSuggest.enabled": true
+  "editor.inlineSuggest.enabled": true,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "security.workspace.trust.untrustedFiles": "open",
+  "githubPullRequests.pullBranch": "never",
+  "editor.stickyScroll.enabled": true,
+  "workbench.sideBar.location": "right",
+  "github.copilot.enable": {
+    "*": true,
+    "plaintext": false,
+    "markdown": true,
+    "scminput": false,
+    "yaml": false
+  },
+  "markdown.validate.enabled": true,
+  "command-runner.commands": {
+    "append markdown reference links": "md_links '${file}'"
+  },
+  "editor.autoClosingQuotes": "beforeWhitespace",
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "workbench.colorTheme": "Feather",
+  "[mdx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "window.zoomLevel": 0,
+  "[css]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  // npm install spawns a gajillion rg processes (https://github.com/microsoft/vscode/issues/98594):
+  "search.followSymlinks": false,
+  "dotnetAcquisitionExtension.existingDotnetPath": [
+    {
+      "extensionId": "ms-dotnettools.csharp",
+      "path": "/usr/local/share/dotnet/dotnet"
+    }
+  ]
 }
