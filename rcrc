@@ -1,0 +1,2 @@
+EXCLUDES="README.md vscode"
+UNDOTTED="Brewfile bin zsh-history-substring-search move-next.sh move-previous.sh"
