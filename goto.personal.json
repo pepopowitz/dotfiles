@@ -1,0 +1,72 @@
+[
+  {
+    "name": "cp (Case Parts)",
+    "url": "https://caseparts.visualstudio.com/",
+    "routes": [
+      {
+        "name": "PRs (pull requests)",
+        "url": "https://caseparts.visualstudio.com/CaseBlocks/_git/CaseBlocks/pullrequests?_a=mine",
+        "routes": []
+      },
+      {
+        "name": "repo",
+        "url": "https://caseparts.visualstudio.com/_git/CaseBlocks",
+        "routes": []
+      },
+      {
+        "name": "work items",
+        "url": "https://caseparts.visualstudio.com/CaseBlocks/_workitems/",
+        "routes": []
+      }
+    ]
+  },
+  {
+    "name": "gh (GitHub)",
+    "url": "https://github.com",
+    "routes": [
+      {
+        "name": "docs",
+        "url": "https://github.com/camunda/camunda-docs",
+        "routes": [
+          {
+            "name": "*",
+            "url": "https://github.com/camunda/camunda-docs/${0}",
+            "routes": []
+          },
+          {
+            "name": "pulls",
+            "url": "https://github.com/camunda/camunda-docs/pulls",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "me",
+        "url": "https://github.com/pepopowitz",
+        "routes": [
+          {
+            "name": "*",
+            "url": "https://github.com/pepopowitz/${0}",
+            "routes": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "google",
+    "url": "https://google.com",
+    "routes": [
+      {
+        "name": "*",
+        "url": "https://google.com?q=${0}",
+        "routes": []
+      },
+      {
+        "name": "google",
+        "url": "https://google.com",
+        "routes": []
+      }
+    ]
+  }
+]

@@ -6,6 +6,14 @@ function sjh() {
   cd ~/sjh/dev/personal/$1
 }
 
+function nova() {
+  cd ~/sjh/dev/nova/$1
+}
+
+function casep() {
+  cd ~/sjh/dev/nova/caseparts/$1
+}
+
 function mkd () {
     mkdir -p "$1"
     cd "$1"
