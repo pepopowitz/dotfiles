@@ -31,7 +31,7 @@ source ~/.git.zsh
 #   Leaving it here as a reminder when I run into the terminal title making me mad.
 # ZSH_THEME_TERM_TITLE_IDLE="%~"
 
-. /usr/local/opt/asdf/libexec/asdf.sh
+eval "$(mise activate zsh)"
 
 # envswitch, for swapping between different .env files
 #   thx https://github.com/sitepoint/envswitch!
