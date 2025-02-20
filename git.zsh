@@ -4,9 +4,6 @@ alias web='gh repo view --web'
 # Open current branch in browser
 alias webbranch='gh repo view --web --branch $(git symbolic-ref --quiet --short HEAD )'
 
-# Open PR for current branch in browser
-alias open-pr='gh pr create --web'
-
 # Browse pulls for current repo
 alias pulls='gh pr list --web'
 
@@ -24,6 +21,15 @@ alias gkm!='git commit --no-verify -m'
 # Thanks, [Elijah](https://twitter.com/elijahmanor/status/1562077209321512965)!
 alias branchy="branches 20 | fzf --header \"Switch to recent branch\" --pointer=\"\" | xargs git switch"
 alias unstashy="stashes 100 | fzf --header \"Apply recent stash\" --pointer=\"\" | cut -d: -f1 | xargs git stash apply"
+
+# Open PR for current branch in browser. Against `main`, unless specified in an argument.
+function open-pr() {
+  if [[ $1 ]] then
+    gh pr create --web --base $1
+  else
+    gh pr create --web
+  fi
+}
 
 function branch() {
   git checkout -b $1

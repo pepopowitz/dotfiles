@@ -18,6 +18,7 @@
 	nuke = !git branch -D $1 && git push origin --delete
 	alias = ! git config --get-regexp ^alias\\. | sed -e s/^alias\\.// -e s/\\ /\\ =\\ /
 	unstage = !git restore --staged $1
+	pullit = !git pull origin $(git branch-name)
 [pull]
 	ff = only
 [github]
