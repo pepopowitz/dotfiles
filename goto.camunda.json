@@ -1,0 +1,116 @@
+[
+  {
+    "name": "docs",
+    "routes": [
+      {
+        "name": "localhost",
+        "url": "https://localhost:3000/",
+        "routes": []
+      },
+      {
+        "name": "production",
+        "url": "https://docs.camunda.io/",
+        "routes": []
+      },
+      {
+        "name": "staging",
+        "url": "https://stage.docs.camunda.io/",
+        "routes": []
+      },
+      {
+        "name": "gh (GitHub)",
+        "url": "https://github.com/camunda/camunda-docs/",
+        "routes": []
+      }
+    ]
+  },
+  {
+    "name": "gh (GitHub)",
+    "url": "https://github.com",
+    "routes": [
+      {
+        "name": "pulls / prs / notifications",
+        "url": "https://github.com/notifications",
+        "routes": []
+      },
+      {
+        "name": "board",
+        "url": "https://github.com/orgs/camunda/projects/27/views/4",
+        "routes": []
+      },
+      {
+        "name": "docs",
+        "url": "https://github.com/camunda/camunda-docs",
+        "routes": [
+          {
+            "name": "*",
+            "url": "https://github.com/camunda/camunda-docs/${0}",
+            "routes": []
+          },
+          {
+            "name": "pulls",
+            "url": "https://github.com/camunda/camunda-docs/pulls",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "dx (developer experience team)",
+        "url": "https://github.com/camunda/documentation-team/issues"
+      },
+      {
+        "name": "hub",
+        "url": "https://github.com/orgs/camunda/projects/9/views/25",
+        "routes": []
+      },
+      {
+        "name": "camunda/camunda",
+        "url": "https://github.com/camunda/camunda",
+        "routes": [
+          {
+            "name": "*",
+            "url": "https://github.com/camunda/camunda/${0}",
+            "routes": []
+          },
+          {
+            "name": "pulls",
+            "url": "https://github.com/camunda/camunda/pulls",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "me",
+        "url": "https://github.com/pepopowitz",
+        "routes": [
+          {
+            "name": "*",
+            "url": "https://github.com/pepopowitz/${0}",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "*",
+        "url": "https://github.com/camunda/${0}",
+        "routes": []
+      }
+    ]
+  },
+  {
+    "name": "google",
+    "url": "https://google.com",
+    "routes": [
+      {
+        "name": "*",
+        "url": "https://google.com?q=${0}",
+        "routes": []
+      },
+      {
+        "name": "google",
+        "url": "https://google.com",
+        "routes": []
+      }
+    ]
+  }
+]
