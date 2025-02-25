@@ -56,7 +56,8 @@
       },
       {
         "name": "dx (developer experience team)",
-        "url": "https://github.com/camunda/documentation-team/issues"
+        "url": "https://github.com/camunda/documentation-team/issues",
+        "routes": []
       },
       {
         "name": "hub",
