@@ -1,2 +1,1 @@
-eval "$(mise activate zsh)"
-echo "wtf"
+eval "$(/usr/local/bin/mise activate --shims)"
