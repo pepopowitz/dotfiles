@@ -15,9 +15,6 @@
 #   - no it's not! aerospace doesn't use shift-alt-arrow (or alt-arrow), it uses shift-alt-j/shift-alt-l etc (or alt-j/alt-l etc)
 # - raycast got suuuuper laggy after running aerospace, and I had to kill it. It was taking seconds to come up. Is this a one time thing?
 
-# Place a copy of this config to ~/.aerospace.toml
-# After that, you can edit ~/.aerospace.toml to your liking
-
 # You can use it to add commands that run after login to macOS user session.
 # 'start-at-login' needs to be 'true' for 'after-login-command' to work
 # Available commands: https://nikitabobko.github.io/AeroSpace/commands
@@ -27,7 +24,8 @@ after-login-command = []
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  'exec-and-forget borders active_color=0xfff178ee inactive_color=0xff494d64 width=5.0'
+  ## start jankyborders
+  'exec-and-forget borders active_color=0xff70e544 inactive_color=0xff949992 width=7.0'
 ]
 
 # Start AeroSpace at login
@@ -60,7 +58,7 @@ on-focused-monitor-changed = ['move-mouse monitor-lazy-center']
 # You can effectively turn off macOS "Hide application" (cmd-h) feature by toggling this flag
 # Useful if you don't use this macOS feature, but accidentally hit cmd-h or cmd-alt-h key
 # Also see: https://nikitabobko.github.io/AeroSpace/goodies#disable-hide-app
-automatically-unhide-macos-hidden-apps = false
+automatically-unhide-macos-hidden-apps = true
 
 # Possible values: (qwerty|dvorak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
@@ -82,7 +80,9 @@ outer.bottom =     10
 outer.top =        10
 outer.right =      10
 
-# 'main' binding mode declaration
+
+
+#  MAIN MODE
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 # 'main' binding mode must be always presented
 # Fallback value (if you omit the key): mode.main.binding = {}
@@ -112,15 +112,48 @@ outer.right =      10
 # end tell'
 # '''
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#layout
-alt-slash = 'layout tiles horizontal vertical'
-alt-comma = 'layout accordion horizontal vertical'
+## FOCUS
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
 alt-j = 'focus left'
 alt-k = 'focus down'
 alt-i = 'focus up'
 alt-l = 'focus right'
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
+ctrl-alt-1 = 'workspace 1(JunkDrawer)'
+ctrl-alt-2 = 'workspace 2(Comms)'
+ctrl-alt-3 = 'workspace 3(Docs)'
+ctrl-alt-4 = 'workspace 4(Camundacamunda)'
+ctrl-alt-5 = 'workspace 5(Dotfiles)'
+ctrl-alt-6 = 'workspace 6(Personal)'
+ctrl-alt-7 = 'workspace 7'
+ctrl-alt-8 = 'workspace 8'
+ctrl-alt-9 = 'workspace 9'
+ctrl-alt-a = 'workspace A'
+ctrl-alt-b = 'workspace B'
+ctrl-alt-c = 'workspace C'
+ctrl-alt-d = 'workspace D'
+ctrl-alt-e = 'workspace E'
+ctrl-alt-f = 'workspace F'
+
+# ctrl-alt-1 = 'workspace 1(JunkDrawer)'
+# ctrl-alt-2 = 'workspace 2(Comms)'
+# ctrl-alt-3 = 'workspace 3(CaseParts)'
+# ctrl-alt-4 = 'workspace 4(Friends)'
+# ctrl-alt-5 = 'workspace 5(Supernova)'
+# ctrl-alt-6 = 'workspace 6(Art)'
+# ctrl-alt-7 = 'workspace 7(Sprouts)'
+# ctrl-alt-8 = 'workspace 8(Aerospace)'
+
+## sjh: mimic native spaces navigation
+ctrl-left = 'workspace prev'
+ctrl-right = 'workspace next'
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
+ctrl-alt-tab = 'workspace-back-and-forth'
+
+## MOVE
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
 alt-shift-j = 'move left'
@@ -134,72 +167,75 @@ ctrl-alt-shift-k = 'join-with down'
 ctrl-alt-shift-i = 'join-with up'
 ctrl-alt-shift-l = 'join-with right'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#resize
-alt-shift-minus = 'resize smart -100'
-alt-shift-equal = 'resize smart +100'
-
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-ctrl-alt-1 = 'workspace 1(JunkDrawer)'
-ctrl-alt-2 = 'workspace 2(Comms)'
-ctrl-alt-3 = 'workspace 3(CaseParts)'
-ctrl-alt-4 = 'workspace 4(Friends)'
-ctrl-alt-5 = 'workspace 5(Supernova)'
-ctrl-alt-6 = 'workspace 6(Art)'
-ctrl-alt-7 = 'workspace 7(Sprouts)'
-ctrl-alt-8 = 'workspace 8(Aerospace)'
-ctrl-alt-9 = 'workspace 9'
-ctrl-alt-a = 'workspace A(temp)' # In your config, you can drop workspace bindings that you don't need
-ctrl-alt-b = 'workspace B'
-ctrl-alt-c = 'workspace C'
-ctrl-alt-d = 'workspace D'
-ctrl-alt-e = 'workspace E'
-ctrl-alt-f = 'workspace F'
-
-## sjh: mimic native spaces navigation
-ctrl-left = 'workspace prev'
-ctrl-right = 'workspace next'
-
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 ctrl-alt-shift-1 = 'move-node-to-workspace 1(JunkDrawer)'
 ctrl-alt-shift-2 = 'move-node-to-workspace 2(Comms)'
-ctrl-alt-shift-3 = 'move-node-to-workspace 3(CaseParts)'
-ctrl-alt-shift-4 = 'move-node-to-workspace 4(Friends)'
-ctrl-alt-shift-5 = 'move-node-to-workspace 5(Supernova)'
-ctrl-alt-shift-6 = 'move-node-to-workspace 6(Art)'
-ctrl-alt-shift-7 = 'move-node-to-workspace 7(Sprouts)'
-ctrl-alt-shift-8 = 'move-node-to-workspace 8(Aerospace)'
+ctrl-alt-shift-3 = 'move-node-to-workspace 3(Docs)'
+ctrl-alt-shift-4 = 'move-node-to-workspace 4(Camundacamunda)'
+ctrl-alt-shift-5 = 'move-node-to-workspace 5(Dotfiles)'
+ctrl-alt-shift-6 = 'move-node-to-workspace 6(Personal)'
+ctrl-alt-shift-7 = 'move-node-to-workspace 7'
+ctrl-alt-shift-8 = 'move-node-to-workspace 8'
 ctrl-alt-shift-9 = 'move-node-to-workspace 9'
-ctrl-alt-shift-a = 'move-node-to-workspace A(temp)'
+ctrl-alt-shift-a = 'move-node-to-workspace A'
 ctrl-alt-shift-b = 'move-node-to-workspace B'
 ctrl-alt-shift-c = 'move-node-to-workspace C'
 ctrl-alt-shift-d = 'move-node-to-workspace D'
 ctrl-alt-shift-e = 'move-node-to-workspace E'
 ctrl-alt-shift-f = 'move-node-to-workspace F'
 
+# ctrl-alt-shift-3 = 'move-node-to-workspace 3(CaseParts)'
+# ctrl-alt-shift-4 = 'move-node-to-workspace 4(Friends)'
+# ctrl-alt-shift-5 = 'move-node-to-workspace 5(Supernova)'
+# ctrl-alt-shift-6 = 'move-node-to-workspace 6(Art)'
+# ctrl-alt-shift-7 = 'move-node-to-workspace 7(Sprouts)'
+# ctrl-alt-shift-8 = 'move-node-to-workspace 8(Aerospace)'
+
 ## sjh: mimic native spaces navigation
 ctrl-alt-shift-left = 'move-node-to-workspace prev'
 ctrl-alt-shift-right = 'move-node-to-workspace next'
 
-# See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
-ctrl-alt-tab = 'workspace-back-and-forth'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 ctrl-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
+## MODES
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
-alt-semicolon = 'mode service'
+alt-semicolon = 'mode config'
+alt-comma = 'mode layout'
+alt-o = 'mode open'
 
-# 'service' binding mode declaration.
-# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
-[mode.service.binding]
-esc = ['reload-config', 'mode main']
+
+
+# LAYOUT MODE
+[mode.layout.binding]
+esc = ['mode main']
+
+# Still want to be able to focus windows in layout mode
+alt-j = 'focus left'
+alt-k = 'focus down'
+alt-i = 'focus up'
+alt-l = 'focus right'
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#layout
+slash = 'layout tiles horizontal vertical'
+comma = 'layout accordion horizontal vertical'
+
+# See: https://nikitabobko.github.io/AeroSpace/commands#resize
+shift-minus = 'resize smart -100'
+shift-equal = 'resize smart +100'
+
 # reset tiled/accordioned layout to even distribution
 r = ['flatten-workspace-tree', 'mode main']
-# toggle layout from tiled to floating, or vice versa
-alt-r = ["exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling floating", "mode main"]
+
+# set all to floating
+alt-f = ["exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} floating", "mode main"]
+
+# set all to tiling
+alt-t = ["exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling", "mode main"]
+
 # toggle specific window between floating and tiling
 f = ['layout floating tiling', 'mode main']
 
-backspace = ['close-all-windows-but-current', 'mode main']
 # auto-layout
 a = [
     "focus --dfs-index 0", 
@@ -224,25 +260,39 @@ a = [
 ]
 b = ['balance-sizes', 'mode main']
 
-# open windows for camunda
-alt-c = ["layout horizontal", "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://docs.camunda.io'", "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://github.com/camunda/camunda-docs'", "mode main" ]
-
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']
 
-# down = 'volume down'
-# up = 'volume up'
-# shift-down = ['volume set 0', 'mode main']
+
+
+# OPEN MODE
+[mode.open.binding]
+esc = ['mode main']
+
+backspace = ['close-all-windows-but-current', 'mode main']
+
+# open windows for camunda
+alt-c = ["layout horizontal", "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://docs.camunda.io'", "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://github.com/camunda/camunda-docs'", "mode main" ]
+
+
+
+# CONFIG MODE
+# 'service' binding mode declaration.
+# See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
+[mode.config.binding]
+
+esc = ['reload-config', 'mode main']
 
 ## save session
-shift-ctrl-s=[
+s=[
     'exec-and-forget ~/.aerospace/aerospace.save.sh', 'mode main'
 ]
 
 ## restore session
-shift-ctrl-r=[
+r=[
     'exec-and-forget ~/.aerospace/aerospace.restore.sh', 'mode main'
 ]
+
 
 [[on-window-detected]]
 if.app-id = 'com.apple.ActivityMonitor'
@@ -258,4 +308,8 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.finder'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.todoist.mac.Todoist'
 run = 'layout floating'
