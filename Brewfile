@@ -1,4 +1,6 @@
+tap "felixkratz/formulae" # jankyborders
 tap "homebrew/bundle"
+tap "nikitabobko/tap" # aerospace
 brew "bat"
 brew "fzf"
 brew "gh"
@@ -8,6 +10,10 @@ brew "mas"
 brew "mise"
 brew "rcm"
 brew "starship"
+brew "terminal-notifier"
+brew "felixkratz/formulae/borders"
+cask "aerospace"
+cask "livebook"
 cask "sensiblesidebuttons"
 cask "spotify"
 cask "unnaturalscrollwheels"
