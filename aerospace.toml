@@ -25,7 +25,8 @@ after-login-command = []
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
   ## start jankyborders
-  'exec-and-forget borders active_color=0xff70e544 inactive_color=0xff949992 width=7.0'
+  ##   ignore todoist because it shows funny borders for the quick-add window.
+  'exec-and-forget borders active_color=0xff70e544 inactive_color=0xff949992 width=7.0 blacklist="Todoist"'
 ]
 
 # Start AeroSpace at login
@@ -73,12 +74,12 @@ preset = 'qwerty'
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
 [gaps]
-inner.horizontal = 10
-inner.vertical =   10
-outer.left =       10
-outer.bottom =     10
-outer.top =        10
-outer.right =      10
+inner.horizontal = 11
+inner.vertical =   9
+outer.left =       8
+outer.bottom =     8
+outer.top =        8
+outer.right =      8
 
 
 
@@ -228,16 +229,33 @@ shift-equal = 'resize smart +100'
 r = ['flatten-workspace-tree', 'mode main']
 
 # set all to floating
-alt-f = ["exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} floating", "mode main"]
+alt-f = [
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} floating", 
+    "mode main"
+    ]
 
-# set all to tiling
-alt-t = ["exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling", "mode main"]
+# set all to tiles
+alt-t = [
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling", 
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiles horizontal", 
+    "mode main"
+    ]
+
+# set all to accordion
+alt-a = [
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling", 
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} accordion horizontal", 
+    "mode main"
+    ]
 
 # toggle specific window between floating and tiling
-f = ['layout floating tiling', 'mode main']
+f = ['layout floating']
+t = ['layout tiling horizontal']
 
 # auto-layout
 a = [
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling", 
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} h_tiles",
     "focus --dfs-index 0", 
     "join-with right", 
     "focus --dfs-index 2", 
