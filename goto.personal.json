@@ -59,7 +59,7 @@
     "routes": [
       {
         "name": "*",
-        "url": "https://google.com?q=${0}",
+        "url": "https://google.com/search?q=${0}",
         "routes": []
       },
       {

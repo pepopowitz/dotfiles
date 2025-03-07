@@ -17,11 +17,6 @@ cask "livebook"
 cask "sensiblesidebuttons"
 cask "spotify"
 cask "unnaturalscrollwheels"
-mas "GarageBand", id: 682658836
-mas "iMovie", id: 408981434
-mas "Keynote", id: 409183694
-mas "Numbers", id: 409203825
-mas "Pages", id: 409201541
 mas "Perculia", id: 1462633284
 vscode "alefragnani.project-manager"
 vscode "antiantisepticeye.vscode-color-picker"
@@ -60,7 +55,6 @@ vscode "nicoespeon.abracadabra"
 vscode "peterschmalfeldt.explorer-exclude"
 vscode "redhat.java"
 vscode "runningcoder.react-snippets"
-vscode "travisthetechie.write-good-linter"
 vscode "tyriar.lorem-ipsum"
 vscode "unifiedjs.vscode-mdx"
 vscode "visualstudioexptteam.intellicode-api-usage-examples"
