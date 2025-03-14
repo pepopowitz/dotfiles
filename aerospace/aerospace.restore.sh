@@ -25,5 +25,5 @@ jq -r --argjson current "$current_windows" '
   end
 ' "$layout_file" |
 while IFS=$'\t' read -r window_id workspace; do
-  $(brew --prefix)/bin/aerospace move-node-to-workspace --window-id $window_id \"$workspace\" --fail-if-noop
+  $(brew --prefix)/bin/aerospace move-node-to-workspace --window-id $window_id $workspace --fail-if-noop
 done
