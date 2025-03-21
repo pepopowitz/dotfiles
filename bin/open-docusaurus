@@ -1,0 +1,170 @@
+#!/usr/bin/env node
+// Open the URL corresponding to the current file in a browser.
+// Usage:
+//   open-docusaurus filePath projectPath
+// Arguments:
+//   filePath: The file path to open in a browser.
+//   projectPath: The path to the root of the Docusaurus project.
+//   host: The host to use for the URL. Default: http://localhost:3000.
+
+const config = {
+  docs: {
+    currentVersion: '8.6',
+  },
+  optimize: {
+    currentVersion: '3.14.0',
+  },
+};
+
+const { exec } = require('child_process');
+const { readFileSync } = require('fs');
+
+const filePath = process.argv[2];
+const projectPath = process.argv[3];
+const host = process.argv[4] || 'http://localhost:3000';
+
+if (!filePath || !projectPath) {
+  console.error(
+    'Error: Please provide a file path and project path as arguments.'
+  );
+  console.error('Usage: open-docusaurus <file-path> <project-path>');
+  process.exit(1);
+}
+
+const contents = readFileContents(filePath);
+
+const urlFile = findUrlFile(filePath, contents);
+const urlPath = findUrlPath(filePath, projectPath);
+
+const url = `${host}/${urlPath}/${urlFile}`;
+console.log('  URL: ', url);
+openUrl(url);
+
+function readFileContents(filePath) {
+  try {
+    return readFileSync(filePath, 'utf8');
+  } catch (err) {
+    console.error(`Error: Unable to read file ${filePath}.`);
+    process.exit(1);
+  }
+}
+
+function findUrlFile(filePath, contents) {
+  // use the id property in the frontmatter if it exists
+  const id = findId(contents);
+  if (id) {
+    console.log('  Document ID: ', id);
+    return id;
+  }
+
+  // use the file name, minus extension
+  //   Gets "example.md" from "/path/to/example.md"
+  const fullFileName = filePath.split('/').pop();
+  //   Gets "example" from "example.md"
+  const fileName = fullFileName.split('.')[0];
+  console.log('  File name: ', fileName);
+
+  return fileName;
+}
+
+function findUrlPath(filePath, projectPath) {
+  // Different versions match different patterns.
+  const pathMappings = [
+    {
+      pattern: new RegExp(
+        `${projectPath}/versioned_docs/version-${config.docs.currentVersion}/(.*)$`
+      ),
+      replacement: 'docs/$1',
+    },
+    {
+      pattern: new RegExp(
+        `${projectPath}/versioned_docs/version-([^/]+)/(.*)$`
+      ),
+      replacement: 'docs/$1/$2',
+    },
+    {
+      pattern: new RegExp(`${projectPath}/docs/(.*)$`),
+      replacement: 'docs/next/$1',
+    },
+    {
+      pattern: new RegExp(
+        `${projectPath}/optimize_versioned_docs/version-${config.optimize.currentVersion}/(.*)$`
+      ),
+      replacement: 'optimize/$1',
+    },
+    {
+      pattern: new RegExp(
+        `${projectPath}/optimize_versioned_docs/version-([^/]+)/(.*)$`
+      ),
+      replacement: 'optimize/$1/$2',
+    },
+    {
+      pattern: new RegExp(`${projectPath}/optimize/(.*)$`),
+      replacement: 'optimize/next/$1',
+    },
+  ];
+
+  // Try each pattern until we find a match
+  for (const mapping of pathMappings) {
+    const match = filePath.match(mapping.pattern);
+    if (match) {
+      // We have a match, apply the replacement
+      let urlPath = mapping.replacement;
+
+      // Replace capture group references
+      //  $1: version number
+      //  $2: path after version
+      if (match[1]) {
+        urlPath = urlPath.replace('$1', match[1]);
+      }
+      if (match[2]) {
+        urlPath = urlPath.replace('$2', match[2]);
+      }
+
+      // Remove file name from URL path
+      urlPath = urlPath.split('/').slice(0, -1).join('/');
+
+      console.log('  URL path: ', urlPath);
+      return urlPath;
+    }
+  }
+
+  // No match found
+  console.error(`Error: Unable to identify URL path of ${filePath}.`);
+  process.exit(1);
+}
+
+function findId(contents) {
+  // find the id property in the frontmatter
+
+  // Extract frontmatter content between --- markers
+  const frontMatterMatch = contents.match(/^---\s*$([\s\S]*?)^---\s*$/m);
+
+  if (!frontMatterMatch || !frontMatterMatch[1]) {
+    return null;
+  }
+
+  // Look for id: value within the frontmatter
+  const idMatch = frontMatterMatch[1].match(/^id:\s*(.*)$/m);
+
+  if (!idMatch || !idMatch[1]) {
+    return null;
+  }
+  return idMatch[1].trim();
+}
+
+function openUrl(url) {
+  // Cross-platform browser opening
+
+  // Linux
+  let command = 'xdg-open';
+  if (process.platform === 'win32') {
+    // Windows
+    command = 'start';
+  } else if (process.platform === 'darwin') {
+    // Mac
+    command = 'open';
+  }
+
+  exec(`${command} ${url}`);
+}

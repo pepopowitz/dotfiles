@@ -7,5 +7,8 @@
     "activityBar.foreground": "#ffffff",
     "statusBar.background": "#a100ac",
     "statusBar.foreground": "#ffffff"
+  },
+  "files.associations": {
+    "**/bin/open-docusaurus": "javascript"
   }
 }
