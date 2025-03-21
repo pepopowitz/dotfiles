@@ -65,6 +65,7 @@ function jwt_decode(){
 #  Not yet smart enough to ignore links that are already defined.
 function md_links() {
   # $1: a file path
+  echo "adding links to $1"
   grep -o '\[[^]]*\]\[[^]]*\]' "$1" | sed 's/\(\[[^]]*\]\)\(\[[^]]*\]\)/\2:/g' >> "$1"
 }
 
