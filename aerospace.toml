@@ -290,8 +290,13 @@ esc = ['mode main']
 backspace = ['close-all-windows-but-current', 'mode main']
 
 # open windows for camunda
-alt-c = ["layout horizontal", "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://docs.camunda.io'", "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://github.com/camunda/camunda-docs'", "mode main" ]
+# edge with personal profile (sjh)
+s = ["exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Default'", "mode main" ]
+# edge with camunda profile
+c = ["exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Profile 2'", "mode main" ]
 
+# docs windows
+d = ["layout horizontal", "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://docs.camunda.io'", "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://github.com/camunda/camunda-docs'", "mode main" ]
 
 
 # CONFIG MODE
@@ -330,4 +335,8 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.todoist.mac.Todoist'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'us.zoom.xos'
 run = 'layout floating'
