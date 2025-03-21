@@ -10,9 +10,7 @@
 const { exec } = require('child_process');
 const { readFileSync } = require('fs');
 
-const filePath = process.argv[2];
-const projectPath = process.argv[3];
-const host = process.argv[4] || 'http://localhost:3000';
+const { filePath, projectPath, host } = getContext();
 
 if (!filePath || !projectPath) {
   console.error(
@@ -22,14 +20,23 @@ if (!filePath || !projectPath) {
   process.exit(1);
 }
 
-const currentVersions = require(`${projectPath}/src/versions`)
-  .versionMappings[0];
+openDocInBrowser(filePath, projectPath, host);
 
-const urlPath = buildUrlPath(filePath, projectPath);
+function getContext() {
+  const filePath = process.argv[2];
+  const projectPath = process.argv[3];
+  const host = process.argv[4] || 'http://localhost:3000';
 
-const url = `${host}/${urlPath}`;
-console.log('  URL: ', url);
-openUrl(url);
+  return { filePath, projectPath, host };
+}
+
+function openDocInBrowser(filePath, projectPath, host) {
+  const urlPath = buildUrlPath(filePath, projectPath);
+
+  const url = `${host}/${urlPath}`;
+  console.log('  URL: ', url);
+  openUrl(url);
+}
 
 function buildUrlPath(filePath, projectPath) {
   const contents = readFileContents(filePath);
@@ -81,6 +88,9 @@ function extractFileName(filePath, documentId) {
 }
 
 function findUrlBasePathAndDirectory(filePath, projectPath) {
+  const currentVersions = require(`${projectPath}/src/versions`)
+    .versionMappings[0];
+
   // Different versions match different patterns.
   const pathMappings = [
     {
