@@ -3,3 +3,5 @@
 # The original version is saved in .zprofile.pysave
 PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
 export PATH
+
+eval "$(mise activate zsh --shims)"
