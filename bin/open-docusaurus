@@ -25,14 +25,42 @@ if (!filePath || !projectPath) {
 const currentVersions = require(`${projectPath}/src/versions`)
   .versionMappings[0];
 
-const contents = readFileContents(filePath);
+const urlPath = buildUrlPath(filePath, projectPath);
 
-const urlFile = findUrlFile(filePath, contents);
-const urlPath = findUrlPath(filePath, projectPath);
-
-const url = `${host}/${urlPath}/${urlFile}`;
+const url = `${host}/${urlPath}`;
 console.log('  URL: ', url);
 openUrl(url);
+
+function buildUrlPath(filePath, projectPath) {
+  const contents = readFileContents(filePath);
+  const frontmatter = extractFrontmatter(contents);
+
+  const slug = extractSlugFromFrontmatter(frontmatter);
+  const documentId = extractIdFromFrontmatter(frontmatter);
+  const fileName = extractFileName(filePath);
+  const { urlBasePath, urlDirectory } = findUrlBasePathAndDirectory(
+    filePath,
+    projectPath
+  );
+
+  if (slug) {
+    console.log('  URL base path: ', urlBasePath);
+    console.log('  Slug: ', slug);
+    return `${urlBasePath}/${slug}`;
+  }
+
+  if (documentId) {
+    console.log('  URL base path: ', urlBasePath);
+    console.log('  URL directory: ', urlDirectory);
+    console.log('  Document ID: ', documentId);
+    return `${urlBasePath}/${urlDirectory}/${documentId}`;
+  }
+
+  console.log('  URL base path: ', urlBasePath);
+  console.log('  URL directory: ', urlDirectory);
+  console.log('  File name: ', fileName);
+  return `${urlBasePath}/${urlDirectory}/${fileName}`;
+}
 
 function readFileContents(filePath) {
   try {
@@ -43,58 +71,49 @@ function readFileContents(filePath) {
   }
 }
 
-function findUrlFile(filePath, contents) {
-  // use the id property in the frontmatter if it exists
-  const id = findId(contents);
-  if (id) {
-    console.log('  Document ID: ', id);
-    return id;
-  }
-
-  // use the file name, minus extension
+function extractFileName(filePath, documentId) {
   //   Gets "example.md" from "/path/to/example.md"
   const fullFileName = filePath.split('/').pop();
   //   Gets "example" from "example.md"
   const fileName = fullFileName.split('.')[0];
-  console.log('  File name: ', fileName);
 
   return fileName;
 }
 
-function findUrlPath(filePath, projectPath) {
+function findUrlBasePathAndDirectory(filePath, projectPath) {
   // Different versions match different patterns.
   const pathMappings = [
     {
       pattern: new RegExp(
         `${projectPath}/versioned_docs/version-${currentVersions.docsVersion}/(.*)$`
       ),
-      replacement: 'docs/$1',
+      replacement: 'docs',
     },
     {
       pattern: new RegExp(
         `${projectPath}/versioned_docs/version-([^/]+)/(.*)$`
       ),
-      replacement: 'docs/$1/$2',
+      replacement: 'docs/$1',
     },
     {
       pattern: new RegExp(`${projectPath}/docs/(.*)$`),
-      replacement: 'docs/next/$1',
+      replacement: 'docs/next',
     },
     {
       pattern: new RegExp(
         `${projectPath}/optimize_versioned_docs/version-${currentVersions.optimizeVersion}/(.*)$`
       ),
-      replacement: 'optimize/$1',
+      replacement: 'optimize',
     },
     {
       pattern: new RegExp(
         `${projectPath}/optimize_versioned_docs/version-([^/]+)/(.*)$`
       ),
-      replacement: 'optimize/$1/$2',
+      replacement: 'optimize/$1',
     },
     {
       pattern: new RegExp(`${projectPath}/optimize/(.*)$`),
-      replacement: 'optimize/next/$1',
+      replacement: 'optimize/next',
     },
   ];
 
@@ -103,23 +122,22 @@ function findUrlPath(filePath, projectPath) {
     const match = filePath.match(mapping.pattern);
     if (match) {
       // We have a match, apply the replacement
-      let urlPath = mapping.replacement;
+      let urlBasePath = mapping.replacement;
 
-      // Replace capture group references
-      //  $1: version number
-      //  $2: path after version
-      if (match[1]) {
-        urlPath = urlPath.replace('$1', match[1]);
-      }
+      let urlDirectory = '';
       if (match[2]) {
-        urlPath = urlPath.replace('$2', match[2]);
+        // if there are two captures, the first is a version and the second is the directory path + file
+        urlDirectory = match[2];
+        urlBasePath = urlBasePath.replace('$1', match[1]);
+      } else {
+        // else the only capture is the directory path + file
+        urlDirectory = match[1];
       }
 
       // Remove file name from URL path
-      urlPath = urlPath.split('/').slice(0, -1).join('/');
+      urlDirectory = urlDirectory.split('/').slice(0, -1).join('/');
 
-      console.log('  URL path: ', urlPath);
-      return urlPath;
+      return { urlBasePath, urlDirectory };
     }
   }
 
@@ -128,23 +146,38 @@ function findUrlPath(filePath, projectPath) {
   process.exit(1);
 }
 
-function findId(contents) {
-  // find the id property in the frontmatter
-
+function extractFrontmatter(frontmatter) {
   // Extract frontmatter content between --- markers
-  const frontMatterMatch = contents.match(/^---\s*$([\s\S]*?)^---\s*$/m);
+  const match = frontmatter.match(/^---\s*$([\s\S]*?)^---\s*$/m);
 
-  if (!frontMatterMatch || !frontMatterMatch[1]) {
-    return null;
+  // Return the trimmed match value if found, otherwise null
+  if (match && match[1]) {
+    return match[1].trim();
   }
+  return null;
+}
 
+function extractSlugFromFrontmatter(frontmatter) {
+  // Look for slug: value within the frontmatter
+  const match = frontmatter.match(/^slug:\s*(.*)$/m);
+
+  // Return the trimmed match value if found, otherwise null
+  if (match && match[1]) {
+    // trim the match, and remove leading slash:
+    return match[1].trim().replace(/^\//, '');
+  }
+  return null;
+}
+
+function extractIdFromFrontmatter(frontmatter) {
   // Look for id: value within the frontmatter
-  const idMatch = frontMatterMatch[1].match(/^id:\s*(.*)$/m);
+  const match = frontmatter.match(/^id:\s*(.*)$/m);
 
-  if (!idMatch || !idMatch[1]) {
-    return null;
+  // Return the trimmed match value if found, otherwise null
+  if (match && match[1]) {
+    return match[1].trim();
   }
-  return idMatch[1].trim();
+  return null;
 }
 
 function openUrl(url) {
