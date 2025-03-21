@@ -7,15 +7,6 @@
 //   projectPath: The path to the root of the Docusaurus project.
 //   host: The host to use for the URL. Default: http://localhost:3000.
 
-const config = {
-  docs: {
-    currentVersion: '8.6',
-  },
-  optimize: {
-    currentVersion: '3.14.0',
-  },
-};
-
 const { exec } = require('child_process');
 const { readFileSync } = require('fs');
 
@@ -30,6 +21,9 @@ if (!filePath || !projectPath) {
   console.error('Usage: open-docusaurus <file-path> <project-path>');
   process.exit(1);
 }
+
+const currentVersions = require(`${projectPath}/src/versions`)
+  .versionMappings[0];
 
 const contents = readFileContents(filePath);
 
@@ -72,7 +66,7 @@ function findUrlPath(filePath, projectPath) {
   const pathMappings = [
     {
       pattern: new RegExp(
-        `${projectPath}/versioned_docs/version-${config.docs.currentVersion}/(.*)$`
+        `${projectPath}/versioned_docs/version-${currentVersions.docsVersion}/(.*)$`
       ),
       replacement: 'docs/$1',
     },
@@ -88,7 +82,7 @@ function findUrlPath(filePath, projectPath) {
     },
     {
       pattern: new RegExp(
-        `${projectPath}/optimize_versioned_docs/version-${config.optimize.currentVersion}/(.*)$`
+        `${projectPath}/optimize_versioned_docs/version-${currentVersions.optimizeVersion}/(.*)$`
       ),
       replacement: 'optimize/$1',
     },
