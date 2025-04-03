@@ -24,13 +24,41 @@ after-login-command = []
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-  ## start jankyborders
-  ##   ignore todoist because it shows funny borders for the quick-add window.
-  'exec-and-forget borders active_color=0xff70e544 inactive_color=0xff949992 width=7.0 blacklist="Todoist"'
+    ### sjhsjhsjh
+    ## start jankyborders
+    ##   ignore todoist because it shows funny borders for the quick-add window.
+    'exec-and-forget borders active_color=0xff70e544 inactive_color=0xff949992 width=7.0 blacklist="Todoist"',
 ]
 
+## sjh settings that are moderately noteworthy.
+# -----------
 # Start AeroSpace at login
 start-at-login = false
+
+# Possible values: tiles|accordion
+default-root-container-layout = 'tiles'
+# Possible values: horizontal|vertical|auto
+# 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
+#               tall monitor (anything higher than wide) gets vertical orientation
+default-root-container-orientation = 'auto'
+
+# Gaps between windows (inner-*) and between monitor edges (outer-*).
+# Possible values:
+# - Constant:     gaps.outer.top = 8
+# - Per monitor:  gaps.outer.top = [{ monitor.main = 16 }, { monitor."some-pattern" = 32 }, 24]
+#                 In this example, 24 is a default value when there is no match.
+#                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
+#                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
+[gaps]
+inner.horizontal = 11
+inner.vertical = 9
+outer.left = 8
+outer.bottom = 8
+outer.top = 8
+outer.right = 8
+
+## sjh settings I don't care about.
+# -----------
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
 enable-normalization-flatten-containers = true
@@ -40,14 +68,6 @@ enable-normalization-opposite-orientation-for-nested-containers = true
 # The 'accordion-padding' specifies the size of accordion padding
 # You can set 0 to disable the padding feature
 accordion-padding = 30
-
-# Possible values: tiles|accordion
-default-root-container-layout = 'tiles'
-
-# Possible values: horizontal|vertical|auto
-# 'auto' means: wide monitor (anything wider than high) gets horizontal orientation,
-#               tall monitor (anything higher than wide) gets vertical orientation
-default-root-container-orientation = 'auto'
 
 # Mouse follows focus when focused monitor changes
 # Drop it from your config, if you don't like this behavior
@@ -66,22 +86,8 @@ automatically-unhide-macos-hidden-apps = true
 [key-mapping]
 preset = 'qwerty'
 
-# Gaps between windows (inner-*) and between monitor edges (outer-*).
-# Possible values:
-# - Constant:     gaps.outer.top = 8
-# - Per monitor:  gaps.outer.top = [{ monitor.main = 16 }, { monitor."some-pattern" = 32 }, 24]
-#                 In this example, 24 is a default value when there is no match.
-#                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
-#                 See: https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
-[gaps]
-inner.horizontal = 11
-inner.vertical =   9
-outer.left =       8
-outer.bottom =     8
-outer.top =        8
-outer.right =      8
 
-
+## sjhsjhsjh modes
 
 #  MAIN MODE
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -113,6 +119,10 @@ outer.right =      8
 # end tell'
 # '''
 
+
+## sjh noteworthy bindings
+# -----------
+
 ## FOCUS
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#focus
@@ -138,6 +148,7 @@ ctrl-alt-d = 'workspace D'
 ctrl-alt-e = 'workspace E'
 ctrl-alt-f = 'workspace F'
 
+# sjh unsolved: multiple devices
 # ctrl-alt-1 = 'workspace 1(JunkDrawer)'
 # ctrl-alt-2 = 'workspace 2(Comms)'
 # ctrl-alt-3 = 'workspace 3(CaseParts)'
@@ -147,7 +158,7 @@ ctrl-alt-f = 'workspace F'
 # ctrl-alt-7 = 'workspace 7(Sprouts)'
 # ctrl-alt-8 = 'workspace 8(Aerospace)'
 
-## sjh: mimic native spaces navigation
+## sjh: mimic native spaces navigation; turn off macos shortcuts for these!
 ctrl-left = 'workspace prev'
 ctrl-right = 'workspace next'
 
@@ -199,12 +210,12 @@ ctrl-alt-shift-right = 'move-node-to-workspace next'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 ctrl-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
+# sjhsjhsjh
 ## MODES
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-semicolon = 'mode config'
 alt-comma = 'mode layout'
 alt-o = 'mode open'
-
 
 
 # LAYOUT MODE
@@ -230,23 +241,23 @@ r = ['flatten-workspace-tree', 'mode main']
 
 # set all to floating
 alt-f = [
-    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} floating", 
-    "mode main"
-    ]
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} floating",
+    "mode main",
+]
 
 # set all to tiles
 alt-t = [
-    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling", 
-    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiles horizontal", 
-    "mode main"
-    ]
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling",
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiles horizontal",
+    "mode main",
+]
 
 # set all to accordion
 alt-a = [
-    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling", 
-    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} accordion horizontal", 
-    "mode main"
-    ]
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling",
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} accordion horizontal",
+    "mode main",
+]
 
 # toggle specific window between floating and tiling
 f = ['layout floating']
@@ -254,33 +265,32 @@ t = ['layout tiling horizontal']
 
 # auto-layout
 a = [
-    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling", 
+    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling",
     "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} h_tiles",
-    "focus --dfs-index 0", 
-    "join-with right", 
-    "focus --dfs-index 2", 
-    "join-with right", 
+    "focus --dfs-index 0",
+    "join-with right",
+    "focus --dfs-index 2",
+    "join-with right",
     "focus --dfs-index 4",
     "join-with right",
-    "focus --dfs-index 6", 
-    "join-with right", 
-    "focus --dfs-index 8", 
-    "join-with right", 
-    "focus --dfs-index 10", 
+    "focus --dfs-index 6",
     "join-with right",
-    "focus --dfs-index 12", 
-    "join-with right", 
+    "focus --dfs-index 8",
+    "join-with right",
+    "focus --dfs-index 10",
+    "join-with right",
+    "focus --dfs-index 12",
+    "join-with right",
     "focus --dfs-index 14",
     "join-with right",
     "focus --dfs-index 16",
-    "join-with right", 
-    "mode main"
+    "join-with right",
+    "mode main",
 ]
 b = ['balance-sizes', 'mode main']
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']
-
 
 
 # OPEN MODE
@@ -291,12 +301,23 @@ backspace = ['close-all-windows-but-current', 'mode main']
 
 # open windows for camunda
 # edge with personal profile (sjh)
-s = ["exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Default'", "mode main" ]
+s = [
+    "exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Default'",
+    "mode main",
+]
 # edge with camunda profile
-c = ["exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Profile 2'", "mode main" ]
+c = [
+    "exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Profile 2'",
+    "mode main",
+]
 
 # docs windows
-d = ["layout horizontal", "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://docs.camunda.io'", "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://github.com/camunda/camunda-docs'", "mode main" ]
+d = [
+    "layout horizontal",
+    "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://docs.camunda.io'",
+    "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://github.com/camunda/camunda-docs'",
+    "mode main",
+]
 
 
 # CONFIG MODE
@@ -307,14 +328,10 @@ d = ["layout horizontal", "exec-and-forget open -na 'Microsoft Edge' --args --ne
 esc = ['reload-config', 'mode main']
 
 ## save session
-s=[
-    'exec-and-forget ~/.aerospace/aerospace.save.sh', 'mode main'
-]
+s = ['exec-and-forget ~/.aerospace/aerospace.save.sh', 'mode main']
 
 ## restore session
-r=[
-    'exec-and-forget ~/.aerospace/aerospace.restore.sh', 'mode main'
-]
+r = ['exec-and-forget ~/.aerospace/aerospace.restore.sh', 'mode main']
 
 
 [[on-window-detected]]
