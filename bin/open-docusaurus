@@ -88,14 +88,13 @@ function extractFileName(filePath, documentId) {
 }
 
 function findUrlBasePathAndDirectory(filePath, projectPath) {
-  const currentVersions = require(`${projectPath}/src/versions`)
-    .versionMappings[0];
+  const { currentVersion } = require(`${projectPath}/src/versions`);
 
   // Different versions match different patterns.
   const pathMappings = [
     {
       pattern: new RegExp(
-        `${projectPath}/versioned_docs/version-${currentVersions.docsVersion}/(.*)$`
+        `${projectPath}/versioned_docs/version-${currentVersion}/(.*)$`
       ),
       replacement: 'docs',
     },
@@ -108,22 +107,6 @@ function findUrlBasePathAndDirectory(filePath, projectPath) {
     {
       pattern: new RegExp(`${projectPath}/docs/(.*)$`),
       replacement: 'docs/next',
-    },
-    {
-      pattern: new RegExp(
-        `${projectPath}/optimize_versioned_docs/version-${currentVersions.optimizeVersion}/(.*)$`
-      ),
-      replacement: 'optimize',
-    },
-    {
-      pattern: new RegExp(
-        `${projectPath}/optimize_versioned_docs/version-([^/]+)/(.*)$`
-      ),
-      replacement: 'optimize/$1',
-    },
-    {
-      pattern: new RegExp(`${projectPath}/optimize/(.*)$`),
-      replacement: 'optimize/next',
     },
   ];
 
