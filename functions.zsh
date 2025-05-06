@@ -1,5 +1,5 @@
-function camunda() {
-  cd ~/sjh/dev/camunda/$1
+function lean() {
+  cd ~/sjh/dev/lean/$1
 }
 
 function sjh() {
