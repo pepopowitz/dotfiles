@@ -1,6 +1,6 @@
 [user]
 	name = Steven Hicks
-	email = steven.hicks@camunda.com
+	email = shicks@leanscaper.com
 [includeIf "gitdir:~/sjh/dev/personal/"]
   path = .gitconfig-personal
 [alias]
