@@ -4,4 +4,4 @@
 PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
 export PATH
 
-eval "$(mise activate zsh --shims)"
+eval "$(/opt/homebrew/bin/mise activate zsh --shims)"
