@@ -42,6 +42,10 @@ default-root-container-layout = 'tiles'
 #               tall monitor (anything higher than wide) gets vertical orientation
 default-root-container-orientation = 'auto'
 
+
+## sjhsjh video 1: Tiles vs accordions
+
+
 ## sjh settings I don't care about.
 # -----------
 
@@ -131,15 +135,19 @@ alt-k = 'focus down'
 alt-i = 'focus up'
 alt-l = 'focus right'
 
+
+## sjhsjh video 2: Focus updownleftright
+
+
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
 ctrl-alt-1 = 'workspace 1(JunkDrawer)'
 ctrl-alt-2 = 'workspace 2(Comms)'
-ctrl-alt-3 = 'workspace 3(Docs)'
-ctrl-alt-4 = 'workspace 4(Camundacamunda)'
-ctrl-alt-5 = 'workspace 5(Dotfiles)'
-ctrl-alt-6 = 'workspace 6(Personal)'
-ctrl-alt-7 = 'workspace 7'
-ctrl-alt-8 = 'workspace 8'
+ctrl-alt-3 = 'workspace 3(CaseParts)'
+ctrl-alt-4 = 'workspace 4(Friends)'
+ctrl-alt-5 = 'workspace 5(Supernova)'
+ctrl-alt-6 = 'workspace 6(Art)'
+ctrl-alt-7 = 'workspace 7(Sprouts)'
+ctrl-alt-8 = 'workspace 8(Aerospace)'
 ctrl-alt-9 = 'workspace 9'
 ctrl-alt-a = 'workspace A'
 ctrl-alt-b = 'workspace B'
@@ -165,6 +173,10 @@ ctrl-right = 'workspace next'
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 ctrl-alt-tab = 'workspace-back-and-forth'
 
+
+## sjhsjh video 3: Workspace list;focus workspace; next/prev workspace; workspace back and forth
+
+
 ## MOVE
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move
@@ -182,12 +194,12 @@ ctrl-alt-shift-l = 'join-with right'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 ctrl-alt-shift-1 = 'move-node-to-workspace 1(JunkDrawer)'
 ctrl-alt-shift-2 = 'move-node-to-workspace 2(Comms)'
-ctrl-alt-shift-3 = 'move-node-to-workspace 3(Docs)'
-ctrl-alt-shift-4 = 'move-node-to-workspace 4(Camundacamunda)'
-ctrl-alt-shift-5 = 'move-node-to-workspace 5(Dotfiles)'
-ctrl-alt-shift-6 = 'move-node-to-workspace 6(Personal)'
-ctrl-alt-shift-7 = 'move-node-to-workspace 7'
-ctrl-alt-shift-8 = 'move-node-to-workspace 8'
+ctrl-alt-shift-3 = 'move-node-to-workspace 3(CaseParts)'
+ctrl-alt-shift-4 = 'move-node-to-workspace 4(Friends)'
+ctrl-alt-shift-5 = 'move-node-to-workspace 5(Supernova)'
+ctrl-alt-shift-6 = 'move-node-to-workspace 6(Art)'
+ctrl-alt-shift-7 = 'move-node-to-workspace 7(Sprouts)'
+ctrl-alt-shift-8 = 'move-node-to-workspace 8(Aerospace)'
 ctrl-alt-shift-9 = 'move-node-to-workspace 9'
 ctrl-alt-shift-a = 'move-node-to-workspace A'
 ctrl-alt-shift-b = 'move-node-to-workspace B'
@@ -206,6 +218,10 @@ ctrl-alt-shift-f = 'move-node-to-workspace F'
 ## sjh: mimic native spaces navigation
 ctrl-alt-shift-left = 'move-node-to-workspace prev'
 ctrl-alt-shift-right = 'move-node-to-workspace next'
+
+
+## sjhsjh video 4: Move window; Join windows; Move to workspace; Move to next/prev space
+
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 ctrl-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
@@ -236,8 +252,18 @@ comma = 'layout accordion horizontal vertical'
 shift-minus = 'resize smart -100'
 shift-equal = 'resize smart +100'
 
+b = ['balance-sizes', 'mode main']
+
 # reset tiled/accordioned layout to even distribution
 r = ['flatten-workspace-tree', 'mode main']
+
+
+## sjhsjh video 5: Layout mode basics: tiles; accordions; resize; balance; reset
+
+
+# toggle specific window between floating and tiling
+f = ['layout floating']
+t = ['layout tiling horizontal']
 
 # set all to floating
 alt-f = [
@@ -252,18 +278,18 @@ alt-t = [
     "mode main",
 ]
 
-# set all to accordion
+
+## sjhsjh video 6: Layout mode advanced: floating <> tiling; all floating; all tiling.
+
+
+# set all to accordion (not sure this actually works)
 alt-a = [
     "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling",
     "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} accordion horizontal",
     "mode main",
 ]
 
-# toggle specific window between floating and tiling
-f = ['layout floating']
-t = ['layout tiling horizontal']
-
-# auto-layout
+# auto-layout (doesn't work well)
 a = [
     "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling",
     "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} h_tiles",
@@ -287,7 +313,6 @@ a = [
     "join-with right",
     "mode main",
 ]
-b = ['balance-sizes', 'mode main']
 
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']
@@ -320,6 +345,9 @@ d = [
 ]
 
 
+## sjhsjh video 7: Open mode: edge with profiles; docs windows; close all but current.
+
+
 # CONFIG MODE
 # 'service' binding mode declaration.
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -333,6 +361,11 @@ s = ['exec-and-forget ~/.aerospace/aerospace.save.sh', 'mode main']
 ## restore session
 r = ['exec-and-forget ~/.aerospace/aerospace.restore.sh', 'mode main']
 
+
+## sjhsjh video 8: Config mode: save & restore sessions.
+
+
+## sjh: assign apps to floating. (could also assign to workspaces)
 
 [[on-window-detected]]
 if.app-id = 'com.apple.ActivityMonitor'
