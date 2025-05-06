@@ -1,5 +1,5 @@
 function lean() {
-  cd ~/sjh/dev/lean/$1
+  cd ~/sjh/dev/leanscaper/$1
 }
 
 function sjh() {
