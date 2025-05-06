@@ -19,6 +19,7 @@
   "files.defaultLanguage": "markdown",
   "workbench.tree.renderIndentGuides": "none",
   "terminal.integrated.fontWeight": "500",
+  "terminal.integrated.fontFamily": "SauceCodePro Nerd Font Mono",
   "breadcrumbs.enabled": true,
   "[json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
