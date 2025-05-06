@@ -24,13 +24,12 @@ after-login-command = []
 # 'after-startup-command' is run after 'after-login-command'
 # Available commands : https://nikitabobko.github.io/AeroSpace/commands
 after-startup-command = [
-    ### sjhsjhsjh
     ## start jankyborders
     ##   ignore todoist because it shows funny borders for the quick-add window.
     'exec-and-forget borders active_color=0xff70e544 inactive_color=0xff949992 width=7.0 blacklist="Todoist"',
 ]
 
-## sjh settings that are moderately noteworthy.
+## settings that are moderately noteworthy.
 # -----------
 # Start AeroSpace at login
 start-at-login = false
@@ -42,11 +41,7 @@ default-root-container-layout = 'tiles'
 #               tall monitor (anything higher than wide) gets vertical orientation
 default-root-container-orientation = 'auto'
 
-
-## sjhsjh video 1: Tiles vs accordions
-
-
-## sjh settings I don't care about.
+## settings I don't care about.
 # -----------
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
@@ -91,8 +86,6 @@ outer.right = 8
 preset = 'qwerty'
 
 
-## sjhsjhsjh modes
-
 #  MAIN MODE
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
 # 'main' binding mode must be always presented
@@ -124,7 +117,7 @@ preset = 'qwerty'
 # '''
 
 
-## sjh noteworthy bindings
+## noteworthy bindings
 # -----------
 
 ## FOCUS
@@ -135,17 +128,13 @@ alt-k = 'focus down'
 alt-i = 'focus up'
 alt-l = 'focus right'
 
-
-## sjhsjh video 2: Focus updownleftright
-
-
+ctrl-alt-6 = 'workspace 6(Art)'
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
 ctrl-alt-1 = 'workspace 1(JunkDrawer)'
 ctrl-alt-2 = 'workspace 2(Comms)'
 ctrl-alt-3 = 'workspace 3(CaseParts)'
 ctrl-alt-4 = 'workspace 4(Friends)'
 ctrl-alt-5 = 'workspace 5(Supernova)'
-ctrl-alt-6 = 'workspace 6(Art)'
 ctrl-alt-7 = 'workspace 7(Sprouts)'
 ctrl-alt-8 = 'workspace 8(Aerospace)'
 ctrl-alt-9 = 'workspace 9'
@@ -166,16 +155,12 @@ ctrl-alt-f = 'workspace F'
 # ctrl-alt-7 = 'workspace 7(Sprouts)'
 # ctrl-alt-8 = 'workspace 8(Aerospace)'
 
-## sjh: mimic native spaces navigation; turn off macos shortcuts for these!
+## mimic native spaces navigation; turn off macos shortcuts for these!
 ctrl-left = 'workspace prev'
 ctrl-right = 'workspace next'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace-back-and-forth
 ctrl-alt-tab = 'workspace-back-and-forth'
-
-
-## sjhsjh video 3: Workspace list;focus workspace; next/prev workspace; workspace back and forth
-
 
 ## MOVE
 
@@ -215,18 +200,13 @@ ctrl-alt-shift-f = 'move-node-to-workspace F'
 # ctrl-alt-shift-7 = 'move-node-to-workspace 7(Sprouts)'
 # ctrl-alt-shift-8 = 'move-node-to-workspace 8(Aerospace)'
 
-## sjh: mimic native spaces navigation
+## mimic native spaces navigation
 ctrl-alt-shift-left = 'move-node-to-workspace prev'
 ctrl-alt-shift-right = 'move-node-to-workspace next'
-
-
-## sjhsjh video 4: Move window; Join windows; Move to workspace; Move to next/prev space
-
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-workspace-to-monitor
 ctrl-alt-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
-# sjhsjhsjh
 ## MODES
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 alt-semicolon = 'mode config'
@@ -258,9 +238,6 @@ b = ['balance-sizes', 'mode main']
 r = ['flatten-workspace-tree', 'mode main']
 
 
-## sjhsjh video 5: Layout mode basics: tiles; accordions; resize; balance; reset
-
-
 # toggle specific window between floating and tiling
 f = ['layout floating']
 t = ['layout tiling horizontal']
@@ -277,9 +254,6 @@ alt-t = [
     "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiles horizontal",
     "mode main",
 ]
-
-
-## sjhsjh video 6: Layout mode advanced: floating <> tiling; all floating; all tiling.
 
 
 # set all to accordion (not sure this actually works)
@@ -330,9 +304,9 @@ s = [
     "exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Default'",
     "mode main",
 ]
-# edge with camunda profile
-c = [
-    "exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Profile 2'",
+# edge with work profile
+w = [
+    "exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Profile 1'",
     "mode main",
 ]
 
@@ -343,9 +317,6 @@ d = [
     "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://github.com/camunda/camunda-docs'",
     "mode main",
 ]
-
-
-## sjhsjh video 7: Open mode: edge with profiles; docs windows; close all but current.
 
 
 # CONFIG MODE
@@ -362,10 +333,7 @@ s = ['exec-and-forget ~/.aerospace/aerospace.save.sh', 'mode main']
 r = ['exec-and-forget ~/.aerospace/aerospace.restore.sh', 'mode main']
 
 
-## sjhsjh video 8: Config mode: save & restore sessions.
-
-
-## sjh: assign apps to floating. (could also assign to workspaces)
+## assign apps to floating. (could also assign to workspaces)
 
 [[on-window-detected]]
 if.app-id = 'com.apple.ActivityMonitor'
