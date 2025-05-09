@@ -128,22 +128,19 @@ alt-k = 'focus down'
 alt-i = 'focus up'
 alt-l = 'focus right'
 
-ctrl-alt-6 = 'workspace 6(Art)'
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
 ctrl-alt-1 = 'workspace 1(JunkDrawer)'
 ctrl-alt-2 = 'workspace 2(Comms)'
-ctrl-alt-3 = 'workspace 3(CaseParts)'
-ctrl-alt-4 = 'workspace 4(Friends)'
-ctrl-alt-5 = 'workspace 5(Supernova)'
-ctrl-alt-7 = 'workspace 7(Sprouts)'
-ctrl-alt-8 = 'workspace 8(Aerospace)'
-ctrl-alt-9 = 'workspace 9'
-ctrl-alt-a = 'workspace A'
-ctrl-alt-b = 'workspace B'
-ctrl-alt-c = 'workspace C'
-ctrl-alt-d = 'workspace D'
-ctrl-alt-e = 'workspace E'
-ctrl-alt-f = 'workspace F'
+ctrl-alt-3 = 'workspace 3(TODOs)'
+ctrl-alt-a = 'workspace AliceBlue'
+ctrl-alt-b = 'workspace Bisque'
+ctrl-alt-c = 'workspace Cornsilk'
+ctrl-alt-d = 'workspace DeepSkyBlue'
+ctrl-alt-e = 'workspace Emerald'
+ctrl-alt-f = 'workspace FireBrick'
+
+# Go to first empty workspace
+ctrl-alt-0 = "exec-and-forget ~/.aerospace/focus-empty-workspace.sh"
 
 # sjh unsolved: multiple devices
 # ctrl-alt-1 = 'workspace 1(JunkDrawer)'
@@ -179,19 +176,16 @@ ctrl-alt-shift-l = 'join-with right'
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
 ctrl-alt-shift-1 = 'move-node-to-workspace 1(JunkDrawer)'
 ctrl-alt-shift-2 = 'move-node-to-workspace 2(Comms)'
-ctrl-alt-shift-3 = 'move-node-to-workspace 3(CaseParts)'
-ctrl-alt-shift-4 = 'move-node-to-workspace 4(Friends)'
-ctrl-alt-shift-5 = 'move-node-to-workspace 5(Supernova)'
-ctrl-alt-shift-6 = 'move-node-to-workspace 6(Art)'
-ctrl-alt-shift-7 = 'move-node-to-workspace 7(Sprouts)'
-ctrl-alt-shift-8 = 'move-node-to-workspace 8(Aerospace)'
-ctrl-alt-shift-9 = 'move-node-to-workspace 9'
-ctrl-alt-shift-a = 'move-node-to-workspace A'
-ctrl-alt-shift-b = 'move-node-to-workspace B'
-ctrl-alt-shift-c = 'move-node-to-workspace C'
-ctrl-alt-shift-d = 'move-node-to-workspace D'
-ctrl-alt-shift-e = 'move-node-to-workspace E'
-ctrl-alt-shift-f = 'move-node-to-workspace F'
+ctrl-alt-shift-3 = 'move-node-to-workspace 3(TODOs)'
+ctrl-alt-shift-a = 'move-node-to-workspace AliceBlue'
+ctrl-alt-shift-b = 'move-node-to-workspace Bisque'
+ctrl-alt-shift-c = 'move-node-to-workspace Cornsilk'
+ctrl-alt-shift-d = 'move-node-to-workspace DeepSkyBlue'
+ctrl-alt-shift-e = 'move-node-to-workspace Emerald'
+ctrl-alt-shift-f = 'move-node-to-workspace FireBrick'
+
+# Move current window to first empty workspace and focus on it
+ctrl-alt-shift-0 = "exec-and-forget ~/.aerospace/move-to-empty-workspace-and-focus.sh"
 
 # ctrl-alt-shift-3 = 'move-node-to-workspace 3(CaseParts)'
 # ctrl-alt-shift-4 = 'move-node-to-workspace 4(Friends)'
@@ -236,7 +230,6 @@ b = ['balance-sizes', 'mode main']
 
 # reset tiled/accordioned layout to even distribution
 r = ['flatten-workspace-tree', 'mode main']
-
 
 # toggle specific window between floating and tiling
 f = ['layout floating']
@@ -357,4 +350,8 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'us.zoom.xos'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
 run = 'layout floating'
