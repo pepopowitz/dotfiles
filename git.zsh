@@ -9,6 +9,8 @@ alias pulls='gh pr list --web'
 
 # git aliases
 alias gco='git checkout'
+# "gco quick", to skip post-checkout hook
+alias gcoq='git -c core.hooksPath=/dev/null checkout'
 alias gpo='git push origin'
 alias gpo1='git push --set-upstream origin $(git symbolic-ref --quiet --short HEAD )'
 alias gst='git status'
