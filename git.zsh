@@ -46,6 +46,8 @@ function stash() {
   fi
 }
 
+alias stashdiff='git stash show -p'
+
 function unstash() {
   re='^[0-9]+$'
   if [[ $1 ]] then
