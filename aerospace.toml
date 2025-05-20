@@ -142,16 +142,6 @@ ctrl-alt-f = 'workspace FireBrick'
 # Go to first empty workspace
 ctrl-alt-0 = "exec-and-forget ~/.aerospace/focus-empty-workspace.sh"
 
-# sjh unsolved: multiple devices
-# ctrl-alt-1 = 'workspace 1(JunkDrawer)'
-# ctrl-alt-2 = 'workspace 2(Comms)'
-# ctrl-alt-3 = 'workspace 3(CaseParts)'
-# ctrl-alt-4 = 'workspace 4(Friends)'
-# ctrl-alt-5 = 'workspace 5(Supernova)'
-# ctrl-alt-6 = 'workspace 6(Art)'
-# ctrl-alt-7 = 'workspace 7(Sprouts)'
-# ctrl-alt-8 = 'workspace 8(Aerospace)'
-
 ## mimic native spaces navigation; turn off macos shortcuts for these!
 ctrl-left = 'workspace prev'
 ctrl-right = 'workspace next'
@@ -259,31 +249,6 @@ alt-a = [
     "mode main",
 ]
 
-# auto-layout (doesn't work well)
-a = [
-    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} tiling",
-    "exec-and-forget aerospace list-windows --workspace focused | awk -F '|' '{print $1}' | xargs -I {} aerospace layout --window-id {} h_tiles",
-    "focus --dfs-index 0",
-    "join-with right",
-    "focus --dfs-index 2",
-    "join-with right",
-    "focus --dfs-index 4",
-    "join-with right",
-    "focus --dfs-index 6",
-    "join-with right",
-    "focus --dfs-index 8",
-    "join-with right",
-    "focus --dfs-index 10",
-    "join-with right",
-    "focus --dfs-index 12",
-    "join-with right",
-    "focus --dfs-index 14",
-    "join-with right",
-    "focus --dfs-index 16",
-    "join-with right",
-    "mode main",
-]
-
 # sticky is not yet supported https://github.com/nikitabobko/AeroSpace/issues/2
 #s = ['layout sticky tiling', 'mode main']
 
@@ -349,7 +314,8 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.todoist.mac.Todoist'
-run = 'layout floating'
+# run = 'layout floating'
+run = 'move-node-to-workspace 3(TODOs)'
 
 [[on-window-detected]]
 if.app-id = 'us.zoom.xos'
@@ -357,4 +323,12 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
-run = 'layout floating'
+run = ['layout floating', 'move-node-to-workspace 1(JunkDrawer)']
+
+[[on-window-detected]]
+if.app-id = 'com.tinyspeck.slackmacgap'
+run = 'move-node-to-workspace 2(Comms)'
+
+[[on-window-detected]]
+if.app-id = 'com.apple.iCal'
+run = 'move-node-to-workspace 3(TODOs)'
