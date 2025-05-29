@@ -211,9 +211,26 @@ alt-l = 'focus right'
 # See: https://nikitabobko.github.io/AeroSpace/commands#layout
 slash = 'layout tiles horizontal vertical'
 comma = 'layout accordion horizontal vertical'
-# reset tree before setting layout (for swapping working location, i.e. on laptop vs monitor)s = ['flatten-workspace-tree', 'layout tiles horizontal']
-alt-slash = ['flatten-workspace-tree', 'layout tiles horizontal']
-alt-comma = ['flatten-workspace-tree', 'layout accordion horizontal']
+
+# switching to desktop/laptop: reset current workspace to layout
+alt-slash = ['flatten-workspace-tree', 'layout tiles horizontal', 'mode main']
+alt-comma = [
+    'flatten-workspace-tree',
+    'layout accordion horizontal',
+    'mode main',
+]
+
+# switching to desktop: reset all workspaces to tiles
+ctrl-alt-slash = [
+    'exec-and-forget ~/.aerospace/apply-layout-to-all-workspaces.sh tiles',
+    'mode main',
+]
+
+# switching to laptop: reset all workspaces to accordions
+ctrl-alt-comma = [
+    'exec-and-forget ~/.aerospace/apply-layout-to-all-workspaces.sh accordion',
+    'mode main',
+]
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#resize
 shift-minus = 'resize smart -100'
