@@ -135,3 +135,9 @@ function rebaseonmain() {
     unstash
   fi
 }
+
+alias skips="git ls-files -v | grep '^S'"
+alias skip="git update-index --skip-worktree"
+alias unskip="git update-index --no-skip-worktree"
+alias ughlockfile="rm -f ./package-lock.json && npm install"
+alias dammitlockfile="rm -f ./package-lock.json && npm run clean:nm && npm install"
