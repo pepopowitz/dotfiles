@@ -1,0 +1,124 @@
+[
+  {
+    "name": "localhost",
+    "url": "http://localhost:3000/",
+    "routes": []
+  },
+  {
+    "name": "staging",
+    "url": "https://staging.leanscaper.com/",
+    "routes": []
+  },
+  {
+    "name": "gh (GitHub)",
+    "url": "https://github.com",
+    "routes": [
+      {
+        "name": "pulls / PRs",
+        "url": "https://github.com/leanscaper/platform/pulls",
+        "routes": []
+      },
+      {
+        "name": "platform",
+        "url": "https://github.com/leanscaper/platform/pulls",
+        "routes": [
+          {
+            "name": "pulls / PRs",
+            "url": "https://github.com/leanscaper/platform/pulls",
+            "routes": []
+          },
+          {
+            "name": "*",
+            "url": "https://github.com/leanscaper/platform/${0}",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "iac",
+        "url": "https://github.com/leanscaper/iac",
+        "routes": [
+          {
+            "name": "pulls / PRs",
+            "url": "https://github.com/leanscaper/iac/pulls",
+            "routes": []
+          },
+          {
+            "name": "*",
+            "url": "https://github.com/leanscaper/iac/${0}",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "notifications",
+        "url": "https://github.com/notifications",
+        "routes": []
+      },
+      {
+        "name": "me",
+        "url": "https://github.com/pepopowitz",
+        "routes": [
+          {
+            "name": "*",
+            "url": "https://github.com/pepopowitz/${0}",
+            "routes": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "google",
+    "url": "https://google.com",
+    "routes": [
+      {
+        "name": "*",
+        "url": "https://google.com/search?q=-ai+${0}",
+        "routes": []
+      },
+      {
+        "name": "google",
+        "url": "https://google.com",
+        "routes": []
+      }
+    ]
+  },
+  {
+    "name": "kagi",
+    "url": "https://kagi.com",
+    "routes": [
+      {
+        "name": "*",
+        "url": "https://kagi.com/search?q=${0}",
+        "routes": []
+      }
+    ]
+  },
+  {
+    "name": "aws",
+    "url": "https://leanscaper.awsapps.com/start/",
+    "routes": [
+      {
+        "name": "CodeBuild",
+        "url": "https://us-east-1.console.aws.amazon.com/codesuite/codebuild/projects?region=us-east-1",
+        "routes": []
+      },
+      {
+        "name": "CodeDeploy",
+        "url": "https://us-east-1.console.aws.amazon.com/codesuite/codedeploy/home?region=us-east-1",
+        "routes": []
+      },
+      {
+        "name": "CodePipeline",
+        "url": "https://us-east-1.console.aws.amazon.com/codesuite/codepipeline/pipelines?region=us-east-1",
+        "routes": []
+      }
+    ]
+  },
+  {
+    "name": "harlequin keybindings",
+    "url": "https://harlequin.sh/docs/bindings#results-viewer-bindings",
+    "routes": []
+  }
+]
