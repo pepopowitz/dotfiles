@@ -16,5 +16,6 @@ alias past="cal -B 2"
 
 # technology is disappointing
 alias flip-audio-table="sudo killall coreaudiod && sudo launchctl stop com.apple.bluetoothd && sudo launchctl start com.apple.bluetoothd"
+alias flip-wifi-table="sudo ifconfig en0 down && sudo ifconfig en0 up"
 
 alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
