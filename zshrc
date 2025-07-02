@@ -23,8 +23,7 @@ source ~/.aliases.zsh
 source ~/.functions.zsh
 source ~/.git.zsh
 
-# eventually I'll want this
-# source ~/.private.zshrc
+source ~/.private.zshrc
 
 # This won't do anything because I'm not using oh-my-zsh
 #   But maybe I'll want to figure out how to do something similar with just zsh?
