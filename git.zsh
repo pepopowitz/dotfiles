@@ -136,6 +136,17 @@ function rebaseonmain() {
   fi
 }
 
+# Applies a prefix to gkm based on the current feature branch number.
+function gkmls() {
+  local branch=$(git branch --show-current)
+  if [[ "$branch" == ls-* ]]; then
+    local prefix=$(echo "$branch" | cut -d'-' -f1,2)
+    gkm "$prefix: $1"
+  else
+    gkm "$1"
+  fi
+}
+
 alias skips="git ls-files -v | grep '^S'"
 alias skip="git update-index --skip-worktree"
 alias unskip="git update-index --no-skip-worktree"
