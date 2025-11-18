@@ -101,3 +101,88 @@ function pickit() {
       ;;
   esac
 }
+
+# merges the output of `st log` with `st status` to show PR and stack info next to each branch.
+function supst() {
+  # capture status but scrub ANSI color codes from it so we can parse it
+  status_output=$(st status 2>/dev/null | sed 's/\x1b\[[0-9;]*m//g')
+
+  st log | while IFS= read -r line; do
+    if [[ "$line" == *"○ "* ]] || [[ "$line" == *"● "* ]]; then
+      branch=$(echo "$line" | sed -E 's/.*[○●] ([a-z0-9-]+).*/\1/')
+      branch_status=$(echo "$status_output" | awk -v branch="$branch" -F'|' '
+        NR > 3 && NF > 4 {
+          branch_col = $2
+          gsub(/^[[:space:]]+|[[:space:]]+$/, "", branch_col)
+          if (branch_col == branch) {
+            stack = $4
+            pr = $5
+            gsub(/^[[:space:]]+|[[:space:]]+$/, "", stack)
+            gsub(/^[[:space:]]+|[[:space:]]+$/, "", pr)
+            print pr " | " stack
+            exit
+          }
+        }')
+      if [[ -n "$branch_status" ]]; then
+        echo "$line | $branch_status"
+      else
+        echo "$line"
+      fi
+    else
+      echo "$line"
+    fi
+  done
+}
+
+# Move up the stack one level.
+function upst() {
+  local current_branch=$(git branch --show-current)
+
+  if [[ "$current_branch" == "main" ]]; then
+    echo "You at the top of the stack, yo."
+    return 0
+  fi
+
+  local parent_branch=$(st status | sed 's/\x1b\[[0-9;]*m//g' | awk -v branch="$current_branch" -F'|' '
+    NR > 3 && NF > 4 {
+      branch_col = $2
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", branch_col)
+      if (branch_col == branch) {
+        parent = $3
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", parent)
+        print parent
+        exit
+      }
+    }')
+
+  if [[ -z "$parent_branch" ]]; then
+    echo "Couldn't find parent branch, batman."
+    return 1
+  fi
+
+  git checkout "$parent_branch"
+}
+
+# Move down the stack one level.
+function dnst() {
+  local current_branch=$(git branch --show-current)
+
+  local child_branch=$(st status | sed 's/\x1b\[[0-9;]*m//g' | awk -v branch="$current_branch" -F'|' '
+    NR > 3 && NF > 4 {
+      parent_col = $3
+      gsub(/^[[:space:]]+|[[:space:]]+$/, "", parent_col)
+      if (parent_col == branch) {
+        child = $2
+        gsub(/^[[:space:]]+|[[:space:]]+$/, "", child)
+        print child
+        exit
+      }
+    }')
+
+  if [[ -z "$child_branch" ]]; then
+    echo "Lol you're at the bottom of the stack dood!"
+    return 1
+  fi
+
+  git checkout "$child_branch"
+}
