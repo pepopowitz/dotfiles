@@ -100,6 +100,11 @@
     "url": "https://leanscaper.awsapps.com/start/",
     "routes": [
       {
+        "name": "Start",
+        "url": "https://leanscaper.awsapps.com/start/",
+        "routes": []
+      },
+      {
         "name": "CodeBuild",
         "url": "https://us-east-1.console.aws.amazon.com/codesuite/codebuild/projects?region=us-east-1",
         "routes": []
@@ -116,9 +121,46 @@
       }
     ]
   },
+
   {
-    "name": "harlequin keybindings",
-    "url": "https://harlequin.sh/docs/bindings#results-viewer-bindings",
-    "routes": []
+    "name": "docs",
+    "url": "",
+    "routes": [
+      {
+        "name": "harlequin",
+        "url": "https://harlequin.sh/docs/bindings#results-viewer-bindings",
+        "routes": []
+      },
+      {
+        "name": "nextjs",
+        "url": "https://nextjs.org/docs",
+        "routes": []
+      },
+      {
+        "name": "radix",
+        "url": "https://www.radix-ui.com/primitives/docs/overview/introduction",
+        "routes": []
+      },
+      {
+        "name": "react",
+        "url": "https://react.dev/reference/react/",
+        "routes": []
+      },
+      {
+        "name": "react-hook-form",
+        "url": "https://react-hook-form.com/docs",
+        "routes": []
+      },
+      {
+        "name": "shadCN",
+        "url": "https://ui.shadcn.com/docs/components/",
+        "routes": []
+      },
+      {
+        "name": "tailwind",
+        "url": "https://tailwindcss.com/docs/",
+        "routes": []
+      }
+    ]
   }
 ]
