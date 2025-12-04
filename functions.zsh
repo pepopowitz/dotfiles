@@ -186,3 +186,57 @@ function dnst() {
 
   git checkout "$child_branch"
 }
+
+# leanscaper: toggle env settings between local and staging databases
+# Usage: set-env <local|staging> [env-file-path]
+function set-env() {
+  local env_type="$1"
+  local env_file="${2:-/Users/stevenhicks/sjh/dev/leanscaper/platform/apps/web/.env.local}"
+  
+  if [[ -z "$env_type" ]]; then
+    echo "Usage: set-env <local|staging> [env-file-path]"
+    return 1
+  fi
+  
+  if [[ ! -f "$env_file" ]]; then
+    echo "Error: File '$env_file' not found"
+    return 1
+  fi
+  
+  case "$env_type" in
+    local)
+      echo "Switching to local database configuration..."
+      # Comment out staging database lines
+      sed -i '' '/## START_STAGING_DB/,/## END_STAGING_DB/ {
+        /^DB_/s/^/# /
+      }' "$env_file"
+      
+      # Uncomment local database lines
+      sed -i '' '/## START_LOCAL_DB/,/## END_LOCAL_DB/ {
+        /^# DB_/s/^# //
+      }' "$env_file"
+      
+      echo "✓ Switched to local database"
+      ;;
+      
+    staging)
+      echo "Switching to staging database configuration..."
+      # Uncomment staging database lines
+      sed -i '' '/## START_STAGING_DB/,/## END_STAGING_DB/ {
+        /^# DB_/s/^# //
+      }' "$env_file"
+      
+      # Comment out local database lines
+      sed -i '' '/## START_LOCAL_DB/,/## END_LOCAL_DB/ {
+        /^DB_/s/^/# /
+      }' "$env_file"
+      
+      echo "✓ Switched to staging database"
+      ;;
+      
+    *)
+      echo "Error: Unknown environment '$env_type'. Use 'local' or 'staging'"
+      return 1
+      ;;
+  esac
+}
