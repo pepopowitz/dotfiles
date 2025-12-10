@@ -43,10 +43,10 @@ class HUDWindow: NSWindow {
 
         // Enable vertical centering in the cell
         if let cell = label.cell as? NSTextFieldCell {
-            cell.usesSingleLineMode = false
+            cell.usesSingleLineMode = true
             cell.wraps = false
             cell.isScrollable = false
-            cell.lineBreakMode = .byTruncatingTail
+            cell.lineBreakMode = .byClipping
         }
 
         // Calculate proper vertical position to center the baseline
@@ -181,11 +181,12 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         if let specifiedWidth = width {
             finalWidth = specifiedWidth
         } else {
-            // Estimate width based on message length and font size
-            // Approximate character width is about 0.6 * fontSize for most fonts
-            let padding: CGFloat = 30 // 15px on each side
-            let estimatedTextWidth = CGFloat(message.count) * fontSize * 0.6
-            finalWidth = max(100, min(600, estimatedTextWidth + padding))
+            // Measure actual text width using the font
+            let font = NSFont.systemFont(ofSize: fontSize, weight: .medium)
+            let textSize = (message as NSString).size(withAttributes: [.font: font])
+            let padding: CGFloat = 40 // Extra padding to ensure text fits
+            // Add 10% buffer to measured width for safety
+            finalWidth = max(100, min(800, textSize.width * 1.1 + padding))
         }
 
         // Calculate height dynamically if not specified
