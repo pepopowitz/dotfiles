@@ -48,7 +48,26 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     
     func applicationDidFinishLaunching(_ notification: Notification) {
         let arguments = CommandLine.arguments
-        
+
+        // Kill any existing HUD process
+        let pidFile = NSTemporaryDirectory() + "hud.pid"
+        if let existingPid = try? String(contentsOfFile: pidFile, encoding: .utf8),
+           let pid = Int32(existingPid.trimmingCharacters(in: .whitespacesAndNewlines)) {
+            // Check if process exists (kill with signal 0 doesn't actually kill, just checks)
+            if kill(pid, 0) == 0 {
+                // Process exists, kill it
+                kill(pid, SIGTERM)
+                // Give it a moment to terminate gracefully
+                usleep(50000) // 50ms
+            }
+            // Clean up stale or now-terminated PID file
+            try? FileManager.default.removeItem(atPath: pidFile)
+        }
+
+        // Write current process ID
+        let currentPid = getpid()
+        try? String(currentPid).write(toFile: pidFile, atomically: true, encoding: .utf8)
+
         // Default values
         var message = "HUD Message"
         var width: CGFloat? = nil
@@ -124,10 +143,20 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         // Auto-dismiss after specified duration
         DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
+            self.cleanup()
             NSApplication.shared.terminate(nil)
         }
     }
-    
+
+    func cleanup() {
+        let pidFile = NSTemporaryDirectory() + "hud.pid"
+        try? FileManager.default.removeItem(atPath: pidFile)
+    }
+
+    func applicationWillTerminate(_ notification: Notification) {
+        cleanup()
+    }
+
     func printHelp() {
         print("""
         HUD - Display a heads-up display message
