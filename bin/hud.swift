@@ -200,12 +200,25 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         // Create and show window
         window = HUDWindow(message: message, width: finalWidth, height: finalHeight, yOffset: yOffset, fontSize: fontSize, opacity: opacity, bgColor: bgColor, fgColor: fgColor)
+        window?.alphaValue = 0.0
         window?.makeKeyAndOrderFront(nil)
-        
-        // Auto-dismiss after specified duration
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) {
-            self.cleanup()
-            NSApplication.shared.terminate(nil)
+
+        // Fade in
+        NSAnimationContext.runAnimationGroup({ context in
+            context.duration = 0.1
+            window?.animator().alphaValue = 1.0
+        })
+
+        // Auto-dismiss after specified duration with fade out
+        let fadeOutDelay = duration - 0.1 // Start fade out 0.2s before end
+        DispatchQueue.main.asyncAfter(deadline: .now() + fadeOutDelay) {
+            NSAnimationContext.runAnimationGroup({ context in
+                context.duration = 0.1
+                self.window?.animator().alphaValue = 0.0
+            }, completionHandler: {
+                self.cleanup()
+                NSApplication.shared.terminate(nil)
+            })
         }
     }
 
