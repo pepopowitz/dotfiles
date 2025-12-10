@@ -30,16 +30,30 @@ class HUDWindow: NSWindow {
         backgroundView.layer?.cornerRadius = 10
         self.contentView?.addSubview(backgroundView)
 
-        // Create label with dynamic padding
-        let padding: CGFloat = 15
-        let label = NSTextField(frame: NSRect(x: padding, y: padding, width: width - (padding * 2), height: height - (padding * 2)))
+        // Create label with proper vertical centering
+        let horizontalPadding: CGFloat = 15
+        let label = NSTextField(frame: NSRect(x: horizontalPadding, y: 0, width: width - (horizontalPadding * 2), height: height))
         label.stringValue = message
         label.isEditable = false
         label.isBordered = false
-        label.backgroundColor = .clear
+        label.drawsBackground = false
         label.textColor = fgColor
         label.alignment = .center
         label.font = NSFont.systemFont(ofSize: fontSize, weight: .medium)
+
+        // Enable vertical centering in the cell
+        if let cell = label.cell as? NSTextFieldCell {
+            cell.usesSingleLineMode = false
+            cell.wraps = false
+            cell.isScrollable = false
+            cell.lineBreakMode = .byTruncatingTail
+        }
+
+        // Calculate proper vertical position to center the baseline
+        let font = label.font!
+        let textHeight = font.ascender - font.descender
+        let yOffset = (height - textHeight) / 2 - font.descender
+        label.frame = NSRect(x: horizontalPadding, y: yOffset, width: width - (horizontalPadding * 2), height: textHeight)
 
         self.contentView?.addSubview(label)
     }
@@ -96,9 +110,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         // Default values
         var message = "HUD Message"
         var width: CGFloat? = nil
-        var height: CGFloat = 50
+        var height: CGFloat? = nil
         var yOffset: CGFloat = 40
-        var fontSize: CGFloat = 18
+        var fontSize: CGFloat = 14
         var opacity: Double = 0.8
         var bgColor: NSColor = .black
         var fgColor: NSColor = .white
@@ -174,8 +188,18 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             finalWidth = max(100, min(600, estimatedTextWidth + padding))
         }
 
+        // Calculate height dynamically if not specified
+        let finalHeight: CGFloat
+        if let specifiedHeight = height {
+            finalHeight = specifiedHeight
+        } else {
+            // Height based on font size plus reasonable padding
+            // Font metrics: ascender + descender is roughly 1.2-1.4x the font size
+            finalHeight = fontSize * 1.4 + 20
+        }
+
         // Create and show window
-        window = HUDWindow(message: message, width: finalWidth, height: height, yOffset: yOffset, fontSize: fontSize, opacity: opacity, bgColor: bgColor, fgColor: fgColor)
+        window = HUDWindow(message: message, width: finalWidth, height: finalHeight, yOffset: yOffset, fontSize: fontSize, opacity: opacity, bgColor: bgColor, fgColor: fgColor)
         window?.makeKeyAndOrderFront(nil)
         
         // Auto-dismiss after specified duration
@@ -202,9 +226,9 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
         Options:
           -w, --width        Window width in pixels (default: auto-calculated from message)
-          -h, --height       Window height in pixels (default: 50)
+          -h, --height       Window height in pixels (default: auto-calculated from font size)
           -y, --yoffset      Distance from top of screen in pixels (default: 40)
-          -f, --fontsize     Font size (default: 18)
+          -f, --fontsize     Font size (default: 14)
           -d, --duration     Display duration in seconds (default: 1.0)
           -o, --opacity      Background opacity 0.0-1.0 (default: 0.8)
           -bg, --background  Background color in hex format (default: black #000000)
