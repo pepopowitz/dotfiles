@@ -68,7 +68,7 @@ automatically-unhide-macos-hidden-apps = true
 exec-on-workspace-change = [
     '/bin/bash',
     '-c',
-    '~/bin/hud $AEROSPACE_FOCUSED_WORKSPACE',
+    '~/.aerospace/aerospace-hud.sh $AEROSPACE_FOCUSED_WORKSPACE',
 ]
 
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
