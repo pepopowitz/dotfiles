@@ -22,20 +22,20 @@ case "$WORKSPACE" in
         FG_COLOR="#FFFFFF"  # White
         ;;
     "AliceBlue")
-        BG_COLOR="#1E3A8A"  # Dark Blue
+        BG_COLOR="#48657e"  # Dark Blue
         FG_COLOR="#F0F8FF"  # Alice Blue
         ;;
     "Bisque")
-        BG_COLOR="#8B4513"  # Saddle brown
+        BG_COLOR="#695a47"  # ?? brown
         FG_COLOR="#FFE4C4"  # Bisque
         ;;
     "Cornsilk")
-        BG_COLOR="#654321"  # Dark Brown
+        BG_COLOR="#3b5517"  # Dark green
         FG_COLOR="#FFF8DC"  # Cornsilk
         ;;
     "DeepSkyBlue")
         FG_COLOR="#00BFFF"  # Deep Sky Blue
-        BG_COLOR="#06047a"  # Dark blue
+        BG_COLOR="#0d4355"  # Dark blue
         ;;
     "Emerald")
         BG_COLOR="#0d6c0a"  # Emerald
