@@ -27,6 +27,8 @@ after-startup-command = [
     ## start jankyborders
     ##   ignore todoist because it shows funny borders for the quick-add window.
     'exec-and-forget borders active_color=0xff70e544 inactive_color=0xff949992 width=7.0 blacklist="Todoist"',
+    # Compile ~/bin/hud.swift to ~/bin/hud if missing or outdated
+    'exec-and-forget /bin/bash -lc "if [ -f \"$HOME/bin/hud.swift\" ] && { [ ! -x \"$HOME/bin/hud\" ] || [ \"$HOME/bin/hud.swift\" -nt \"$HOME/bin/hud\" ]; }; then if command -v swiftc >/dev/null 2>&1; then swiftc -o \"$HOME/bin/hud\" \"$HOME/bin/hud.swift\" && chmod +x \"$HOME/bin/hud\"; else echo \"swiftc not found; cannot compile $HOME/bin/hud.swift\" >&2; fi; fi"',
 ]
 
 ## settings that are moderately noteworthy.
