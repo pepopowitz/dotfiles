@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "Notification": [
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "open raycast://confetti && phrases=(\"As you wish...\" \"All set chief...\" \"Baby come back...\" \"What's next???\") && say \"${phrases[$((RANDOM % ${#phrases[@]}))]}\" -v Karen"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "open raycast://confetti && phrases=(\"As you wish...\" \"All set chief...\" \"Baby come back...\" \"What's next???\") && say \"${phrases[$((RANDOM % ${#phrases[@]}))]}\" -v Karen"
+          }
+        ]
+      }
+    ]
+  },
+  "enabledPlugins": {
+    "compound-engineering@every-marketplace": true,
+    "frontend-design@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true,
+  "mcpServers": {
+    "github-pr-review": {
+      "command": "node",
+      "args": [
+        "/Users/stevenhicks/.claude/mcp-servers/github-pr-review/index.js"
+      ]
+    }
+  },
+  "feedbackSurveyState": {
+    "lastShownTime": 1754333339275
+  }
+}
