@@ -1,3 +1,5 @@
 .DS_Store
 private.zshrc
 bin/hud
+
+node_modules/
