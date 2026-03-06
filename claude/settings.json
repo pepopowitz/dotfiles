@@ -3,11 +3,20 @@
   "hooks": {
     "Notification": [
       {
+        "matcher": "permission_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/notify.sh \"Excuse me?\""
+          }
+        ]
+      },
+      {
         "matcher": "idle_prompt",
         "hooks": [
           {
             "type": "command",
-            "command": "open raycast://confetti && phrases=(\"As you wish...\" \"All set chief...\" \"Baby come back...\" \"What's next???\") && say \"${phrases[$((RANDOM % ${#phrases[@]}))]}\" -v Karen"
+            "command": "~/.claude/scripts/notify.sh \"Hey bruh...\" \"Pssst...\" \"Baby come back...\" \"Yoohoo...\""
           }
         ]
       }
@@ -18,7 +27,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "open raycast://confetti && phrases=(\"As you wish...\" \"All set chief...\" \"Baby come back...\" \"What's next???\") && say \"${phrases[$((RANDOM % ${#phrases[@]}))]}\" -v Karen"
+            "command": "~/.claude/scripts/notify.sh \"As you wish...\" \"All set chief...\" \"Baby come back...\" \"What's next???\""
           }
         ]
       }
