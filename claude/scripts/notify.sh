@@ -20,5 +20,5 @@ VOICE="${VOICES[$INDEX]}"
 PHRASES=("$@")
 PHRASE="${PHRASES[$((RANDOM % ${#PHRASES[@]}))]}"
 
-open raycast://confetti
+open -g raycast://confetti
 say "$PHRASE" -v "$VOICE"
