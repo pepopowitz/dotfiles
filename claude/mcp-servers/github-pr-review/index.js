@@ -220,13 +220,15 @@ server.registerTool(
       pr_number: z.number().describe('Pull request number'),
       review_id: z.number().describe('ID of the pending review to submit'),
       event: z.enum(['COMMENT', 'APPROVE', 'REQUEST_CHANGES']).default('COMMENT').describe('Review event type'),
+      body: z.string().optional().describe('Review summary message (e.g. "LGTM")'),
     },
   },
-  async ({ owner, repo, pr_number, review_id, event }) => {
+  async ({ owner, repo, pr_number, review_id, event, body }) => {
+    const payload = { event, ...(body ? { body } : {}) };
     const output = execFileSync(
       'gh',
       ['api', `repos/${owner}/${repo}/pulls/${pr_number}/reviews/${review_id}/events`, '--method', 'POST', '--input', '-'],
-      { input: JSON.stringify({ event }), encoding: 'utf8' }
+      { input: JSON.stringify(payload), encoding: 'utf8' }
     );
     return { content: [{ type: 'text', text: output }] };
   }
