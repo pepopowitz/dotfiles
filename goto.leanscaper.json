@@ -15,7 +15,7 @@
     "routes": [
       {
         "name": "pulls / PRs",
-        "url": "https://github.com/leanscaper/platform/pulls",
+        "url": "https://github.com/leanscaper/platform/pulls?q=is%3Apr+is%3Aopen+label%3Asurface%3Aweb+base%3Amain",
         "routes": []
       },
       {
