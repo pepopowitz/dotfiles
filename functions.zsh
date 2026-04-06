@@ -49,7 +49,7 @@ function cd-finder() {
 }
 
 # hey steve you also used to use a function named ofd from oh-my-zsh/macos, it opened finder in the current directory.
-#   you don't need that anymore, just use `open _path_`. 
+#   you don't need that anymore, just use `open _path_`.
 
 function doit() {
   $@ # executes all arguments as a command
@@ -70,7 +70,7 @@ function md_links() {
 }
 
 # This is a function I used to enable quick cherry-picking of a ton of commits from `main` to `unsupported/1.3`.
-#   I had created the `unsupported/1.3` branch from `main`, then it sat dormant for a year and a half. 
+#   I had created the `unsupported/1.3` branch from `main`, then it sat dormant for a year and a half.
 #   This allowed me to not start over.
 function pickit() {
   local sha=$1
@@ -87,7 +87,7 @@ function pickit() {
 
       # remove files from the index that I've already deleted in this branch
       git rm -r --ignore-unmatch ./docs sidebars.js ./versioned_docs/version-8.{0..6}/ ./versioned_sidebars/version-8.{0..6}-sidebars.json
-      git rm -r --ignore-unmatch ./optimize ./optimize_sidebars.js ./optimize_versioned_docs/version-3.{8..14}.0/ ./optimize_versioned_sidebars/version-3.{8..14}.0-sidebars.json 
+      git rm -r --ignore-unmatch ./optimize ./optimize_sidebars.js ./optimize_versioned_docs/version-3.{8..14}.0/ ./optimize_versioned_sidebars/version-3.{8..14}.0-sidebars.json
 
       # eyeball the remaining changes
       git status
@@ -192,17 +192,17 @@ function dnst() {
 function set-env() {
   local env_type="$1"
   local env_file="${2:-/Users/stevenhicks/sjh/dev/leanscaper/platform/apps/web/.env.local}"
-  
+
   if [[ -z "$env_type" ]]; then
     echo "Usage: set-env <local|staging> [env-file-path]"
     return 1
   fi
-  
+
   if [[ ! -f "$env_file" ]]; then
     echo "Error: File '$env_file' not found"
     return 1
   fi
-  
+
   case "$env_type" in
     local)
       echo "Switching to local database configuration..."
@@ -210,33 +210,46 @@ function set-env() {
       sed -i '' '/## START_STAGING_DB/,/## END_STAGING_DB/ {
         /^DB_/s/^/# /
       }' "$env_file"
-      
+
       # Uncomment local database lines
       sed -i '' '/## START_LOCAL_DB/,/## END_LOCAL_DB/ {
         /^# DB_/s/^# //
       }' "$env_file"
-      
+
       echo "✓ Switched to local database"
       ;;
-      
+
     staging)
       echo "Switching to staging database configuration..."
       # Uncomment staging database lines
       sed -i '' '/## START_STAGING_DB/,/## END_STAGING_DB/ {
         /^# DB_/s/^# //
       }' "$env_file"
-      
+
       # Comment out local database lines
       sed -i '' '/## START_LOCAL_DB/,/## END_LOCAL_DB/ {
         /^DB_/s/^/# /
       }' "$env_file"
-      
+
       echo "✓ Switched to staging database"
       ;;
-      
+
     *)
       echo "Error: Unknown environment '$env_type'. Use 'local' or 'staging'"
       return 1
       ;;
   esac
+}
+
+function update-claude() {
+  brew upgrade claude-code && \
+  for marketplace in ~/.claude/plugins/marketplaces/*/; do
+    cd "$marketplace" && git pull && cd -
+  done && \
+  jq -r '
+    .plugins | to_entries[] | .key as $plugin |
+    .value[] | "\($plugin) \(.scope)"
+  ' ~/.claude/plugins/installed_plugins.json | while read plugin scope; do
+    claude plugin update "$plugin" --scope "$scope"
+  done
 }
