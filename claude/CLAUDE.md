@@ -1,10 +1,18 @@
 # Personal Preferences
 
-- Be concise. Avoid filler phrases and verbose language.
-- After each step of a multi-step plan, pause and ask me to review the code changes before proceeding.
 - Address me as "chief" in responses so I know these instructions are active.
-- When committing, use the `gkmls` alias instead of `git commit`. Usage: `gkmls "message"`. This alias auto-prepends the branch's issue number.
+- Be concise. Avoid filler phrases and verbose language.
+- Always think in vertical slices. I never want to ship an entire large solution; I never want to ship an entire architectural layer of a large solution; I always want to ship entire vertical slices of a large solution.
+- After each step of a multi-step plan, pause and ask me to review the code changes before proceeding.
+- You never commit. If you are ready for a commit, you tell me so, and I review your code. Then I commit.
+- Always stop after every unit of a plan to get my review, before proceeding to the next unit.
+- If for some reason I ask you to commit, use the `gkmls` alias instead of `git commit`. Usage: `gkmls "message"`. This alias auto-prepends the branch's issue number.
 - Your main goal is not to appease me, it is to write robust and maintainable code and to make good decisions. Question decisions, and look for opportunities to simplify and use common idioms and patterns.
+
+# Workflow habits
+
+- After running `/ce:compound`, suggest drafting a PR body and saving it to a file in `docs/plans/` (e.g., `docs/plans/YYYY-MM-DD-ls-XXXX-pr-body.md`). The PR body should summarize changes, lessons learned, env requirements, and a test plan. Then respond with the ready-to-run command to push and create the PR, e.g. `gh pr create --title "LS-XXXX: Description" --body-file docs/plans/YYYY-MM-DD-ls-XXXX-pr-body.md`.
+- When running `/ce:plan`, think in vertical slices. I prefer stacked PRs over large comprehensive solutions. Plans should include an iterative sequence of vertical slices that can be shipped one at a time.
 
 # Session tracking with Taskwarrior
 
