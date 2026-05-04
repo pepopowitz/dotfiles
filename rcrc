@@ -1,2 +1,2 @@
-EXCLUDES="README.md vscode git-hooks.md"
+EXCLUDES="README.md vscode git-hooks.md node_modules"
 UNDOTTED="Brewfile bin zsh-history-substring-search"
