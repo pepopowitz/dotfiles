@@ -253,3 +253,40 @@ function update-claude() {
     claude plugin update "$plugin" --scope "$scope"
   done
 }
+
+
+# taskwarrior quick reference because taskwarrior docs are horrible
+taskhelp() {
+  cat <<'EOF'
+# Add
+task add "description"
+task add "LS-3114: desc" project:LS-3114
+
+# List
+task list                        # all pending
+task list project:LS-3114        # filter by project
+
+# View
+task info <id>                   # full detail + annotations
+
+# Annotate
+task <id> annotate "note"
+
+# Complete / delete
+task <id> done
+task <id> delete
+
+# Modify
+task <id> modify project:LS-3114
+task <id> modify description:"new desc"
+
+# Filter / search
+task list +tag
+task list description.contains:foo
+
+# Reports
+task                             # next (default)
+task all                         # includes completed/deleted
+task completed
+EOF
+}

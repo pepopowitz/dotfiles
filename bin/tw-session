@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# tw-session: create or find a Taskwarrior task for the current terminal session, based on a Linear ticket number or a custom topic.
+# Stores the task ID in /tmp/tw-session-<uuid>.id for use within the session, so that Claude can retain context about the current work.
+# Requires a unique UUID per terminal session, which is set by 'export TW_SESSION_UUID=$(uuidgen)' in .zshrc.
+
+usage() {
+  cat <<EOF
+Usage: tw-session [--no-ticket] <ticket-or-topic> "<description>"
+
+Creates or finds a Taskwarrior task for the current session and prints its ID.
+Stores the task ID in /tmp/tw-session-<uuid>.id for use within the session.
+
+Options:
+  --no-ticket   Use a plain topic instead of a Linear ticket number
+
+Examples:
+  tw-session LS-3114 "document detail route"
+  tw-session --no-ticket "session tracking setup"
+EOF
+}
+
+NO_TICKET=0
+if [[ "${1:-}" == "--no-ticket" ]]; then
+  NO_TICKET=1
+  shift
+fi
+
+if [[ $# -lt 1 ]]; then
+  usage
+  exit 1
+fi
+
+IDENTIFIER="$1"
+DESCRIPTION="${2:-$1}"
+
+# Require per-terminal UUID from shell init
+if [[ -z "${TW_SESSION_UUID:-}" ]]; then
+  echo "TW_SESSION_UUID is not set. Add 'export TW_SESSION_UUID=\$(uuidgen)' to your .zshrc." >&2
+  exit 1
+fi
+SESSION_ID_FILE="/tmp/tw-session-${TW_SESSION_UUID}.id"
+
+# If we already have a task ID stored for this session, return it
+if [[ -f "$SESSION_ID_FILE" ]]; then
+  cat "$SESSION_ID_FILE"
+  exit 0
+fi
+
+# Search for existing task
+if [[ "$NO_TICKET" -eq 0 ]]; then
+  EXISTING=$(task list project:"$IDENTIFIER" 2>/dev/null | awk '/^[0-9]/ { print $1; exit }')
+else
+  EXISTING=$(task list 2>/dev/null | grep -i "$IDENTIFIER" | awk '/^[0-9]/ { print $1; exit }' || true)
+fi
+
+if [[ -n "$EXISTING" ]]; then
+  TASK_ID="$EXISTING"
+else
+  # Create new task
+  if [[ "$NO_TICKET" -eq 0 ]]; then
+    TASK_ID=$(task add "$IDENTIFIER: $DESCRIPTION" project:"$IDENTIFIER" 2>/dev/null | grep -oE 'Created task [0-9]+' | grep -oE '[0-9]+')
+  else
+    TASK_ID=$(task add "$DESCRIPTION" 2>/dev/null | grep -oE 'Created task [0-9]+' | grep -oE '[0-9]+')
+  fi
+fi
+
+echo "$TASK_ID" | tee "$SESSION_ID_FILE"
