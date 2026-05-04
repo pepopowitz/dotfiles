@@ -7,19 +7,48 @@ set -euo pipefail
 
 usage() {
   cat <<EOF
-Usage: tw-session [--no-ticket] <ticket-or-topic> "<description>"
+Usage: tw-session [--no-ticket] <ticket-or-topic> [description]
+       tw-session --current
+       tw-session --clear
 
 Creates or finds a Taskwarrior task for the current session and prints its ID.
+Clears any previous session before creating a new one.
 Stores the task ID in /tmp/tw-session-<uuid>.id for use within the session.
 
 Options:
   --no-ticket   Use a plain topic instead of a Linear ticket number
+  --current     Print the task ID for the current session (no-op if none)
+  --clear       Clear the stored task ID without starting a new session
 
 Examples:
   tw-session LS-3114 "document detail route"
   tw-session --no-ticket "session tracking setup"
+  tw-session --current
+  tw-session --clear
 EOF
 }
+
+if [[ -z "${TW_SESSION_UUID:-}" ]]; then
+  echo "TW_SESSION_UUID is not set. Add 'export TW_SESSION_UUID=\$(uuidgen)' to your .zshrc." >&2
+  exit 1
+fi
+SESSION_ID_FILE="/tmp/tw-session-${TW_SESSION_UUID}.id"
+
+if [[ "${1:-}" == "--current" ]]; then
+  if [[ -f "$SESSION_ID_FILE" ]]; then
+    cat "$SESSION_ID_FILE"
+  else
+    echo "No active session." >&2
+    exit 1
+  fi
+  exit 0
+fi
+
+if [[ "${1:-}" == "--clear" ]]; then
+  rm -f "$SESSION_ID_FILE"
+  echo "Session cleared."
+  exit 0
+fi
 
 NO_TICKET=0
 if [[ "${1:-}" == "--no-ticket" ]]; then
@@ -35,18 +64,8 @@ fi
 IDENTIFIER="$1"
 DESCRIPTION="${2:-$1}"
 
-# Require per-terminal UUID from shell init
-if [[ -z "${TW_SESSION_UUID:-}" ]]; then
-  echo "TW_SESSION_UUID is not set. Add 'export TW_SESSION_UUID=\$(uuidgen)' to your .zshrc." >&2
-  exit 1
-fi
-SESSION_ID_FILE="/tmp/tw-session-${TW_SESSION_UUID}.id"
-
-# If we already have a task ID stored for this session, return it
-if [[ -f "$SESSION_ID_FILE" ]]; then
-  cat "$SESSION_ID_FILE"
-  exit 0
-fi
+# Clear any previous session before starting a new one
+rm -f "$SESSION_ID_FILE"
 
 # Search for existing task
 if [[ "$NO_TICKET" -eq 0 ]]; then

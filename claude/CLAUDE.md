@@ -10,7 +10,7 @@
 
 When asked to track work for a session:
 1. Ask whether a Linear ticket exists, needs to be created, or isn't needed
-2. Run `tw-session "LS-XXXX" "<description>"` (or `tw-session --no-ticket "<topic>"`) — returns a task ID
+2. Run `tw-session "LS-XXXX" "<description>"` (or `tw-session --no-ticket "<topic>"`) — clears any previous session and returns a task ID
 3. If a Linear URL is known, annotate it: `task <id> annotate "Linear: https://linear.app/..."`
 
 Throughout the session, annotate on noteworthy milestones:
