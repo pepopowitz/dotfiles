@@ -1,4 +1,4 @@
-export PATH=/opt/homebrew/bin:/usr/local/opt/python/libexec/bin:/usr/local/bin:~/bin:~/.local/bin:$PATH
+export PATH=/opt/homebrew/bin:/usr/local/opt/python/libexec/bin:/usr/local/bin:~/bin:~/.local/bin:~/.bun/bin:$PATH
 
 # history setup
 setopt SHARE_HISTORY
@@ -40,3 +40,6 @@ eval "$(envswitch -i)"
 #  ctrl-R: search history
 #  ctrl-T: search files
 source <(fzf --zsh)
+
+# Unique ID per terminal session (used by tw-session)
+export TW_SESSION_UUID=$(uuidgen)
