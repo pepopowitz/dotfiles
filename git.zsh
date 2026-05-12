@@ -81,7 +81,9 @@ function sync() {
 }
 
 function main_or_master() {
-  if (branch_exists main); then
+  if (branch_exists main-js); then
+    echo 'main-js'
+  elif (branch_exists main); then
     echo 'main'
   else
     echo 'master'
@@ -153,3 +155,45 @@ alias unskip="git update-index --no-skip-worktree"
 alias ughlockfile="rm -f ./package-lock.json && npm install"
 alias dammitlockfile="rm -f ./package-lock.json && npm run clean:nm && npm install"
 alias flipstaging="gco staging && git fetch origin staging && git reset --hard origin/staging"
+
+# maybe temp function to identify from gh-stack what the target branch is.
+function stack-base() {
+	local branch
+	branch=$(git branch --show-current)
+
+	# Try clabby/st first
+	local st_base
+	st_base=$(st status 2>/dev/null | awk -F'|' -v b="$branch" '
+		$2 ~ b { gsub(/^[[:space:]]+|[[:space:]]+$/, "", $3); print $3 }
+	')
+	if [[ -n "$st_base" ]]; then
+		echo "$st_base"
+		return
+	fi
+
+	# Fall back to gh-stack
+	local stack_file=".git/gh-stack"
+	if [[ -f "$stack_file" ]]; then
+		local gh_base
+		gh_base=$(jq -r --arg b "$branch" '
+			.stacks[] |
+			(.branches | map(.branch) | index($b)) as $i |
+			if $i != null then
+				if $i > 0 then .branches[$i - 1].branch
+				else .trunk.branch
+				end
+			else empty
+			end
+		' "$stack_file" 2>/dev/null)
+		if [[ -n "$gh_base" ]]; then
+			echo "$gh_base"
+			return
+		fi
+	fi
+
+	echo "main"
+}
+
+function ugh() {
+  stash 'ugh, drop' && ("$@") && git stash pop
+}
