@@ -13,10 +13,16 @@ learnings, interesting code, and progress — then open it in the browser.
 
 ## Step 1: Identify the diff range
 
+Get the current branch:
 ```bash
-BASE=$(stack-base)
-BRANCH=$(git branch --show-current)
+git branch --show-current
 ```
+
+Determine the base:
+- If the user specified a base when invoking the skill (e.g. `/what-did-i-just-do main`, or "what did I just do since main"), use that.
+- Otherwise, ask: "What branch or commit should I compare against? (e.g. `main`, `origin/main`, a SHA, or another branch name)"
+
+Use the current branch output as `BRANCH` and the determined base as `BASE` before proceeding.
 
 ## Step 2: Gather raw material
 
