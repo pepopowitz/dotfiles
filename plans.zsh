@@ -58,7 +58,7 @@ plans-path() {
 plans-edit() {
   local path
   path=$(plans-path "$1") || return 1
-  code "$path"
+  open -a "Visual Studio Code" "$path"
 }
 
 # Copy plans matching a tag into docs/plans/.
