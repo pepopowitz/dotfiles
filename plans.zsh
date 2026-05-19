@@ -12,7 +12,7 @@ _claude_project_dir() {
   local slug
   slug=$(git rev-parse --show-toplevel 2>/dev/null || echo "$PWD")
   slug="${slug//\//-}"
-  slug="${slug//\./-}"
+  slug="${slug//./-}"
   echo "$HOME/.claude/projects/$slug"
 }
 
