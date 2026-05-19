@@ -40,6 +40,26 @@ plans-tagged() {
   done
 }
 
+# Print the full path to a plan in external storage.
+# Usage: plans-path <filename>
+plans-path() {
+  local dir="$(_claude_project_dir)/plans"
+  local file="$dir/$1"
+  if [[ ! -f "$file" ]]; then
+    echo "Not found: $1" >&2
+    return 1
+  fi
+  echo "$file"
+}
+
+# Open a plan in $EDITOR without copying it into the repo.
+# Usage: plans-edit <filename>
+plans-edit() {
+  local path
+  path=$(plans-path "$1") || return 1
+  ${EDITOR:-vi} "$path"
+}
+
 # Copy plans matching a tag into docs/plans/.
 # Usage: plans-in <tag>
 plans-in() {
