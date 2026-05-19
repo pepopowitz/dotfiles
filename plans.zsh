@@ -53,16 +53,12 @@ plans-path() {
   echo "$file"
 }
 
-# Open a plan in $EDITOR (or VS Code as fallback) without copying it into the repo.
+# Open a plan in VS Code without copying it into the repo.
 # Usage: plans-edit <filename>
 plans-edit() {
   local path
   path=$(plans-path "$1") || return 1
-  if [[ -n "$EDITOR" ]]; then
-    "$EDITOR" "$path"
-  else
-    open -a "Visual Studio Code" "$path"
-  fi
+  code "$path"
 }
 
 # Copy plans matching a tag into docs/plans/.
