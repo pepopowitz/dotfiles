@@ -15,16 +15,18 @@ _claude_project_dir() {
   echo "$HOME/.claude/projects/$slug"
 }
 
+# Returns true if the file has status: archived in its YAML frontmatter (not body).
+_plan_is_archived() {
+  awk 'NR==1 && /^---$/{in_fm=1; next} in_fm && /^---$/{exit} in_fm && /^status:[[:space:]]*archived/{found=1} END{exit !found}' "$1"
+}
+
 # List active (non-archived) plans for the current project, most recent first.
 plans() {
   local dir="$(_claude_project_dir)/plans"
   mkdir -p "$dir"
-  local archived
-  archived=$(rg -l 'status:\s*archived' "$dir" --max-depth 1 2>/dev/null | xargs -I{} basename {})
   ls -1t "$dir" | while read -r f; do
     [[ -d "$dir/$f" ]] && continue
-    echo "$archived" | grep -qx "$f" && continue
-    echo "$f"
+    if ! _plan_is_archived "$dir/$f"; then echo "$f"; fi
   done
 }
 
@@ -89,8 +91,9 @@ plans-archive() {
 plans-archived() {
   local dir="$(_claude_project_dir)/plans"
   mkdir -p "$dir"
-  rg -l 'status:\s*archived' "$dir" --max-depth 1 2>/dev/null | while read -r f; do
-    basename "$f"
+  ls -1t "$dir" | while read -r f; do
+    [[ -d "$dir/$f" ]] && continue
+    if _plan_is_archived "$dir/$f"; then echo "$f"; fi
   done
 }
 
