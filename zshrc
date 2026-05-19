@@ -22,6 +22,7 @@ unsetopt BEEP
 source ~/.aliases.zsh
 source ~/.functions.zsh
 source ~/.git.zsh
+source ~/.plans.zsh
 
 source ~/.private.zshrc
 
