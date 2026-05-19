@@ -22,6 +22,7 @@
 - Never commit plans.
 - Always commit solution docs from compounding.
 - Prefix brainstorm/plan file names with a single letter to identify the type of doc, e.g. `b-2026-05-08-etc` for a brainstorm or `p-2026-05-08-etc` for a plan.
+- **Plan and brainstorm storage:** Write plans to `~/.claude/projects/<project-slug>/plans/` and brainstorms to `~/.claude/projects/<project-slug>/brainstorms/`, NOT inside the repo. Use `_claude_project_dir` (defined in `~/.plans.zsh`) to resolve the slug. Always include `tags` in frontmatter (comma-separated: linear ticket `ls-XXXX`, feature area, etc.).
 
 # Session tracking with Taskwarrior
 
