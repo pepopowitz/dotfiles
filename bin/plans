@@ -22,6 +22,7 @@ Commands:
   archive <file>        Archive a doc (hides from list)
   archived              List archived docs
   unarchive <file>      Restore an archived doc
+  dir                   Print the external storage root for this project
   help                  Show this message
 EOF
 }
@@ -220,6 +221,7 @@ case "${1:-list}" in
   list)      cmd_list ;;
   tagged)    [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_tagged "$2" ;;
   tags)      cmd_tags ;;
+  dir)       _claude_project_dir ;;
   in)        [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_in "$2" ;;
   out)       [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_out "$2" ;;
   path)      [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_path "$2" ;;
