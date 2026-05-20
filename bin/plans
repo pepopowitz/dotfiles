@@ -14,9 +14,9 @@ Usage: plans [command] [args]
 Commands:
   list                  List active plans and brainstorms (default)
   tagged <tag>          List docs matching a tag
-  in <tag>              Copy docs matching a tag into the repo
-  cp <file>             Copy a single doc into the repo by filename
-  out <file>            Move a doc from the repo back to external storage
+  tags                  List all tags (excluding ls-* tickets)
+  in <tag|file>         Copy docs into the repo (by tag or filename)
+  out <tag|file>        Move docs from the repo back to external storage
   path <file>           Print the full external path to a doc
   edit <file>           Open a doc in VS Code
   archive <file>        Archive a doc (hides from list)
@@ -81,28 +81,7 @@ cmd_tagged() {
   done
 }
 
-cmd_in() {
-  local base="$(_claude_project_dir)"
-  mkdir -p "$base/plans" "$base/brainstorms"
-  local -a matches
-  matches=("${(@f)$(rg -l "tags:.*\b${1}\b" "$base/plans" "$base/brainstorms" 2>/dev/null)}")
-  if [[ ${#matches[@]} -eq 0 || -z "${matches[1]}" ]]; then
-    echo "No docs matching tag '$1'" >&2
-    return 1
-  fi
-  local f
-  for f in "${matches[@]}"; do
-    _copy_to_repo "$f"
-  done
-}
-
-cmd_cp() {
-  local file
-  file=$(_plan_find_file "$1") || return 1
-  _copy_to_repo "$file"
-}
-
-cmd_out() {
+_move_to_external() {
   local base="$(_claude_project_dir)"
   local file="$1"
   local src subdir
@@ -120,6 +99,72 @@ cmd_out() {
   mv "$src" "$base/$subdir/$file"
   git rm --cached "$src" 2>/dev/null || true
   echo "  $file → external ($subdir)"
+}
+
+cmd_in() {
+  local arg="$1"
+  local base="$(_claude_project_dir)"
+  mkdir -p "$base/plans" "$base/brainstorms"
+
+  # Try as filename first
+  local file
+  if file=$(_plan_find_file "$arg" 2>/dev/null); then
+    _copy_to_repo "$file"
+    return 0
+  fi
+
+  # Fall back to tag search
+  local -a matches
+  matches=("${(@f)$(rg -l "tags:.*\b${arg}\b" "$base/plans" "$base/brainstorms" 2>/dev/null)}")
+  if [[ ${#matches[@]} -eq 0 || -z "${matches[1]}" ]]; then
+    echo "No docs matching tag or filename '$arg'" >&2
+    return 1
+  fi
+  local f
+  for f in "${matches[@]}"; do
+    _copy_to_repo "$f"
+  done
+}
+
+cmd_out() {
+  local arg="$1"
+  local base="$(_claude_project_dir)"
+
+  # Try as filename first
+  if [[ -f "docs/brainstorms/$arg" ]] || [[ -f "docs/plans/$arg" ]]; then
+    _move_to_external "$arg"
+    return 0
+  fi
+
+  # Fall back to tag search across repo docs
+  local -a matches
+  matches=()
+  local dir
+  for dir in docs/plans docs/brainstorms; do
+    [[ -d "$dir" ]] || continue
+    local -a found
+    found=("${(@f)$(rg -l "tags:.*\b${arg}\b" "$dir" 2>/dev/null)}")
+    [[ ${#found[@]} -gt 0 && -n "${found[1]}" ]] && matches+=("${found[@]}")
+  done
+
+  if [[ ${#matches[@]} -eq 0 ]]; then
+    echo "No docs matching tag or filename '$arg'" >&2
+    return 1
+  fi
+  local f
+  for f in "${matches[@]}"; do
+    _move_to_external "$(basename "$f")"
+  done
+}
+
+cmd_tags() {
+  local base="$(_claude_project_dir)"
+  mkdir -p "$base/plans" "$base/brainstorms"
+  local f
+  for f in "$base"/{plans,brainstorms}/*(N); do
+    [[ -f "$f" ]] || continue
+    awk 'NR==1 && /^---$/{in_fm=1; next} in_fm && /^---$/{exit} in_fm && /^tags:/{sub(/^tags:[[:space:]]*/, ""); print}' "$f"
+  done | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | grep -v '^ls-' | grep -v '^$' | sort -u
 }
 
 cmd_path() {
@@ -159,8 +204,8 @@ cmd_unarchive() {
 case "${1:-list}" in
   list)      cmd_list ;;
   tagged)    [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_tagged "$2" ;;
+  tags)      cmd_tags ;;
   in)        [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_in "$2" ;;
-  cp)        [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_cp "$2" ;;
   out)       [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_out "$2" ;;
   path)      [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_path "$2" ;;
   edit)      [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_edit "$2" ;;
