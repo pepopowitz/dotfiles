@@ -131,18 +131,15 @@ cmd_out() {
   local arg="$1"
   local base="$(_claude_project_dir)"
 
-  # Move all plan/brainstorm docs out of the repo
+  # Move all untracked plan/brainstorm docs out of the repo
   if [[ "$arg" == "--all" ]]; then
     local moved=0
-    local dir
-    for dir in docs/plans docs/brainstorms; do
-      [[ -d "$dir" ]] || continue
-      for f in "$dir"/*.md(N); do
-        _move_to_external "$(basename "$f")"
-        moved=1
-      done
+    local f
+    for f in $(git ls-files --others --exclude-standard -- docs/plans/ docs/brainstorms/ 2>/dev/null); do
+      _move_to_external "$(basename "$f")"
+      moved=1
     done
-    [[ $moved -eq 1 ]] || { echo "No docs to move out" >&2; return 1; }
+    [[ $moved -eq 1 ]] || { echo "No untracked docs to move out" >&2; return 1; }
     return 0
   fi
 
