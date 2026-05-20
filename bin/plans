@@ -1,0 +1,172 @@
+#!/usr/bin/env zsh
+# plans: manage plan and brainstorm docs in external Claude Code project storage.
+# Docs live in ~/.claude/projects/<slug>/{plans,brainstorms}/ — outside the repo
+# so they never appear in git status.
+#
+# Requires: ripgrep (rg) for tag search (BSD grep lacks \b support).
+
+set -euo pipefail
+
+usage() {
+  cat <<EOF
+Usage: plans [command] [args]
+
+Commands:
+  list                  List active plans and brainstorms (default)
+  tagged <tag>          List docs matching a tag
+  in <tag>              Copy docs matching a tag into the repo
+  cp <file>             Copy a single doc into the repo by filename
+  out <file>            Move a doc from the repo back to external storage
+  path <file>           Print the full external path to a doc
+  edit <file>           Open a doc in VS Code
+  archive <file>        Archive a doc (hides from list)
+  archived              List archived docs
+  unarchive <file>      Restore an archived doc
+  help                  Show this message
+EOF
+}
+
+_claude_project_dir() {
+  local slug
+  slug=$(git rev-parse --show-toplevel 2>/dev/null || echo "$PWD")
+  slug="${slug//\//-}"
+  slug="${slug//./-}"
+  echo "$HOME/.claude/projects/$slug"
+}
+
+_plan_is_archived() {
+  awk 'NR==1 && /^---$/{in_fm=1; next} in_fm && /^---$/{exit} in_fm && /^status:[[:space:]]*archived/{found=1} END{exit !found}' "$1"
+}
+
+_plan_find_file() {
+  local base="$(_claude_project_dir)"
+  local subdir file
+  for subdir in plans brainstorms; do
+    file="$base/$subdir/$1"
+    [[ -f "$file" ]] && echo "$file" && return 0
+  done
+  echo "Not found: $1" >&2
+  return 1
+}
+
+_copy_to_repo() {
+  local f="$1"
+  local base="$(_claude_project_dir)"
+  local dest
+  if [[ "$f" == "$base/brainstorms/"* ]]; then
+    dest=docs/brainstorms
+  else
+    dest=docs/plans
+  fi
+  mkdir -p "$dest"
+  cp "$f" "$dest/$(basename "$f")"
+  echo "  $(basename "$f") → $dest"
+}
+
+cmd_list() {
+  local base="$(_claude_project_dir)"
+  mkdir -p "$base/plans" "$base/brainstorms"
+  local f
+  for f in "$base"/{plans,brainstorms}/*(NOm); do
+    [[ -f "$f" ]] || continue
+    if ! _plan_is_archived "$f"; then echo "$(basename "$f")"; fi
+  done
+}
+
+cmd_tagged() {
+  local base="$(_claude_project_dir)"
+  mkdir -p "$base/plans" "$base/brainstorms"
+  rg -l "tags:.*\b${1}\b" "$base/plans" "$base/brainstorms" | while read -r f; do
+    basename "$f"
+  done
+}
+
+cmd_in() {
+  local base="$(_claude_project_dir)"
+  mkdir -p "$base/plans" "$base/brainstorms"
+  local -a matches
+  matches=("${(@f)$(rg -l "tags:.*\b${1}\b" "$base/plans" "$base/brainstorms" 2>/dev/null)}")
+  if [[ ${#matches[@]} -eq 0 || -z "${matches[1]}" ]]; then
+    echo "No docs matching tag '$1'" >&2
+    return 1
+  fi
+  local f
+  for f in "${matches[@]}"; do
+    _copy_to_repo "$f"
+  done
+}
+
+cmd_cp() {
+  local file
+  file=$(_plan_find_file "$1") || return 1
+  _copy_to_repo "$file"
+}
+
+cmd_out() {
+  local base="$(_claude_project_dir)"
+  local file="$1"
+  local src subdir
+  if [[ -f "docs/brainstorms/$file" ]]; then
+    src="docs/brainstorms/$file"
+    subdir=brainstorms
+  elif [[ -f "docs/plans/$file" ]]; then
+    src="docs/plans/$file"
+    subdir=plans
+  else
+    echo "Not found in docs/plans/ or docs/brainstorms/: $file" >&2
+    return 1
+  fi
+  mkdir -p "$base/$subdir"
+  mv "$src" "$base/$subdir/$file"
+  git rm --cached "$src" 2>/dev/null || true
+  echo "  $file → external ($subdir)"
+}
+
+cmd_path() {
+  _plan_find_file "$1"
+}
+
+cmd_edit() {
+  local path
+  path=$(_plan_find_file "$1") || return 1
+  /usr/bin/open -a "Visual Studio Code" "$path"
+}
+
+cmd_archive() {
+  local file
+  file=$(_plan_find_file "$1") || return 1
+  sed -i '' 's/^status:.*$/status: archived/' "$file"
+  echo "  $1 → archived"
+}
+
+cmd_archived() {
+  local base="$(_claude_project_dir)"
+  mkdir -p "$base/plans" "$base/brainstorms"
+  local f
+  for f in "$base"/{plans,brainstorms}/*(NOm); do
+    [[ -f "$f" ]] || continue
+    if _plan_is_archived "$f"; then echo "$(basename "$f")"; fi
+  done
+}
+
+cmd_unarchive() {
+  local file
+  file=$(_plan_find_file "$1") || return 1
+  sed -i '' 's/^status:[[:space:]]*archived$/status: draft/' "$file"
+  echo "  $1 → restored"
+}
+
+case "${1:-list}" in
+  list)      cmd_list ;;
+  tagged)    [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_tagged "$2" ;;
+  in)        [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_in "$2" ;;
+  cp)        [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_cp "$2" ;;
+  out)       [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_out "$2" ;;
+  path)      [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_path "$2" ;;
+  edit)      [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_edit "$2" ;;
+  archive)   [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_archive "$2" ;;
+  archived)  cmd_archived ;;
+  unarchive) [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_unarchive "$2" ;;
+  help|--help|-h) usage ;;
+  *) echo "Unknown command: $1" >&2; usage; exit 1 ;;
+esac
