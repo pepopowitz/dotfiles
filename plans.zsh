@@ -69,7 +69,7 @@ plans-edit() {
   /usr/bin/open -a "Visual Studio Code" "$path"
 }
 
-# Copy plans/brainstorms matching a tag into docs/plans/.
+# Copy plans/brainstorms matching a tag into docs/plans/ or docs/brainstorms/.
 # Usage: plans-in <tag>
 plans-in() {
   local tag="$1"
@@ -82,30 +82,37 @@ plans-in() {
     return 1
   fi
   for f in "${matches[@]}"; do
-    cp "$f" docs/plans/"$(basename "$f")"
-    echo "  $(basename "$f")"
+    local dest
+    if [[ "$f" == "$base/brainstorms/"* ]]; then
+      dest=docs/brainstorms
+    else
+      dest=docs/plans
+    fi
+    mkdir -p "$dest"
+    cp "$f" "$dest/$(basename "$f")"
+    echo "  $(basename "$f") → $dest"
   done
 }
 
-# Move a file from docs/plans/ back to external storage.
-# Files prefixed with b- go to brainstorms/, all others go to plans/.
+# Move a file from docs/plans/ or docs/brainstorms/ back to external storage.
 # Usage: plans-out <filename>
 plans-out() {
   local base="$(_claude_project_dir)"
   local file="$1"
-  if [[ ! -f "docs/plans/$file" ]]; then
-    echo "Not found: docs/plans/$file" >&2
+  local src subdir
+  if [[ -f "docs/brainstorms/$file" ]]; then
+    src="docs/brainstorms/$file"
+    subdir=brainstorms
+  elif [[ -f "docs/plans/$file" ]]; then
+    src="docs/plans/$file"
+    subdir=plans
+  else
+    echo "Not found in docs/plans/ or docs/brainstorms/: $file" >&2
     return 1
   fi
-  local subdir
-  if [[ "$file" == b-* ]]; then
-    subdir=brainstorms
-  else
-    subdir=plans
-  fi
   mkdir -p "$base/$subdir"
-  mv "docs/plans/$file" "$base/$subdir/$file"
-  git rm --cached "docs/plans/$file" 2>/dev/null
+  mv "$src" "$base/$subdir/$file"
+  git rm --cached "$src" 2>/dev/null
   echo "  $file → external ($subdir)"
 }
 
