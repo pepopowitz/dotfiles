@@ -5,7 +5,7 @@
 #
 # Requires: ripgrep (rg) for tag search (BSD grep lacks \b support).
 
-set -euo pipefail
+set -u
 
 usage() {
   cat <<EOF
