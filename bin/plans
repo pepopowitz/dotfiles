@@ -16,7 +16,7 @@ Commands:
   tagged <tag>          List docs matching a tag
   tags                  List all tags (excluding ls-* tickets)
   in <tag|file>         Copy docs into the repo (by tag or filename)
-  out <tag|file>        Move docs from the repo back to external storage
+  out <tag|file|--all>  Move docs from the repo back to external storage
   path <file>           Print the full external path to a doc
   edit <file>           Open a doc in VS Code
   archive <file>        Archive a doc (hides from list)
@@ -129,6 +129,21 @@ cmd_in() {
 cmd_out() {
   local arg="$1"
   local base="$(_claude_project_dir)"
+
+  # Move all plan/brainstorm docs out of the repo
+  if [[ "$arg" == "--all" ]]; then
+    local moved=0
+    local dir
+    for dir in docs/plans docs/brainstorms; do
+      [[ -d "$dir" ]] || continue
+      for f in "$dir"/*.md(N); do
+        _move_to_external "$(basename "$f")"
+        moved=1
+      done
+    done
+    [[ $moved -eq 1 ]] || { echo "No docs to move out" >&2; return 1; }
+    return 0
+  fi
 
   # Try as filename first
   if [[ -f "docs/brainstorms/$arg" ]] || [[ -f "docs/plans/$arg" ]]; then
