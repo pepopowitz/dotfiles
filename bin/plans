@@ -12,7 +12,7 @@ usage() {
 Usage: plans [command] [args]
 
 Commands:
-  list                  List active plans and brainstorms (default)
+  list [--plans|--brainstorms]  List active docs (default: both)
   tagged <tag>          List docs matching a tag
   tags                  List all tags (excluding ls-* tickets)
   in <tag|file>         Copy docs into the repo (by tag or filename)
@@ -65,12 +65,33 @@ _copy_to_repo() {
 }
 
 cmd_list() {
+  local filter="${1:-}"
   local base="$(_claude_project_dir)"
   mkdir -p "$base/plans" "$base/brainstorms"
-  local f
-  for f in "$base"/{plans,brainstorms}/*(NOm); do
+
+  local -a dirs
+  case "$filter" in
+    --plans)      dirs=("$base/plans") ;;
+    --brainstorms) dirs=("$base/brainstorms") ;;
+    *)            dirs=("$base/plans" "$base/brainstorms") ;;
+  esac
+
+  local section="" kind f
+  for f in ${^dirs}/*(NOm); do
     [[ -f "$f" ]] || continue
-    if ! _plan_is_archived "$f"; then echo "$(basename "$f")"; fi
+    if ! _plan_is_archived "$f"; then
+      if [[ "$f" == "$base/plans/"* ]]; then
+        kind="plans"
+      else
+        kind="brainstorms"
+      fi
+      if [[ "$kind" != "$section" ]]; then
+        [[ -n "$section" ]] && echo
+        echo "$kind:"
+        section="$kind"
+      fi
+      echo "  $(basename "$f")"
+    fi
   done
 }
 
@@ -215,7 +236,7 @@ cmd_unarchive() {
 }
 
 case "${1:-list}" in
-  list)      cmd_list ;;
+  list)      cmd_list "${2:-}" ;;
   tagged)    [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_tagged "$2" ;;
   tags)      cmd_tags ;;
   dir)       _claude_project_dir ;;
@@ -226,6 +247,7 @@ case "${1:-list}" in
   archive)   [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_archive "$2" ;;
   archived)  cmd_archived ;;
   unarchive) [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_unarchive "$2" ;;
+  --plans|--brainstorms) cmd_list "$1" ;;
   help|--help|-h) usage ;;
   *) echo "Unknown command: $1" >&2; usage; exit 1 ;;
 esac
