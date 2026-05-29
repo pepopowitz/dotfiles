@@ -19,10 +19,12 @@ Commands:
   out <tag|file|--all>  Move docs from the repo back to external storage
   path <file>           Print the full external path to a doc
   edit <file>           Open a doc in VS Code
-  archive <file>        Archive a doc (hides from list)
+  archive <file|--older-than N>  Archive a doc or all active docs older than N days
   archived              List archived docs
   unarchive <file>      Restore an archived doc
-  delete <file>         Permanently delete an archived doc
+  keep <file>           Mark a doc as keep (protected from --older-than)
+  unkeep <file>         Remove keep mark from a doc
+  delete <file|--older-than N>  Delete an archived doc or all archived docs older than N days
   dir                   Print the external storage root for this project
   help                  Show this message
 EOF
@@ -38,6 +40,23 @@ _claude_project_dir() {
 
 _plan_is_archived() {
   awk 'NR==1 && /^---$/{in_fm=1; next} in_fm && /^---$/{exit} in_fm && /^status:[[:space:]]*archived/{found=1} END{exit !found}' "$1"
+}
+
+_plan_has_keep_tag() {
+  awk 'NR==1 && /^---$/{in_fm=1; next} in_fm && /^---$/{exit} in_fm && /^tags:/{sub(/^tags:[[:space:]]*/, ""); print}' "$1" \
+    | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | grep -qx 'keep'
+}
+
+_plan_filename_date() {
+  basename "$1" | sed -E 's/^[a-z]-([0-9]{4}-[0-9]{2}-[0-9]{2}).*/\1/'
+}
+
+_plan_is_older_than() {
+  local file="$1" days="$2"
+  local file_date cutoff
+  file_date=$(_plan_filename_date "$file")
+  cutoff=$(date -v-${days}d +%Y-%m-%d)
+  [[ "$file_date" < "$cutoff" ]]
 }
 
 _plan_find_file() {
@@ -214,6 +233,25 @@ cmd_edit() {
 }
 
 cmd_archive() {
+  if [[ "$1" == "--older-than" ]]; then
+    local days="${2:?Usage: plans archive --older-than <days>}"
+    local base="$(_claude_project_dir)"
+    mkdir -p "$base/plans" "$base/brainstorms"
+    local count=0 f
+    for f in "$base"/{plans,brainstorms}/*(NOm); do
+      [[ -f "$f" ]] || continue
+      _plan_is_archived "$f" && continue
+      _plan_has_keep_tag "$f" && continue
+      if _plan_is_older_than "$f" "$days"; then
+        sed -i '' 's/^status:.*$/status: archived/' "$f"
+        echo "  $(basename "$f") → archived"
+        count=$((count + 1))
+      fi
+    done
+    [[ $count -gt 0 ]] || echo "No plans older than $days days to archive"
+    return 0
+  fi
+
   local file
   file=$(_plan_find_file "$1") || return 1
   sed -i '' 's/^status:.*$/status: archived/' "$file"
@@ -237,7 +275,61 @@ cmd_unarchive() {
   echo "  $1 → restored"
 }
 
+cmd_keep() {
+  local file
+  file=$(_plan_find_file "$1") || return 1
+  if _plan_has_keep_tag "$file"; then
+    echo "  $1 already has keep tag"
+    return 0
+  fi
+  # Append keep to existing tags, or add tags line if missing
+  if grep -q '^tags:' "$file"; then
+    sed -i '' '/^tags:/ s/$/, keep/' "$file"
+  else
+    sed -i '' '/^---$/,/^---$/ { /^status:/ a\
+tags: keep
+}' "$file"
+  fi
+  echo "  $1 → keep"
+}
+
+cmd_unkeep() {
+  local file
+  file=$(_plan_find_file "$1") || return 1
+  if ! _plan_has_keep_tag "$file"; then
+    echo "  $1 does not have keep tag"
+    return 0
+  fi
+  # Remove keep from tags, handling all positions in comma-separated list
+  sed -i '' '/^tags:/ {
+    s/, keep$//
+    s/, keep,/,/
+    s/^tags: keep, /tags: /
+    s/^tags: keep$/tags:/
+  }' "$file"
+  echo "  $1 → unkeep"
+}
+
 cmd_delete() {
+  if [[ "$1" == "--older-than" ]]; then
+    local days="${2:?Usage: plans delete --older-than <days>}"
+    local base="$(_claude_project_dir)"
+    mkdir -p "$base/plans" "$base/brainstorms"
+    local count=0 f
+    for f in "$base"/{plans,brainstorms}/*(NOm); do
+      [[ -f "$f" ]] || continue
+      _plan_is_archived "$f" || continue
+      _plan_has_keep_tag "$f" && continue
+      if _plan_is_older_than "$f" "$days"; then
+        rm "$f"
+        echo "  $(basename "$f") → deleted"
+        count=$((count + 1))
+      fi
+    done
+    [[ $count -gt 0 ]] || echo "No archived plans older than $days days to delete"
+    return 0
+  fi
+
   local file
   file=$(_plan_find_file "$1") || return 1
   if ! _plan_is_archived "$file"; then
@@ -257,10 +349,12 @@ case "${1:-list}" in
   out)       [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_out "$2" ;;
   path)      [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_path "$2" ;;
   edit)      [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_edit "$2" ;;
-  archive)   [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_archive "$2" ;;
+  archive)   [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_archive "$2" "${3:-}" ;;
   archived)  cmd_archived ;;
   unarchive) [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_unarchive "$2" ;;
-  delete)    [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_delete "$2" ;;
+  keep)      [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_keep "$2" ;;
+  unkeep)    [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_unkeep "$2" ;;
+  delete)    [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_delete "$2" "${3:-}" ;;
   --plans|--brainstorms) cmd_list "$1" ;;
   help|--help|-h) usage ;;
   *) echo "Unknown command: $1" >&2; usage; exit 1 ;;
