@@ -10,61 +10,63 @@ Requires [ripgrep](https://github.com/BurntSushi/ripgrep) (`rg`) for tag search.
 
 ## Commands
 
-### Listing
+### List what's in external storage
 
 ```
-plans                              # list all active plans and brainstorms
-plans list                         # same as above
-plans list --plans                 # only plans
-plans list --brainstorms           # only brainstorms
-plans tagged <tag>                 # list docs matching a tag
-plans tags                         # list all tags (excluding ls-* tickets)
-plans archived                     # list archived docs
+plans                              # list all active plans & brainstorms
+plans --plans                      # only plans
+plans --brainstorms                # only brainstorms
+plans tagged <tag>                 # find docs by tag
+plans tags                         # list all non-ticket tags
 ```
 
-### Moving in/out of the repo
+### Copy plans into the repo for implementation
 
 ```
 plans in <tag|file>                # copy docs into docs/plans/ or docs/brainstorms/
+```
+
+`in` accepts a filename or a tag. Filename is tried first; if no file matches, it falls back to tag search.
+
+### Move plans back out when done
+
+```
 plans out <tag|file>               # move docs from the repo back to external storage
-plans out --all                    # move all untracked docs back to external storage
+plans out --all                    # move all untracked docs back
 ```
 
-`in` and `out` accept either a filename or a tag. Filename is tried first; if no file matches, it falls back to tag search.
+`out` also accepts a filename or tag, same as `in`.
 
-### Inspection & editing
-
-```
-plans path <file>                  # print the full external path to a doc
-plans edit <file>                  # open a doc in VS Code
-plans dir                          # print the external storage root for this project
-```
-
-### Archiving & deletion
+### Edit plans without copying them in
 
 ```
-plans archive <file>               # archive a single doc (hides from list)
+plans path <file>                  # print full path (composable with any tool)
+plans edit <file>                  # open in VS Code
+plans dir                          # print external storage root for this project
+```
+
+### Lifecycle management
+
+```
+plans keep <file>                  # protect from date-based cleanup
+plans unkeep <file>                # remove protection
+
+plans archive <file>               # hide from list
 plans archive --older-than <days>  # archive all active docs older than N days
-plans unarchive <file>             # restore an archived doc to active
+plans archived                     # list archived docs
+plans unarchive <file>             # restore to active
 
-plans delete <file>                # permanently delete an archived doc
-plans delete --older-than <days>   # delete all archived docs older than N days
+plans delete <file>                # permanently delete (must be archived first)
+plans delete --older-than <days>   # delete archived docs older than N days
 ```
 
-`delete` refuses to delete non-archived docs. Archive first, then delete.
+`delete` refuses non-archived docs. Archive first, then delete.
 
-### Keep protection
+`--older-than` parses the date from the filename (`p-YYYY-MM-DD-...`), not filesystem mtime, since `in`/`out` changes mtime.
 
-```
-plans keep <file>                  # add keep tag (protects from --older-than)
-plans unkeep <file>                # remove keep tag
-```
-
-Docs with a `keep` tag in their frontmatter are skipped by `archive --older-than` and `delete --older-than`.
+Docs with a `keep` tag are skipped by `archive --older-than` and `delete --older-than`. Frontmatter-modifying commands (`keep`, `unkeep`, `archive`, `unarchive`) update both the external copy and the repo copy if both exist.
 
 ## Frontmatter convention
-
-All docs should include YAML frontmatter with `tags`:
 
 ```yaml
 ---
@@ -80,7 +82,7 @@ tags: ls-3483, chat, sidebar
 - **Feature area**: `chat`, `sidebar`, `pricing`, etc.
 - **Protection**: `keep` (prevents date-based archiving/deletion)
 
-The `status` field is managed by `archive`/`unarchive` commands. The date in the filename (`p-YYYY-MM-DD-...`) is used by `--older-than`.
+The `status` field is managed by `archive`/`unarchive`. The date in the filename is used by `--older-than`.
 
 ## Tests
 
