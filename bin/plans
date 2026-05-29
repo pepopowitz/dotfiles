@@ -197,6 +197,7 @@ cmd_tags() {
   local f
   for f in "$base"/{plans,brainstorms}/*(N); do
     [[ -f "$f" ]] || continue
+    _plan_is_archived "$f" && continue
     awk 'NR==1 && /^---$/{in_fm=1; next} in_fm && /^---$/{exit} in_fm && /^tags:/{sub(/^tags:[[:space:]]*/, ""); print}' "$f"
   done | tr ',' '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//' | grep -v '^ls-' | grep -v '^$' | sort -u
 }
