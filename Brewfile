@@ -14,7 +14,7 @@ brew "terminal-notifier"
 brew "felixkratz/formulae/borders"
 cask "aerospace"
 cask "livebook"
-cask "sensiblesidebuttons"
+cask "sanesidebuttons"
 cask "spotify"
 cask "unnaturalscrollwheels"
 mas "Perculia", id: 1462633284

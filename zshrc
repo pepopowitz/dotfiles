@@ -1,4 +1,4 @@
-export PATH=/opt/homebrew/bin:/usr/local/opt/python/libexec/bin:/usr/local/bin:~/bin:~/.local/bin:~/.bun/bin:$PATH
+export PATH=/opt/homebrew/bin:/usr/local/opt/python/libexec/bin:/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin:~/bin:~/.local/bin:~/.bun/bin
 
 # history setup
 setopt SHARE_HISTORY

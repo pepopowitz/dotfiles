@@ -1,0 +1,2 @@
+#!/usr/bin/env zsh
+exec "$HOME/.dotfiles/bin/plans-cli/plans" "$@"
