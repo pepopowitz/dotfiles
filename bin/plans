@@ -22,6 +22,7 @@ Commands:
   archive <file>        Archive a doc (hides from list)
   archived              List archived docs
   unarchive <file>      Restore an archived doc
+  delete <file>         Permanently delete an archived doc
   dir                   Print the external storage root for this project
   help                  Show this message
 EOF
@@ -236,6 +237,17 @@ cmd_unarchive() {
   echo "  $1 → restored"
 }
 
+cmd_delete() {
+  local file
+  file=$(_plan_find_file "$1") || return 1
+  if ! _plan_is_archived "$file"; then
+    echo "Refusing to delete: $1 is not archived. Archive it first." >&2
+    return 1
+  fi
+  rm "$file"
+  echo "  $1 → deleted"
+}
+
 case "${1:-list}" in
   list)      cmd_list "${2:-}" ;;
   tagged)    [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_tagged "$2" ;;
@@ -248,6 +260,7 @@ case "${1:-list}" in
   archive)   [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_archive "$2" ;;
   archived)  cmd_archived ;;
   unarchive) [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_unarchive "$2" ;;
+  delete)    [[ $# -ge 2 ]] || { usage; exit 1; }; cmd_delete "$2" ;;
   --plans|--brainstorms) cmd_list "$1" ;;
   help|--help|-h) usage ;;
   *) echo "Unknown command: $1" >&2; usage; exit 1 ;;
