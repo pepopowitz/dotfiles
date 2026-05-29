@@ -31,6 +31,10 @@ EOF
 }
 
 _claude_project_dir() {
+  if [[ -n "${PLANS_PROJECT_DIR:-}" ]]; then
+    echo "$PLANS_PROJECT_DIR"
+    return
+  fi
   local slug
   slug=$(git rev-parse --show-toplevel 2>/dev/null || echo "$PWD")
   slug="${slug//\//-}"
