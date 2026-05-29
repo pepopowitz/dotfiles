@@ -1,6 +1,6 @@
 #!/usr/bin/env bats
 
-PLANS_CLI="$BATS_TEST_DIRNAME/../bin/plans"
+PLANS_CLI="$BATS_TEST_DIRNAME/plans"
 
 setup() {
   export PLANS_PROJECT_DIR="$(mktemp -d)"
