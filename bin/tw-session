@@ -69,7 +69,7 @@ rm -f "$SESSION_ID_FILE"
 
 # Search for existing task
 if [[ "$NO_TICKET" -eq 0 ]]; then
-  EXISTING=$(task list project:"$IDENTIFIER" 2>/dev/null | awk '/^[0-9]/ { print $1; exit }')
+  EXISTING=$(task list project:"$IDENTIFIER" 2>/dev/null | awk '/^[0-9]/ { print $1; exit }' || true)
 else
   EXISTING=$(task list 2>/dev/null | grep -i "$IDENTIFIER" | awk '/^[0-9]/ { print $1; exit }' || true)
 fi
