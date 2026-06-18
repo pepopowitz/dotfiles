@@ -1,6 +1,9 @@
+# code --install-extension adpyke.vscode-sql-formatter
 code --install-extension alefragnani.project-manager
+# code --install-extension anthropic.claude-code
 code --install-extension antiantisepticeye.vscode-color-picker
 code --install-extension bierner.emojisense
+code --install-extension bradlc.vscode-tailwindcss
 code --install-extension christian-kohler.npm-intellisense
 code --install-extension cliffordfajardo.highlight-line-vscode
 code --install-extension dbaeumer.vscode-eslint
@@ -10,7 +13,6 @@ code --install-extension edonet.vscode-command-runner
 code --install-extension esbenp.prettier-vscode
 code --install-extension fabiospampinato.vscode-diff
 code --install-extension firsttris.vscode-jest-runner
-code --install-extension github.copilot
 code --install-extension github.copilot-chat
 code --install-extension github.vscode-github-actions
 code --install-extension github.vscode-pull-request-github
@@ -35,8 +37,6 @@ code --install-extension nicoespeon.abracadabra
 code --install-extension peterschmalfeldt.explorer-exclude
 code --install-extension redhat.java
 code --install-extension runningcoder.react-snippets
-code --install-extension streetsidesoftware.code-spell-checker
-code --install-extension travisthetechie.write-good-linter
 code --install-extension tyriar.lorem-ipsum
 code --install-extension unifiedjs.vscode-mdx
 code --install-extension visualstudioexptteam.intellicode-api-usage-examples

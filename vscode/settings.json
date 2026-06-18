@@ -48,20 +48,28 @@
   "screencastMode.onlyKeyboardShortcuts": true,
   "githubPullRequests.queries": [
     {
+      "label": "Local Pull Request Branches",
+      "query": "default"
+    },
+    {
       "label": "Waiting For My Review",
-      "query": "is:open review-requested:${user}"
+      "query": "repo:${owner}/${repository} is:open review-requested:${user}"
     },
     {
       "label": "Assigned To Me",
-      "query": "is:open assignee:${user}"
+      "query": "repo:${owner}/${repository} is:open assignee:${user}"
     },
     {
       "label": "Created By Me (open)",
-      "query": "is:open author:${user}"
+      "query": "repo:${owner}/${repository} is:open author:${user}"
     },
     {
       "label": "Created By Me (all)",
-      "query": "author:${user}"
+      "query": "repo:${owner}/${repository} author:${user}"
+    },
+    {
+      "label": "All Open",
+      "query": "default"
     }
   ],
   "[markdown]": {
@@ -86,10 +94,11 @@
   "github.copilot.enable": {
     "*": true,
     "plaintext": false,
-    "markdown": true,
+    "markdown": false,
     "scminput": false,
     "yaml": false
   },
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
   "markdown.validate.enabled": true,
   "command-runner.commands": {
     "append markdown reference links": "md_links '${file}'"
@@ -111,5 +120,16 @@
       "extensionId": "ms-dotnettools.csharp",
       "path": "/usr/local/share/dotnet/dotnet"
     }
-  ]
+  ],
+  "editor.wordWrap": "on",
+  "workbench.editor.empty.hint": "hidden",
+  "github.copilot.nextEditSuggestions.enabled": true,
+  "markdown.marp.browser": "edge",
+  "prettier.prettierPath": "./node_modules/prettier",
+  "terminal.integrated.suggest.enabled": false,
+  "claudeCode.preferredLocation": "panel",
+  "workbench.editorAssociations": {
+    "*.copilotmd": "vscode.markdown.preview.editor",
+    "*.HEIC": "default"
+  }
 }
