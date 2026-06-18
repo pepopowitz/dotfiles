@@ -1,7 +1,12 @@
-tap "felixkratz/formulae" # jankyborders
-tap "homebrew/bundle"
-tap "nikitabobko/tap" # aerospace
+# for opencode
+tap "anomalyco/tap"
+# for jankyborders & sketchybar
+tap "felixkratz/formulae"
+tap "nikitabobko/tap"
+# Clone of cat(1) with syntax highlighting and Git integration
 brew "bat"
+# Bash Automated Testing System
+brew "bats-core"
 brew "fzf"
 brew "gh"
 brew "git"
@@ -11,16 +16,16 @@ brew "mise"
 brew "rcm"
 brew "starship"
 brew "terminal-notifier"
-brew "felixkratz/formulae/borders"
-cask "aerospace"
+cask "nikitabobko/tap/aerospace"
 cask "livebook"
 cask "sanesidebuttons"
 cask "spotify"
 cask "unnaturalscrollwheels"
-mas "Perculia", id: 1462633284
+cask "visual-studio-code"
 vscode "alefragnani.project-manager"
 vscode "antiantisepticeye.vscode-color-picker"
 vscode "bierner.emojisense"
+vscode "bradlc.vscode-tailwindcss"
 vscode "christian-kohler.npm-intellisense"
 vscode "cliffordfajardo.highlight-line-vscode"
 vscode "dbaeumer.vscode-eslint"
@@ -30,7 +35,6 @@ vscode "edonet.vscode-command-runner"
 vscode "esbenp.prettier-vscode"
 vscode "fabiospampinato.vscode-diff"
 vscode "firsttris.vscode-jest-runner"
-vscode "github.copilot"
 vscode "github.copilot-chat"
 vscode "github.vscode-github-actions"
 vscode "github.vscode-pull-request-github"
@@ -72,6 +76,23 @@ vscode "wix.glean"
 vscode "wmaurer.change-case"
 vscode "yoavbls.pretty-ts-errors"
 vscode "ziyasal.vscode-open-in-github"
+
+cargo "st"
+
+# Potentials, from previous leanscaper machine:
+# # for tdx, when I had dreams of integrating tasks with claude
+# tap "niklas-heer/tap"
+# vscode "adpyke.vscode-sql-formatter"
+# brew "task"
+# brew "neonctl"
+## Utility to optimize JPEG files
+# brew "jpegoptim"
+# # Postgres C API library
+# brew "libpq"
+# # Easy, fast, and beautiful database client for the terminal
+# brew "harlequin"
+# # Interpreter for PostScript and PDF
+# brew "ghostscript"
 
 # Potentials, from previous camnda machine:
 # brew "erlang"
