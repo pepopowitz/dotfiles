@@ -1,5 +1,5 @@
-function lean() {
-  cd ~/sjh/dev/leanscaper/$1
+function puzzmo() {
+  cd ~/sjh/dev/puzzmo/$1
 }
 
 function sjh() {
