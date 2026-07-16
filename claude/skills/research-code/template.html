@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title><!-- SLOT:title --></title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --border: #e7e5e4;
+    --text: #1c1917;
+    --text-muted: #78716c;
+    --accent: #6366f1;
+    --accent-light: #eef2ff;
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+    --amber: #d97706;
+    --amber-light: #fffbeb;
+    --code-bg: #1e1e2e;
+    --code-text: #cdd6f4;
+    --radius: 8px;
+    --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono", Menlo, monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+
+  .header { margin-bottom: 48px; }
+  .header h1 {
+    font-size: 1.75rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+  }
+  .header-meta { display: flex; flex-wrap: wrap; gap: 8px; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 12px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+  }
+
+  section { margin-bottom: 48px; }
+  section > h2 {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  section > h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 24px 0 12px;
+  }
+
+  .narrative p {
+    font-size: 1.05rem;
+    line-height: 1.75;
+    max-width: 65ch;
+    margin-bottom: 16px;
+  }
+
+  .learning-insight {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+  }
+  .learning-insight h3 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    margin-top: 0;
+  }
+  .learning-insight p {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    line-height: 1.6;
+  }
+
+  .glossary-term {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 10px;
+  }
+  .glossary-term .term {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent);
+    margin-bottom: 2px;
+  }
+  .glossary-term .alias {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+  .glossary-term .def { font-size: 0.9rem; line-height: 1.5; }
+  .glossary-term .def code {
+    background: var(--bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    border: 1px solid var(--border);
+  }
+
+  .flow-diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.7;
+    white-space: pre-wrap;
+    margin: 12px 0;
+  }
+
+  .screens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+  .screen-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+  }
+  .screen-card-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  .screen-card h3 { font-size: 0.9rem; font-weight: 600; margin: 0; }
+  .screen-card .route {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+  .screen-card .platform-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 8px; }
+  .screen-card .platform-tag {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--accent);
+    background: var(--accent-light);
+    border-radius: 4px;
+    padding: 1px 6px;
+  }
+  .screen-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 8px; }
+  .screen-card .screen-files { display: flex; flex-wrap: wrap; gap: 6px; }
+
+  .entry-point {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 18px;
+    margin-bottom: 12px;
+  }
+  .entry-point h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--accent);
+  }
+  .entry-point p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+
+  pre.code-block {
+    background: var(--code-bg);
+    color: var(--code-text);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    margin: 12px 0;
+  }
+
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  .file-path {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .file-path:hover { border-color: var(--accent); color: var(--text); }
+  .file-path .copy-icon { width: 14px; height: 14px; opacity: 0.5; }
+  .file-path:hover .copy-icon { opacity: 1; }
+  .file-path .check-icon { width: 14px; height: 14px; color: var(--green); display: none; }
+  .file-path.copied { border-color: var(--green); }
+  .file-path.copied .copy-icon { display: none; }
+  .file-path.copied .check-icon { display: inline-block; }
+
+  p code, li code, .def code {
+    background: var(--bg);
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    border: 1px solid var(--border);
+  }
+
+  ul, ol { margin: 8px 0 16px 24px; }
+  li { margin-bottom: 4px; line-height: 1.5; }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin-bottom: 8px;
+  }
+  .comparison-table th {
+    text-align: left;
+    padding: 8px 12px;
+    background: var(--bg);
+    border-bottom: 2px solid var(--border);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-muted);
+  }
+  .comparison-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  .comparison-table .dimension { font-weight: 600; white-space: nowrap; width: 140px; }
+
+  .empty { color: var(--text-muted); font-size: 0.85rem; font-style: italic; }
+
+  @media (max-width: 640px) {
+    body { padding: 24px 16px 64px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1><!-- SLOT:title --></h1>
+  <div class="header-meta">
+    <!-- SLOT:header_pills -->
+  </div>
+</header>
+
+<!-- ===== WHY THIS EXISTS ===== -->
+<section class="narrative">
+  <h2>Why This Exists</h2>
+  <!-- SLOT:why_this_exists -->
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section>
+  <h2>How It Works, Top to Bottom</h2>
+  <!-- SLOT:how_it_works -->
+</section>
+
+<!-- ===== SCENARIOS, END TO END ===== -->
+<section>
+  <h2>Scenarios, End to End</h2>
+  <!-- SLOT:scenarios -->
+</section>
+
+<!-- ===== SCREENS & UI SURFACES ===== -->
+<section>
+  <h2>Screens &amp; UI Surfaces</h2>
+  <div class="screens-grid">
+    <!-- SLOT:screens -->
+  </div>
+</section>
+
+<!-- ===== CORE CONCEPTS ===== -->
+<section>
+  <h2>Core Concepts</h2>
+  <!-- SLOT:core_concepts -->
+</section>
+
+<!-- ===== ENTRY POINTS FOR COMMON TASKS ===== -->
+<section>
+  <h2>Entry Points for Common Tasks</h2>
+  <!-- SLOT:entry_points -->
+</section>
+
+<!-- ===== PATTERNS & CONVENTIONS ===== -->
+<section>
+  <h2>Patterns &amp; Conventions</h2>
+  <!-- SLOT:patterns_and_conventions -->
+</section>
+
+<!-- ===== RELATED SYSTEMS (optional, always last) ===== -->
+<section>
+  <h2>Related &amp; Adjacent Systems</h2>
+  <!-- SLOT:related_systems -->
+</section>
+
+<script>
+document.querySelectorAll('.file-path').forEach(el => {
+  el.addEventListener('click', () => {
+    const path = el.getAttribute('data-path')
+    if (path) {
+      navigator.clipboard.writeText(path).then(() => {
+        el.classList.add('copied')
+        setTimeout(() => el.classList.remove('copied'), 1500)
+      }).catch(() => {})
+    }
+  })
+})
+</script>
+
+</body>
+</html>
