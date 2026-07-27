@@ -1,0 +1,44 @@
+# translated from ~/.dotfiles/hyper.js
+
+# font-style only matches against the full family name, not the "SauceCodePro NF"
+# alias — with the alias, an unmatched style silently falls back to JetBrains Mono
+font-family = SauceCodePro Nerd Font
+font-style = Medium
+font-size = 12
+# hyper: disableLigatures = true
+font-feature = -liga
+font-feature = -calt
+font-feature = -dlig
+
+# hyper ran the hyper-ayu-light plugin, which replaced hyper's own colors.
+# ghostty applies a theme first and lets explicit keys override it, so setting
+# foreground/background/selection here would defeat the theme.
+theme = Ayu Light
+
+# ayu light's green (#6cbf43) is too washed out on the light background;
+# hyper's own green reads better
+palette = 2=#41a744
+
+background-opacity = 0.92
+background-blur = 20
+
+cursor-style = block
+cursor-style-blink = false
+# zsh shell integration switches the cursor to a beam at the prompt
+shell-integration-features = no-cursor
+cursor-color = #ffaa33
+cursor-opacity = 1
+
+# hyper: padding = '12px 14px'
+window-padding-x = 14
+window-padding-y = 12
+window-inherit-working-directory = true
+
+copy-on-select = false
+# hyper: bell = 'SOUND'
+bell-features = system,attention,title
+
+command = /bin/zsh --login
+
+# replaces the hyper-shift-enter local plugin
+keybind = shift+enter=text:\n
