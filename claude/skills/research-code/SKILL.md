@@ -144,26 +144,30 @@ does. If you find yourself writing a 4th paragraph, something belongs in a
 later section instead — cut it.
 
 ### SLOT:how_it_works (the architecture, top to bottom)
-A short lead-in sentence, then an ordered list (`<ol>`) of the 3-6 major
+**Lead with a Mermaid architecture diagram** (required — see "Diagrams" below).
+A `flowchart` is the default: one node per system-level participant (repo,
+service, store, queue, runtime) and a labeled edge for what crosses each
+boundary (a sync, a write, a published artifact, a request). The diagram is
+the primary representation of the architecture — prefer it over describing the
+wiring in prose. Follow it with a short ordered list (`<ol>`) of the 3-6 major
 stages the system moves through end to end — e.g. "Sync → Attach → Publish →
-Run." Each stage is one `<li>` with a bolded stage name and 1-2 plain-English
-sentences.
+Run" — each a `<li>` with a bolded stage name and 1-2 plain-English sentences
+that annotate the diagram rather than re-listing every edge in it.
 
-This is architecture, not a shortened scenario: each stage names the
-*system-level participants* involved — which repo, service, store, queue, or
-runtime — and what crosses the boundary between them (a sync, a write, a
-published artifact, a request). It answers "what are the moving parts and how
-do they connect," at the level you'd draw on a whiteboard before writing any
-code. It does NOT answer "what does a specific person click and see" — that's
-what Scenarios is for, and the two should feel different to read, not like
-one is a trimmed copy of the other. Concretely: no file paths, line numbers,
-`<pre class="code-block">` snippets, `<div class="flow-diagram">` blocks, or
-named people/personas here. This section should read the same whether or not
-the reader ever opens the code, and whether or not the system has multiple
-branches — the architecture is the same shape regardless of which branch a
-given run takes (branch-specific behavior is what Scenarios is for). If you
-catch yourself naming a function, file, or "the admin does X," that sentence
-belongs in Scenarios, Core Concepts, or Entry Points instead — move it there.
+This is architecture, not a shortened scenario: the diagram and list name the
+*system-level participants* involved and what crosses the boundary between
+them. They answer "what are the moving parts and how do they connect," at the
+level you'd draw on a whiteboard before writing any code. They do NOT answer
+"what does a specific person click and see" — that's what Scenarios is for, and
+the two should feel different to read, not like one is a trimmed copy of the
+other. Concretely: no file paths, line numbers, `<pre class="code-block">`
+snippets, or named people/personas here — the diagram's nodes are systems, not
+functions or files. This section should read the same whether or not the reader
+ever opens the code, and whether or not the system has multiple branches — the
+architecture is the same shape regardless of which branch a given run takes
+(branch-specific behavior is what Scenarios is for). If you catch yourself
+naming a function, file, or "the admin does X," that belongs in Scenarios, Core
+Concepts, or Entry Points instead — move it there.
 
 ### SLOT:scenarios (concrete walkthroughs — always required)
 One `<div class="learning-insight">` per scenario:
@@ -185,6 +189,15 @@ branches (distinct types/modes/paths), write **one scenario per branch**,
 each with a different persona/goal, so every branch gets exercised by a real
 walkthrough rather than described only in the abstract. A system with a
 single path just needs the one scenario.
+
+When a scenario crosses several participants (a person, a frontend, a
+resolver, a job, a store), **add a Mermaid `sequenceDiagram`** above or below
+the `<ol>` to show the call/response order visually — favor the diagram over
+spelling the hop sequence out in prose. Put it in a `<div class="diagram">`
+(see "Diagrams" below). Actors should be the same participants named in How It
+Works; the numbered steps then annotate the diagram with the concrete
+identifiers, routes, and gotchas. A short linear scenario that touches one or
+two participants doesn't need a diagram — use one only when it earns its space.
 
 Ground every step in what actually happened when you traced the code —
 including non-obvious branches or gotchas the trace revealed (a silent
@@ -330,6 +343,37 @@ If nothing is meaningfully adjacent, replace the slot with
 `<p class="empty">No closely related systems worth contrasting.</p>` — do not
 force a comparison.
 
+### Diagrams (used in How It Works and Scenarios)
+The template already loads and configures Mermaid (theme-matched to the page)
+and styles the `.diagram` wrapper — do NOT add a `<script>`, re-initialize
+Mermaid, or restyle it. Just emit a `.diagram` block; it renders on load:
+```html
+<div class="diagram">
+  <pre class="mermaid">
+flowchart LR
+  Player([Player]) -->|submits guess| API[api.puzzmo.com]
+  API -->|writes| DB[(Prisma / Postgres)]
+  API -->|enqueues| Job[Scoring job]
+  Job -->|publishes| DB
+  </pre>
+  <div class="diagram-caption">How a submission moves through the system.</div>
+</div>
+```
+- Use a `flowchart`/`graph` for architecture (How It Works) and a
+  `sequenceDiagram` for ordered walkthroughs (Scenarios). Both are configured
+  and styled already.
+- The `<div class="diagram-caption">` is optional — a one-line label for what
+  the diagram shows.
+- Keep node labels to real participant/system names, short. Do NOT put file
+  paths, line numbers, or the `file-path` widget inside a diagram — those live
+  in prose and cards.
+- **HTML-escape** any `<`, `>`, or `&` inside diagram text (e.g. write
+  `--&gt;` only in prose, not in Mermaid syntax where `-->` is literal; but
+  escape stray `<`/`&` in node labels). Prefer plain labels that avoid these.
+- Mermaid syntax is whitespace/indentation sensitive — keep the diagram source
+  left-aligned inside the `<pre>` as shown, not indented to match surrounding
+  HTML.
+
 ### File path references (used throughout)
 Every code reference uses this pattern, with the line number looked up on the
 current HEAD of the file (not a diff line). `data-path` carries the full
@@ -421,15 +465,60 @@ are needed — a well-written entry is automatically findable.
 
 ## Rules
 
+### Brevity is the #1 rule — walls of text are a failure
+
+This is the rule most often violated. Treat it as a hard constraint, not a
+preference. If you are unsure whether a block is too long, it is — cut it.
+
+**Hard caps (enforce on every single block you write):**
+- **Sentences: max ~20 words.** If a sentence has a comma-spliced second
+  clause explaining the first, split it or delete the second clause.
+- **Paragraphs: max 3 sentences.** A 4th sentence means the content belongs
+  in a list, a later section, or the bin.
+- **No block exceeds ~50 words of prose.** Why This Exists paragraphs and
+  scenario steps included.
+- **Prefer a list to a paragraph** the moment you are describing more than one
+  thing. Two related facts = two bullets, not one sentence with "and".
+
+**Cut these on sight — they are pure filler:**
+- Framing preambles: "It's worth noting that", "The key thing to understand
+  is", "At a high level", "Essentially", "Fundamentally".
+- Restating the heading in the first sentence of a block.
+- Explaining *why something is nice* ("this is elegant because…",
+  "the guiding idea is…") — state the fact, drop the appreciation.
+- Second clauses that re-say the first in different words.
+- Adjectives that add no information: "deliberately", "comprehensive",
+  "robust", "powerful", "simply", "just".
+
+**Concrete before/after** — this is the target density:
+
+> ❌ *"This repo does two jobs. First, it converts any of those foreign
+> formats into `.xd`. Second, it turns an `.xd` document into a deliberately
+> over-rich JSON object (`CrosswordJSON`) that an app can render with zero
+> further parsing — the grid is pre-expanded into typed tiles, clues carry
+> their board positions, and clue text is pre-parsed into a markup tree."*
+>
+> ✅ *"Two jobs:"* followed by two bullets: *"**Converts** foreign formats into
+> `.xd`."* / *"**Parses** `.xd` into a rich `CrosswordJSON` — typed tiles,
+> clues with positions, markup trees. Parse once, render with zero work."*
+
+The ✅ version says everything the ❌ version does in ~40% of the words. That
+gap is the bar. When drafting a section, write it, then delete every word that
+survives its sentence being true without it.
+
 - Do NOT modify the template's CSS, JS, or structure — only replace slot
-  comments.
+  comments. This includes the Mermaid setup (`<script type="module">` and the
+  `.diagram`/`.mermaid` styles) — it's already wired; just emit `.diagram`
+  blocks.
+- Favor diagrams over text for flow and architecture. How It Works must lead
+  with a Mermaid architecture diagram; multi-participant Scenarios should use a
+  Mermaid `sequenceDiagram`. See "Diagrams" above for the snippet.
 - Do NOT let later sections repeat earlier sections' framing — each section
   should add new information, not restate the last one in more words.
-- Every prose block, in every section, must be concise but meaningful: say
-  the real thing in the fewest sentences that don't lose it. Do NOT write
-  walls of text — each block is 1-4 sentences, tighter where the section
-  guidance above says so (Why This Exists). Use bullet/numbered lists when
-  listing things instead of prose.
+- Every prose block obeys the hard caps in "Brevity is the #1 rule" above:
+  ≤20-word sentences, ≤3-sentence paragraphs, ≤50 words per block, lists over
+  prose. This is not aspirational — a block that breaks a cap is wrong and must
+  be cut before you move on.
 - How It Works and Scenarios are different in *kind*, not just length: How
   It Works stays at the architecture level (system participants, boundaries,
   what crosses them) with no files/functions/personas; Scenarios is where

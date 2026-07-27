@@ -141,6 +141,23 @@
     margin: 12px 0;
   }
 
+  .diagram {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin: 12px 0;
+    overflow-x: auto;
+  }
+  .diagram .mermaid { display: flex; justify-content: center; min-height: 40px; }
+  .diagram .mermaid svg { max-width: 100%; height: auto; }
+  .diagram-caption {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 10px;
+  }
+
   .screens-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -332,6 +349,34 @@
   <h2>Related &amp; Adjacent Systems</h2>
   <!-- SLOT:related_systems -->
 </section>
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    flowchart: { curve: 'basis', useMaxWidth: true },
+    sequence: { useMaxWidth: true },
+    themeVariables: {
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      fontSize: '14px',
+      background: '#ffffff',
+      primaryColor: '#eef2ff',
+      primaryBorderColor: '#6366f1',
+      primaryTextColor: '#1c1917',
+      secondaryColor: '#f0fdf4',
+      secondaryBorderColor: '#16a34a',
+      tertiaryColor: '#fffbeb',
+      tertiaryBorderColor: '#d97706',
+      lineColor: '#78716c',
+      textColor: '#1c1917',
+      noteBkgColor: '#fffbeb',
+      noteBorderColor: '#d97706',
+      actorBkg: '#eef2ff',
+      actorBorder: '#6366f1',
+    },
+  });
+</script>
 
 <script>
 document.querySelectorAll('.file-path').forEach(el => {
