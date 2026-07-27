@@ -9,15 +9,15 @@ FG_COLOR="#FFFFFF"
 
 # Map workspace names to colors
 case "$WORKSPACE" in
-    "1(JunkDrawer)")
+    "1-JunkDrawer")
         BG_COLOR="#3E2723"  # Dark oak
         FG_COLOR="#FAE5D3"  # Light sandalwood
         ;;
-    "2(Comms)")
+    "2-Comms")
         BG_COLOR="#007AFF"  # Blue
         FG_COLOR="#FFFFFF"  # White
         ;;
-    "3(TODOs)")
+    "3-TODOs")
         BG_COLOR="#23ab37"  # Green
         FG_COLOR="#FFFFFF"  # White
         ;;

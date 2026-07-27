@@ -137,9 +137,9 @@ alt-i = 'focus up'
 alt-l = 'focus right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#workspace
-ctrl-alt-1 = 'workspace 1(JunkDrawer)'
-ctrl-alt-2 = 'workspace 2(Comms)'
-ctrl-alt-3 = 'workspace 3(TODOs)'
+ctrl-alt-1 = 'workspace 1-JunkDrawer'
+ctrl-alt-2 = 'workspace 2-Comms'
+ctrl-alt-3 = 'workspace 3-TODOs'
 ctrl-alt-a = 'workspace AliceBlue'
 ctrl-alt-b = 'workspace Bisque'
 ctrl-alt-c = 'workspace Cornsilk'
@@ -172,9 +172,9 @@ ctrl-alt-shift-i = 'join-with up'
 ctrl-alt-shift-l = 'join-with right'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#move-node-to-workspace
-ctrl-alt-shift-1 = 'move-node-to-workspace 1(JunkDrawer)'
-ctrl-alt-shift-2 = 'move-node-to-workspace 2(Comms)'
-ctrl-alt-shift-3 = 'move-node-to-workspace 3(TODOs)'
+ctrl-alt-shift-1 = 'move-node-to-workspace 1-JunkDrawer'
+ctrl-alt-shift-2 = 'move-node-to-workspace 2-Comms'
+ctrl-alt-shift-3 = 'move-node-to-workspace 3-TODOs'
 ctrl-alt-shift-a = 'move-node-to-workspace AliceBlue'
 ctrl-alt-shift-b = 'move-node-to-workspace Bisque'
 ctrl-alt-shift-c = 'move-node-to-workspace Cornsilk'
@@ -296,13 +296,13 @@ w = [
     "mode main",
 ]
 
-# docs windows
-d = [
-    "layout horizontal",
-    "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://docs.camunda.io'",
-    "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://github.com/camunda/camunda-docs'",
-    "mode main",
-]
+# docs windows - keeping these around in case it's useful
+# d = [
+#     "layout horizontal",
+#     "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://docs.camunda.io'",
+#     "exec-and-forget open -na 'Microsoft Edge' --args --new-window 'https://github.com/camunda/camunda-docs'",
+#     "mode main",
+# ]
 
 
 # CONFIG MODE
@@ -351,12 +351,12 @@ run = 'layout floating'
 
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
-run = 'move-node-to-workspace 1(JunkDrawer)'
+run = 'move-node-to-workspace 1-JunkDrawer'
 
 [[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
-run = 'move-node-to-workspace 2(Comms)'
+run = 'move-node-to-workspace 2-Comms'
 
 [[on-window-detected]]
 if.app-id = 'com.apple.iCal'
-run = 'move-node-to-workspace 3(TODOs)'
+run = 'move-node-to-workspace 3-TODOs'
