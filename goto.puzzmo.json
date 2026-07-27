@@ -1,0 +1,307 @@
+[
+{
+    "name": "puzzmo",
+    "url": "https://www.puzzmo.com",
+    "routes": [
+      {
+        "name": "puzzmo.com",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:19006",
+            "routes": []
+          },
+          {
+            "name": "prod",
+            "url": "https://www.puzzmo.com",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "studio",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:8910",
+            "routes": []
+          },
+          {
+            "name": "prod",
+            "url": "https://studio.puzzmo.com",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "api.puzzmo.com",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:8911",
+            "routes": []
+          },
+          {
+            "name": "prod",
+            "url": "https://api.puzzmo.com",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "workshop",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:8912",
+            "routes": []
+          },
+          {
+            "name": "prod",
+            "url": "https://workshop.puzzmo.com",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "user-admin",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:8913",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "dev.puzzmo.com",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:8914",
+            "routes": []
+          },
+          {
+            "name": "prod",
+            "url": "https://dev.puzzmo.com",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "data.puzzmo.com",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:8915",
+            "routes": []
+          },
+          {
+            "name": "prod",
+            "url": "https://data.puzzmo.com",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "sdk-docs",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:8916",
+            "routes": []
+          },
+          {
+            "name": "prod",
+            "url": "https://sdk.puzzmo.com",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "thumbnails.puzzmo.com",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:8917",
+            "routes": []
+          },
+          {
+            "name": "prod",
+            "url": "https://thumbnails.puzzmo.com",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "crossword",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:8918",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "sdk-game-2",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:8919",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "runtime",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:5678",
+            "routes": []
+          },
+          {
+            "name": "prod",
+            "url": "https://www.puzzmo.com/_embed/latest.html",
+            "routes": []
+          },
+          {
+            "name": "staging",
+            "url": "https://www.puzzmo.com/_embed-staging/latest.html",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "platform-script",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:5188",
+            "routes": []
+          },
+          {
+            "name": "prod",
+            "url": "https://cdn.puzzmo.com/platform/puzzmo/v1/embed.js",
+            "routes": []
+          },
+          {
+            "name": "staging",
+            "url": "https://cdn.puzzmo.com/platform/puzzmo/v1/embed-staging.js",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "nakama",
+        "routes": [
+          {
+            "name": "api",
+            "routes": [
+              {
+                "name": "dev",
+                "url": "http://localhost:7350",
+                "routes": []
+              }
+            ]
+          },
+          {
+            "name": "console",
+            "routes": [
+              {
+                "name": "dev",
+                "url": "http://localhost:7351",
+                "routes": []
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "pgadmin",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:5050",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "faktory",
+        "routes": [
+          {
+            "name": "dev",
+            "url": "http://localhost:7420",
+            "routes": []
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "gh (GitHub)",
+    "url": "https://github.com",
+    "routes": [
+      {
+        "name": "pulls / prs / notifications",
+        "url": "https://github.com/notifications",
+        "routes": []
+      },
+      {
+        "name": "puzzmo",
+        "url": "https://github.com/puzzmo",
+        "routes": [
+          {
+            "name": "*",
+            "url": "https://github.com/puzzmo-com/${0}",
+            "routes": []
+          },
+          {
+            "name": "pulls",
+            "url": "https://github.com/puzzmo-com/app/pulls",
+            "routes": []
+          },
+          {
+            "name": "monorepo (app)",
+            "url": "https://github.com/puzzmo-com/app",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "me",
+        "url": "https://github.com/pepopowitz",
+        "routes": [
+          {
+            "name": "*",
+            "url": "https://github.com/pepopowitz/${0}",
+            "routes": []
+          }
+        ]
+      },
+      {
+        "name": "*",
+        "url": "https://github.com/puzzmo/${0}",
+        "routes": []
+      }
+    ]
+  },
+  {
+    "name": "google",
+    "url": "https://google.com",
+    "routes": [
+      {
+        "name": "*",
+        "url": "https://google.com?q=${0}",
+        "routes": []
+      },
+      {
+        "name": "google",
+        "url": "https://google.com",
+        "routes": []
+      }
+    ]
+  }
+]
