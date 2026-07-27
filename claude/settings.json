@@ -8,28 +8,8 @@
       "Edit(./.env.*)"
     ]
   },
-  "model": "sonnet",
+  "model": "opus[1m]",
   "hooks": {
-    "SessionStart": [
-      {
-        "matcher": "startup",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "say -v Fred \"fitter. happier. more productive. comfortable. not drinking too much. regular exercise at the gym, 3 days a week. getting on better with your associate employee contemporaries. at ease.\""
-          }
-        ]
-      },
-      {
-        "matcher": "clear",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "say -v Fred \"fitter. happier. more productive. comfortable. not drinking too much. regular exercise at the gym, 3 days a week. getting on better with your associate employee contemporaries. at ease.\""
-          }
-        ]
-      }
-    ],
     "Notification": [
       {
         "matcher": "permission_prompt",
@@ -56,7 +36,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/scripts/notify.sh \"As you wish...\" \"All set chief...\" \"Baby come back...\" \"What's next???\""
+            "command": "INPUT=$(cat); RUNNING=$(echo \"$INPUT\" | jq '[(.background_tasks // [])[] | select(.status==\"running\")] | length'); if [ \"${RUNNING:-0}\" -eq 0 ]; then echo \"$INPUT\" | ~/.claude/scripts/notify.sh \"As you wish...\" \"All set chief...\" \"Baby come back...\" \"What's next???\"; fi"
           }
         ]
       }
@@ -65,10 +45,60 @@
   "enabledPlugins": {
     "compound-engineering@every-marketplace": true,
     "frontend-design@claude-plugins-official": true,
-    "frontend-design@claude-code-plugins": true
+    "frontend-design@claude-code-plugins": true,
+    "skill-creator@claude-plugins-official": true,
+    "compound-engineering@compound-engineering-plugin": true
+  },
+  "extraKnownMarketplaces": {
+    "compound-engineering-plugin": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/EveryInc/every-marketplace.git"
+      }
+    }
+  },
+  "spinnerVerbs": {
+    "mode": "replace",
+    "verbs": [
+      "Doing stuff",
+      "Doing things",
+      "Working",
+      "Thinking",
+      "Spinning out",
+      "Crashing",
+      "Making stuff",
+      "Making things",
+      "Daydreaming",
+      "Procrastinating",
+      "Avoiding responsibility",
+      "M I X ing the egg into the bowl",
+      "Doing a Cross|word but telling you I'm actually working",
+      "Flipping art",
+      "Playing Circuits",
+      "Playing Ribbit",
+      "Getting lost in a Sudoku",
+      "Moving colored tiles around",
+      "Typeshifting",
+      "Struggling at Bongo",
+      "Clearing cubes",
+      "Trying to remember where the 5s are",
+      "Clearing SpellTower",
+      "Pretending to be deterministic",
+      "Forgetting your instructions",
+      "Burning tokens",
+      "Hemorrhaging tokens",
+      "Dumping buckets of tokens into the ocean",
+      "Burning the Amazon",
+      "Boiling Lake Michigan",
+      "Predicting text",
+      "Smooshing 1s and 0s",
+      "Pretending to follow your instructions"
+    ]
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "high",
+  "prefersReducedMotion": true,
+  "theme": "light",
   "mcpServers": {
     "github-pr-review": {
       "command": "node",
