@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+# Shim only. The CLI itself lives in a private repo; keep this file free of
+# anything specific to what it dispatches to.
+
+PZCLI_HOME="${PZCLI_HOME:-$HOME/sjh/dev/puzzmo/pzcli}"
+
+if [[ ! -x "$PZCLI_HOME/pzcli" ]]; then
+  echo "pzcli: no executable at $PZCLI_HOME/pzcli" >&2
+  echo "Clone the CLI repo there, or set PZCLI_HOME to where it lives." >&2
+  exit 1
+fi
+
+exec "$PZCLI_HOME/pzcli" "$@"
