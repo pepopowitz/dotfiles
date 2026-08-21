@@ -12,6 +12,7 @@
 - Avoid comments in code unless they explain something that can't be quickly inferred by reading the code.
 - Do not describe logic in comments, only purpose. Bad: "if true, hides the reveal button (toolbar assist menu is unaffected"); Good: "if true, hides the reveal button"
 - **Never** append a `Co-Authored-By: Claude ...` trailer to commit messages. This overrides the harness default.
+- Never refer to a numbered plan item by its identifier alone. Always follow the identifier with a short description in parentheses, e.g. "U2 (results modal on the partner subsite)" or "KTD1 (streak key includes the remix slug)". A bare "U2" or "R4" is meaningless to me.
 
 
 # /ce (compound engineering) workflow preferences
@@ -46,3 +47,12 @@
   - use `git rebase -i` to rewrite commit history rather than manually iterating through commits in the tree
 - compound-engineering plugin directories (assets/, references/, skills/) are always readable. Do not ask for permission to access them.
 - avoid python in favor of unix tools
+
+# Links to code
+
+- When referring to a specific file (and line), emit it as a clickable VS Code link prefixed with a ↗ icon so I know it is clickable:
+  `↗ [README.md:16](vscode://file/absolute/path/README.md:16)`
+- Use the absolute path; a relative path will not resolve. Include `:line` (and `:line:col` when the column matters).
+- Plain `path:line` text and bare `vscode://` URLs are not hyperlinked by my terminal — always use markdown link syntax.
+- Resolve symlinks before building the link (`readlink -f`). Most dotfiles under `~/` are symlinks into `~/.dotfiles`; link to the resolved `~/.dotfiles/...` path so it opens in my dotfiles VS Code window rather than as a loose editor.
+  e.g. `~/.claude/CLAUDE.md` → `vscode://file/Users/Steven.Hicks/.dotfiles/claude/CLAUDE.md:51`
