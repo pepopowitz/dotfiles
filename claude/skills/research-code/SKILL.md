@@ -149,10 +149,33 @@ A `flowchart` is the default: one node per system-level participant (repo,
 service, store, queue, runtime) and a labeled edge for what crosses each
 boundary (a sync, a write, a published artifact, a request). The diagram is
 the primary representation of the architecture — prefer it over describing the
-wiring in prose. Follow it with a short ordered list (`<ol>`) of the 3-6 major
-stages the system moves through end to end — e.g. "Sync → Attach → Publish →
-Run" — each a `<li>` with a bolded stage name and 1-2 plain-English sentences
-that annotate the diagram rather than re-listing every edge in it.
+wiring in prose.
+
+**Open with the one idea the rest follows from**, in 2-3 sentences above the
+diagram. Most systems have a single load-bearing decision ("this service is
+allowed to forget everything", "the schedule is computed, never stored") that
+makes the remaining structure obvious. Lead with it; the diagram then confirms
+it instead of introducing it.
+
+Follow the diagram with a short ordered list (`<ol>`) of the 3-6 major stages,
+each a `<li>` with a bolded lead-in and 1-2 plain-English sentences.
+
+**The list and the diagram must be the same axis, in the same words.** This is
+the single most common failure of this section. A topology diagram under a
+lifecycle list reads as two unrelated artifacts, and the reader cannot tell
+which box a stage refers to. Enforce it mechanically:
+
+- Number the diagram's edges (`|1. get a ticket|`) and name each `<li>` after
+  the edge it describes, verbatim: **`Browser → api: get a ticket.`**
+- Every stage must correspond to something *visible*. If a stage has no edge
+  (a teardown, an end state), it does not belong in the list — put it in a
+  sentence under the list instead.
+- Every important edge should have a stage. If the diagram shows only arrows
+  *into* the central service and none coming back, the system's actual purpose
+  is invisible — add the return arrows.
+- **Never invent abstract verb labels** ("Mint → Verify → Attach → Relay →
+  Drain"). They feel tidy and are unreadable: the reader cannot map any of them
+  onto the picture. Name the hop, not the concept.
 
 This is architecture, not a shortened scenario: the diagram and list name the
 *system-level participants* involved and what crosses the boundary between
@@ -199,11 +222,25 @@ Works; the numbered steps then annotate the diagram with the concrete
 identifiers, routes, and gotchas. A short linear scenario that touches one or
 two participants doesn't need a diagram — use one only when it earns its space.
 
+**Write an outline, not a transcript.** 3-5 steps per scenario, one clause
+each — what a person does, then what the system does back. A step that needs a
+subordinate clause explaining a mechanism is carrying detail that belongs in
+Core Concepts. The test: could the reader repeat this scenario out loud from
+memory after one pass? If it reads like a trace log with identifiers to pick
+words out of, cut it down.
+
 Ground every step in what actually happened when you traced the code —
 including non-obvious branches or gotchas the trace revealed (a silent
 fallback, a step that's skipped for one branch, a check that fails closed).
-Call these out inline with a bolded `<strong>Gotcha worth knowing:</strong>`
-lead-in; they're often the most valuable sentence in the whole report.
+Give these their own `<p><strong>Worth knowing:</strong> …</p>` line *after*
+the `<ol>`, not inline as a numbered step — a gotcha buried mid-list reads as
+procedure rather than warning, and it doubles the length of the step it sits
+in. Two per scenario is usually the ceiling; they're often the most valuable
+lines in the whole report.
+
+Close each scenario with a single muted `In code:` line carrying the 2-4
+file-path widgets for that walkthrough (see "Where links go" below). The steps
+themselves stay free of paths.
 
 When a step describes a person navigating to or acting within a UI screen,
 name that screen by its **URL/route** (from the Screens section below), not
@@ -384,6 +421,31 @@ running prose and cards:
 <span class="file-path" data-path="relative/path.tsx:LINE"><span class="copy-label">path.tsx:LINE</span> <svg class="copy-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></span>
 ```
 
+**Where links go: the edges of a block, never inside a sentence.** A path
+dropped mid-clause forces the reader to parse an identifier mid-thought, and
+it is the single biggest reason a report reads like an implementation guide
+instead of an explanation. The prose carries the idea; the link sits at a
+boundary where the eye can skip it. Concretely:
+
+- **Scenarios** — one muted `In code:` line at the foot of the scenario, not
+  in the steps.
+- **Core Concepts** — the `alias` line under the term. Two links are fine when
+  a concept genuinely spans two sides (`minted in tickets.ts · checked in
+  identity.ts`).
+- **Screens** — the `screen-files` row on the card.
+- **Entry Points** — inline is correct *here only*. This section is a set of
+  instructions for touching code, so the path is the content.
+
+The muted footer pattern:
+```html
+<p style="color:var(--text-muted);font-size:0.8rem;margin-bottom:0;">In code: …widgets…</p>
+```
+
+Aim for roughly 15-20 links across the report. Zero makes it unnavigable;
+salting every clause is what you're avoiding. If a section's prose is
+unreadable without its links, the prose is underwritten — fix the prose rather
+than adding more links.
+
 **Screens vs. file paths.** When prose describes a person navigating to or
 acting within a UI screen — in Scenarios, Entry Points, or anywhere else —
 name that screen by its **URL/route** (plain `<code>` text, e.g.
@@ -465,6 +527,48 @@ are needed — a well-written entry is automatically findable.
 
 ## Rules
 
+### Altitude: write for someone being *told*, not someone *building*
+
+The reader's goal is to be able to explain this system out loud to a
+colleague. They are not implementing it today. Getting this wrong is the most
+expensive failure mode — it is invisible to you while drafting, and it forces
+a full rewrite rather than a trim, because it is in every sentence rather than
+in a section you can cut.
+
+**The test:** read a block aloud. If you'd never say it that way to a coworker
+at a whiteboard, it's pitched too low.
+
+- **Plain language wins over precision on first use.** Introduce the readable
+  name, put the codebase's term in parentheses once, then use whichever is
+  clearer. "A **pass** (the code calls it a ticket)" beats leading with
+  `ticket`.
+- **Terms of art are the tell.** Words like "frame", "reject ladder", "reserved
+  suffix", "anonymous label", "fan-out" mean nothing outside the source. A
+  WebSocket *frame* is just a message. Say the thing.
+- **No jargon before it's introduced — anywhere, not just Why This Exists.** A
+  term defined in Core Concepts must not appear in How It Works or Scenarios
+  before it's been said plainly. Sections above Core Concepts have to stand on
+  their own; the reader has not scrolled that far yet.
+- **Explain the reason, not the mechanism.** "A lobby pass deliberately can't
+  get you into a room — otherwise anyone logged in could guess room IDs and
+  drop into strangers' matches" is the right altitude. The function names that
+  enforce it are not.
+- **Numbers and identifiers are cheap to include and expensive to read.** Keep
+  the ones a person would actually repeat (a close code, a timeout that
+  explains a symptom). Drop metric names, env-var lists, and buffer sizes
+  unless the size *is* the point.
+
+Do a dedicated jargon pass before writing the file: list every term that only
+makes sense to someone who has read the source, and either replace it or
+introduce it plainly on first use.
+
+### Fill only what the system actually has
+
+Do not fill a slot for the sake of filling it. An honest `<p class="empty">`
+beats a padded section, and a 5-card Screens section beats 7 cards where two
+are filler. Same for Scenarios: one branch, one scenario — not one scenario
+per code path you happened to read.
+
 ### Brevity is the #1 rule — walls of text are a failure
 
 This is the rule most often violated. Treat it as a hard constraint, not a
@@ -529,10 +633,18 @@ survives its sentence being true without it.
   branch (see "Identify branches" in Step 2 and the SLOT:scenarios guidance).
 - Name a UI screen by its URL/route in running prose; reserve `file-path`
   links for source code. See "Screens vs. file paths" above.
+- Links live at the edges of blocks, never mid-sentence. See "Where links go"
+  above.
 - Assume the reader is an experienced engineer new to *this* codebase — don't
   explain generic language/framework concepts (React, GraphQL, HTTP), do
   explain this codebase's specific names, conventions, and non-obvious
-  choices.
+  choices. But "experienced engineer" is not licence to write at
+  implementation altitude — see "Altitude" above, which outranks this.
+- **When the reader says a section is confusing, don't take another blind
+  swing at it.** Ask which part is wrong — the diagram, the prose, the
+  altitude, or having both — before rewriting. Three guesses cost more than
+  one question, and "I'll rewrite it shorter" does not fix an altitude
+  problem.
 - Every code/file reference MUST include a copyable file path with a line
   number, looked up on HEAD, not the search-result line.
 - HTML-escape any code content that contains `<`, `>`, or `&`.
