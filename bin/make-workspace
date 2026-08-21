@@ -1,0 +1,179 @@
+#!/usr/bin/env bash
+# Create (or recolor) a VS Code workspace file for a repo, giving its window a
+# random readable chrome color, then open it.
+#
+# The workspace file is written *next to* the repo directory rather than inside
+# it, so the colors never end up in the project's .vscode/settings.json.
+#
+# Re-running on an existing workspace rerolls the color and leaves any other
+# settings in the file alone.
+
+set -euo pipefail
+
+function usage() {
+  cat <<'EOF'
+Create (or recolor) a VS Code workspace file for a repo, giving its window a
+random readable chrome color, then open it. The file is written next to the repo
+rather than inside it, so the colors never land in .vscode/settings.json.
+
+Usage:
+  make-workspace [path] [options]
+
+Arguments:
+  path         A directory inside the repo to make a workspace for. Default: cwd.
+
+Options:
+  --no-open    Write the workspace file but don't launch VS Code.
+  --print      Print the workspace JSON to stdout without writing anything.
+  -h, --help   Show this help.
+
+Environment:
+  WORKSPACE_DIR  Where to write workspace files. Defaults to the repo's parent
+                 directory, or ~/.vscode-workspaces when that parent is itself
+                 inside a git repo.
+EOF
+}
+
+target="${PWD}"
+open_after=true
+print_only=false
+
+for arg in "$@"; do
+  case "$arg" in
+    --no-open) open_after=false ;;
+    --print) print_only=true ;;
+    -h|--help) usage; exit 0 ;;
+    -*) echo "make-workspace: unknown option $arg" >&2; usage >&2; exit 1 ;;
+    *) target="$arg" ;;
+  esac
+done
+
+if [[ ! -d "$target" ]]; then
+  echo "make-workspace: no such directory: $target" >&2
+  exit 1
+fi
+
+repo="$(git -C "$target" rev-parse --show-toplevel 2>/dev/null || (cd "$target" && pwd))"
+name="$(basename "$repo")"
+parent="$(dirname "$repo")"
+
+# Keep the workspace file out of any git work tree so it can't be committed.
+if [[ -n "${WORKSPACE_DIR:-}" ]]; then
+  outdir="$WORKSPACE_DIR"
+elif git -C "$parent" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+  outdir="${HOME}/.vscode-workspaces"
+  echo "make-workspace: $parent is inside a git repo, using $outdir instead" >&2
+else
+  outdir="$parent"
+fi
+mkdir -p "$outdir"
+
+workspace="${outdir}/${name}.code-workspace"
+
+# A relative path only works when the workspace sits beside the repo.
+if [[ "$outdir" == "$parent" ]]; then
+  folder_path="$name"
+else
+  folder_path="$repo"
+fi
+
+colors="$(awk -v hue="$((RANDOM % 360))" '
+function hue2rgb(p, q, t) {
+  if (t < 0) t += 1
+  if (t > 1) t -= 1
+  if (t < 1/6) return p + (q - p) * 6 * t
+  if (t < 1/2) return q
+  if (t < 2/3) return p + (q - p) * (2/3 - t) * 6
+  return p
+}
+# Sets R, G, B (0-255) and returns the hex string.
+function hsl(h, s, l,   q, p) {
+  if (l < 0) l = 0
+  if (l > 1) l = 1
+  h = h / 360
+  q = (l < 0.5) ? l * (1 + s) : l + s - l * s
+  p = 2 * l - q
+  R = int(hue2rgb(p, q, h + 1/3) * 255 + 0.5)
+  G = int(hue2rgb(p, q, h) * 255 + 0.5)
+  B = int(hue2rgb(p, q, h - 1/3) * 255 + 0.5)
+  return sprintf("#%02X%02X%02X", R, G, B)
+}
+function channel(c) {
+  c = c / 255
+  return (c <= 0.03928) ? c / 12.92 : ((c + 0.055) / 1.055) ^ 2.4
+}
+function luminance(r, g, b) {
+  return 0.2126 * channel(r) + 0.7152 * channel(g) + 0.0722 * channel(b)
+}
+# Whichever of the two inks has the better WCAG contrast against the last color
+# built by hsl().
+function ink(   background, on_dark, on_light) {
+  background = luminance(R, G, B)
+  on_dark = (background + 0.05) / (DARK_INK_LUMINANCE + 0.05)
+  on_light = 1.05 / (background + 0.05)
+  return (on_dark >= on_light) ? DARK_INK : "#ffffff"
+}
+BEGIN {
+  saturation = 0.85
+  lightness = 0.62
+  DARK_INK = "#15202b"
+  DARK_INK_LUMINANCE = luminance(21, 32, 43)
+
+  base = hsl(hue, saturation, lightness)
+  fg = ink()
+  light = hsl(hue, saturation, lightness + 0.10)
+  dark = hsl(hue, saturation, lightness - 0.22)
+  badge = hsl((hue + 180) % 360, 0.90, 0.78)
+  badge_fg = ink()
+
+  printf "{\n"
+  printf "  \"statusBar.background\": \"%s\",\n", base
+  printf "  \"statusBarItem.hoverBackground\": \"%s\",\n", base
+  printf "  \"statusBar.foreground\": \"%s\",\n", fg
+  printf "  \"activityBar.activeBackground\": \"%s\",\n", light
+  printf "  \"activityBar.activeBorder\": \"%s\",\n", dark
+  printf "  \"activityBar.background\": \"%sd9\",\n", base
+  printf "  \"activityBar.foreground\": \"%s\",\n", fg
+  printf "  \"activityBar.inactiveForeground\": \"%s99\",\n", fg
+  printf "  \"activityBarBadge.background\": \"%s\",\n", badge
+  printf "  \"activityBarBadge.foreground\": \"%s\",\n", badge_fg
+  printf "  \"sash.hoverBorder\": \"%s\",\n", base
+  printf "  \"statusBarItem.remoteBackground\": \"%s\",\n", base
+  printf "  \"statusBarItem.remoteForeground\": \"%s\",\n", fg
+  printf "  \"titleBar.activeBackground\": \"%s\",\n", base
+  printf "  \"titleBar.activeForeground\": \"%s\",\n", fg
+  printf "  \"titleBar.inactiveBackground\": \"%s44\",\n", base
+  printf "  \"titleBar.inactiveForeground\": \"%s99\",\n", fg
+  printf "  \"commandCenter.border\": \"%s99\"\n", fg
+  printf "}\n"
+}' </dev/null)"
+
+if [[ -f "$workspace" ]]; then
+  contents="$(jq --argjson colors "$colors" \
+    '.settings["workbench.colorCustomizations"] = $colors' "$workspace")"
+  action="recolored"
+else
+  contents="$(jq -n --arg path "$folder_path" --argjson colors "$colors" \
+    '{folders: [{path: $path}], settings: {"workbench.colorCustomizations": $colors}}')"
+  action="created"
+fi
+
+if [[ "$print_only" == true ]]; then
+  printf '%s\n' "$contents"
+  exit 0
+fi
+
+printf '%s\n' "$contents" > "$workspace"
+echo "make-workspace: $action $workspace"
+
+if [[ "$open_after" == true ]]; then
+  vscode_cli="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+  if command -v code >/dev/null 2>&1; then
+    code "$workspace"
+  elif [[ -x "$vscode_cli" ]]; then
+    "$vscode_cli" "$workspace"
+  else
+    # Last resort for contexts with no useful PATH at all, e.g. launchd.
+    open -a "Visual Studio Code" "$workspace"
+  fi
+fi
