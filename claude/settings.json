@@ -8,7 +8,6 @@
       "Edit(./.env.*)"
     ]
   },
-  "model": "opus[1m]",
   "hooks": {
     "Notification": [
       {
@@ -42,6 +41,10 @@
       }
     ]
   },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-command.sh"
+  },
   "enabledPlugins": {
     "compound-engineering@every-marketplace": true,
     "frontend-design@claude-plugins-official": true,
@@ -65,7 +68,7 @@
       "Working",
       "Thinking",
       "Spinning out",
-      "Crashing",
+      "Crashing out",
       "Making stuff",
       "Making things",
       "Daydreaming",
@@ -75,7 +78,7 @@
       "Doing a Cross|word but telling you I'm actually working",
       "Flipping art",
       "Playing Circuits",
-      "Playing Ribbit",
+      "Ribbiting",
       "Getting lost in a Sudoku",
       "Moving colored tiles around",
       "Typeshifting",
@@ -92,11 +95,13 @@
       "Boiling Lake Michigan",
       "Predicting text",
       "Smooshing 1s and 0s",
-      "Pretending to follow your instructions"
+      "Pretending to follow your instructions",
+      "Stealing all your joy",
+      "Doing the good parts of your job for you"
     ]
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "high",
+  "effortLevel": "medium",
   "prefersReducedMotion": true,
   "theme": "light",
   "mcpServers": {
@@ -109,5 +114,6 @@
   },
   "feedbackSurveyState": {
     "lastShownTime": 1754333339275
-  }
+  },
+  "model": "opus[1m]"
 }
