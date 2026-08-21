@@ -19,7 +19,7 @@ theme = Ayu Light
 # hyper's own green reads better
 palette = 2=#41a744
 
-background-opacity = 0.92
+background-opacity = 0.94
 background-blur = 20
 
 cursor-style = block
