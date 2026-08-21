@@ -10,10 +10,10 @@ license: CC-BY-4.0
 
 Help the user understand a pull request by walking through it collaboratively — one file or logical group of files at a time. The goal is comprehension, not just approval. Surface issues, explain context, and answer questions along the way.
 
-**Focus on three key questions:**
+**Focus on these concerns:**
 
-1. Should this exist at all? Does it fit our architecture? Compare to existing patterns and boundaries in the codebase.
-2. What happens when this breaks? Is the feature gated by a feature flag? Can we roll this back cleanly?
+1. What is the usage of this feature? What does it enable for a user, and how do they take advantage of it?
+2. What are the main concepts being utilized or introduced? What does a developer need to understand to build a mental model of these changes?
 3. Does it introduce a new pattern? If so, should we encode it in CLAUDE.md or the steering docs so the AI gets it right next time?
 
 ## Setup
@@ -45,7 +45,6 @@ For each file or group:
 1. Read the diff: `git diff <base>...HEAD -- <file>`
 2. Read the current file if line numbers are needed for context: use the Read tool
 3. Summarize: what changed, why it matters, how it fits the bigger picture
-4. **Always answer the three key questions** about architecture, breakage, and patterns
 5. **Always include line numbers** when referencing specific code (e.g. "line 113", "lines 101–118")
 6. Flag any issues you notice — don't wait to be asked
 7. Pause for questions before moving on
@@ -79,11 +78,7 @@ When the user is done and wants to publish their review comments:
 
 ## Issue flagging
 
-Point out issues as you encounter them — don't save them for the end. **ONLY flag issues in these three categories:**
-
-1. **Architectural fit**: Does this belong in the codebase? Does it fit our patterns and boundaries? Should it exist at all?
-2. **Rollback and breakage**: What happens when this breaks? Is it behind a feature flag? Can we roll back cleanly? Are there cascading failure modes?
-3. **New patterns**: Does this introduce a new pattern or approach? If so, should we document it in CLAUDE.md or steering docs so the AI gets it right next time?
+Point out issues as you encounter them — don't save them for the end. 
 
 When the user agrees an issue is worth a PR comment, offer to add it inline.
 
