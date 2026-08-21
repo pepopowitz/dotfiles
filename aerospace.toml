@@ -284,15 +284,15 @@ esc = ['mode main']
 
 backspace = ['close-all-windows-but-current', 'mode main']
 
-# open windows for camunda
 # edge with personal profile (sjh)
+# uuuughhhhh swapped these profiles on puzzmolappy.
 s = [
-    "exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Default'",
+    "exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Profile 1'",
     "mode main",
 ]
 # edge with work profile
 w = [
-    "exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Profile 1'",
+    "exec-and-forget open -na 'Microsoft Edge' --args --new-window --profile-directory='Default'",
     "mode main",
 ]
 
@@ -360,3 +360,10 @@ run = 'move-node-to-workspace 2-Comms'
 [[on-window-detected]]
 if.app-id = 'com.apple.iCal'
 run = 'move-node-to-workspace 3-TODOs'
+
+# ghostty treats tabs as entire windows or something like that
+[[on-window-detected]]
+if.app-id="com.mitchellh.ghostty"
+run= [
+  "layout floating",
+]
