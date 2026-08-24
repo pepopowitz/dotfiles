@@ -354,6 +354,10 @@ if.app-id = 'com.spotify.client'
 run = 'move-node-to-workspace 1-JunkDrawer'
 
 [[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = 'move-node-to-workspace 1-JunkDrawer'
+
+[[on-window-detected]]
 if.app-id = 'com.tinyspeck.slackmacgap'
 run = 'move-node-to-workspace 2-Comms'
 
@@ -366,4 +370,5 @@ run = 'move-node-to-workspace 3-TODOs'
 if.app-id="com.mitchellh.ghostty"
 run= [
   "layout floating",
+  "move-node-to-workspace 3-TODOs"
 ]
