@@ -1,4 +1,4 @@
-function puzzmo() {
+function pz() {
   cd ~/sjh/dev/puzzmo/$1
 }
 
