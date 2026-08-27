@@ -316,7 +316,7 @@ esc = ['reload-config', 'mode main']
 s = ['exec-and-forget ~/.aerospace/aerospace.save.sh', 'mode main']
 
 ## restore session
-r = ['exec-and-forget ~/.aerospace/aerospace.restore.sh', 'mode main']
+r = ['exec-and-forget /bin/bash -c "~/.aerospace/aerospace.restore.better.sh >/tmp/aerospace-restore.log 2>&1"', 'mode main']
 
 
 ## assign apps to floating. (could also assign to workspaces)
