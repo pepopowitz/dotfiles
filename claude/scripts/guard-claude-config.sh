@@ -3,8 +3,7 @@
 # scripts on its own initiative — every write asks Steve first, mid-session.
 # An unrequested attempt shows up as a prompt he wasn't expecting; a change he
 # asked for is one approval away. Reads are always allowed.
-# CLAUDE_CONFIG_UNLOCK=1 (the `claude-config` alias) skips the prompting for a
-# session that is entirely about editing config.
+# There is deliberately no way to pre-disarm this.
 set -uo pipefail
 
 input=$(cat)
@@ -23,18 +22,6 @@ elif printf '%s' "$cmd" | grep -qE "$protected" && printf '%s' "$cmd" | grep -qE
 fi
 
 [ "$hit" = true ] || exit 0
-
-if [ "${CLAUDE_CONFIG_UNLOCK:-}" = "1" ]; then
-  jq -nc '{
-    hookSpecificOutput: {
-      hookEventName: "PreToolUse",
-      permissionDecision: "allow",
-      permissionDecisionReason: "CLAUDE_CONFIG_UNLOCK=1 — config edits pre-approved for this session."
-    },
-    systemMessage: "⚠︎ config unlocked — Claude is editing its own permission settings"
-  }'
-  exit 0
-fi
 
 jq -nc '{
   hookSpecificOutput: {
