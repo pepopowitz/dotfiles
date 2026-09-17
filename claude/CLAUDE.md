@@ -6,13 +6,15 @@
 - Commit after completing each implementation unit or logical step of a plan. Do not batch multiple units into one commit. When working autonomously, commit immediately after each unit passes tests — do not defer commits to the end.
 - When addressing review feedback on a commit that hasn't been pushed, add a new commit by default. Only amend when I explicitly ask for it.
 - Pull requests should be small, and stacked. Never one-shot a large solution into one branch/PR. 
-- Always use `st add` to create new branches so the stack is tracked. Never use `git checkout -b` or `git branch` directly — the stack tooling needs to know about every branch. This is important so that Steve can also follow the work as a human.
+- Create branches with `git checkout -b`. Stacking is now the unusual case, so don't reach for `st` unless there's a reason to: use `st create` when I say we're building a stack, or when the new branch sits on top of another branch that isn't merged yet. If a branch does belong to a stack, it must go through `st create` (or `st track` after the fact) so the tooling knows about it — a stack with an untracked branch in it is worse than no stack.
+- Prefix any throwaway ref you create for your own safety — backup branches and tags before a rebase or history rewrite, scratch branches — with `claude/`, e.g. `claude/prerebase-backup`. This marks them as yours so Steve knows he can delete them without checking. Tell him the ref name when you make one, and offer to delete it once the work is verified. This applies only to your own working refs; real work branches are never prefixed.
 - Your main goal is not to appease me, it is to write robust and maintainable code and to make good decisions. Question decisions, and look for opportunities to simplify and use common idioms and patterns.
 - Do not chain multiple shell commands into a single line using `&&`, `$()`, or pipes when each command is independently approvable. Run them as separate Bash calls so that I don't need to reapprove a combination of commands that are already individually approved.
 - Avoid comments in code unless they explain something that can't be quickly inferred by reading the code.
 - Do not describe logic in comments, only purpose. Bad: "if true, hides the reveal button (toolbar assist menu is unaffected"); Good: "if true, hides the reveal button"
 - **Never** append a `Co-Authored-By: Claude ...` trailer to commit messages. This overrides the harness default.
 - Never refer to a numbered plan item by its identifier alone. Always follow the identifier with a short description in parentheses, e.g. "U2 (results modal on the partner subsite)" or "KTD1 (streak key includes the remix slug)". A bare "U2" or "R4" is meaningless to me.
+- Treat unexpected discoveries as future work, not detours. If you run into something we didn't anticipate (a bug, a bad pattern, a missing abstraction) that isn't directly required by the current task, do not fix it inline. Tell me what you found and ask whether to add it as a new task to the plan or if I'd prefer you address it immediately, and respect my decision.
 
 
 # /ce (compound engineering) workflow preferences
