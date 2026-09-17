@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
-# PreToolUse guard: Claude's own permission config is read-only, so a session
-# can't loosen its own leash. Unlock for one session with:
-#   CLAUDE_CONFIG_UNLOCK=1 claude   (or the `claude-config` alias)
-# Reads are always allowed — only writes are gated.
+# PreToolUse guard: Claude never edits its own permission config or hook
+# scripts on its own initiative — every write asks Steve first, mid-session.
+# An unrequested attempt shows up as a prompt he wasn't expecting; a change he
+# asked for is one approval away. Reads are always allowed.
+# CLAUDE_CONFIG_UNLOCK=1 (the `claude-config` alias) skips the prompting for a
+# session that is entirely about editing config.
 set -uo pipefail
 
 input=$(cat)
@@ -23,15 +25,22 @@ fi
 [ "$hit" = true ] || exit 0
 
 if [ "${CLAUDE_CONFIG_UNLOCK:-}" = "1" ]; then
-  jq -nc '{systemMessage: "⚠︎ config unlocked — Claude may edit its own permission settings this session"}'
+  jq -nc '{
+    hookSpecificOutput: {
+      hookEventName: "PreToolUse",
+      permissionDecision: "allow",
+      permissionDecisionReason: "CLAUDE_CONFIG_UNLOCK=1 — config edits pre-approved for this session."
+    },
+    systemMessage: "⚠︎ config unlocked — Claude is editing its own permission settings"
+  }'
   exit 0
 fi
 
 jq -nc '{
   hookSpecificOutput: {
     hookEventName: "PreToolUse",
-    permissionDecision: "deny",
-    permissionDecisionReason: "Claude Code'"'"'s own permission config (settings.json, hook scripts) is read-only in this session, so a session cannot loosen its own guardrails. Reading it is fine. To edit it, Steve restarts with `CLAUDE_CONFIG_UNLOCK=1 claude` — tell him that rather than looking for another way in."
+    permissionDecision: "ask",
+    permissionDecisionReason: "This writes to Claude Code'"'"'s own permission config or hook scripts. Approve only if you asked for this change — Claude is not supposed to adjust its own guardrails on its own initiative."
   }
 }'
 exit 0
