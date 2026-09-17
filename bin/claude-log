@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+# Read the action log written by ~/.claude/scripts/log-action.sh.
+# With no arguments, shows the current (most recently active) session.
+set -uo pipefail
+
+dir="$HOME/.claude/action-log"
+count=0
+follow=false
+session=""
+mode=all
+width=$(( ${COLUMNS:-$(tput cols 2>/dev/null || echo 120)} - 14 ))
+
+usage() {
+  cat <<'USAGE'
+claude-log [options]
+
+  (no args)      every action in the current session
+  -n N           only the last N actions
+  -f             follow live
+  -s ID          a specific session (prefix is enough)
+  -l             list sessions, newest first
+  -d             grouped digest instead of a timeline
+  -w             file writes only
+  -v             don't truncate long commands
+USAGE
+  exit 0
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n) count=${2:-20}; shift 2 ;;
+    -f) follow=true; shift ;;
+    -s) session=${2:-}; shift 2 ;;
+    -l) mode=list; shift ;;
+    -d) mode=digest; shift ;;
+    -w) mode=writes; shift ;;
+    -v) width=0; shift ;;
+    -h|--help) usage ;;
+    *) echo "unknown option: $1" >&2; exit 1 ;;
+  esac
+done
+
+if [ ! -d "$dir" ] || [ -z "$(ls -A "$dir" 2>/dev/null)" ]; then
+  echo "No action log yet — $dir is empty."
+  echo "The logging hooks register at session start, so a session running from"
+  echo "before they were added won't have written anything."
+  exit 0
+fi
+
+logs=$(ls -t "$dir"/*.jsonl 2>/dev/null)
+[ -n "$logs" ] || { echo "No sessions logged yet."; exit 0; }
+
+if [ "$mode" = list ]; then
+  printf '%s\n' "$logs" | while read -r f; do
+    id=$(basename "$f" .jsonl)
+    n=$(wc -l < "$f" | tr -d ' ')
+    when=$(date -r "$f" '+%b %d %H:%M')
+    where=$(tail -n 1 "$f" | jq -r '.cwd // ""' | sed "s|^$HOME|~|")
+    printf '%-38s %5s actions  %s  %s\n' "$id" "$n" "$when" "$where"
+  done
+  exit 0
+fi
+
+if [ -n "$session" ]; then
+  log=$(printf '%s\n' "$logs" | grep -- "$session" | head -n 1)
+  [ -n "$log" ] || { echo "No session matching '$session'. Try: claude-log -l" >&2; exit 1; }
+else
+  log=$(printf '%s\n' "$logs" | head -n 1)
+fi
+
+id=$(basename "$log" .jsonl)
+where=$(tail -n 1 "$log" | jq -r '.cwd // ""' | sed "s|^$HOME|~|")
+total=$(wc -l < "$log" | tr -d ' ')
+printf '\033[2msession %s · %s actions · %s\033[0m\n' "${id:0:8}" "$total" "$where"
+
+timeline='
+  def trunc($w): if $w > 0 and (length > $w) then .[0:$w] + "…" else . end;
+  (.cmd // "" | gsub("[\n\r]+"; " ⏎ ")) as $c
+  | (.file // "" | sub("^" + $home; "~")) as $f
+  | (.ts | split("T")[1]) as $t
+  | if $c != "" then "[2m\($t)[0m  [36m$[0m \($c | trunc($w))"
+    else "[2m\($t)[0m  [33m✎[0m \($f)" end
+'
+
+render() { jq -r --arg home "$HOME" --argjson w "$width" "$timeline"; }
+
+case "$mode" in
+  writes)
+    jq -c 'select(.file != null)' "$log" | render
+    ;;
+  digest)
+    jq -rs '
+      def verb:
+        ((.cmd // "") | sub("^[[:space:]]+"; "") | split(" ") | map(select(length > 0))) as $w
+        | if ($w | length) == 0 then "?"
+          elif ($w[0] | test("^(git|gh|yarn|npm|npx|pnpm|st|brew|docker|make)$")) then ($w[0] + " " + ($w[1] // ""))
+          else $w[0] end;
+      (map(select(.cmd != null))) as $cmds
+      | (map(select(.file != null) | .file | sub("^.*/"; "")) | unique) as $files
+      | ($cmds | map(verb) | group_by(.) | map({k: .[0], n: length}) | sort_by(-.n, .k)) as $verbs
+      | ([ "▸ \($cmds | length) cmds · \($files | length) files" ]
+         + (if ($files | length) > 0 then ["  files  " + ($files | join(", "))] else [] end)
+         + (if ($verbs | length) > 0 then ["  cmds   " + ($verbs | map("\(.k)×\(.n)") | join("  "))] else [] end))
+      | join("\n")' "$log"
+    ;;
+  *)
+    if [ "$follow" = true ]; then
+      tail -n "${count:-10}" -f "$log" | render
+    elif [ "$count" -gt 0 ]; then
+      tail -n "$count" "$log" | render
+    else
+      render < "$log"
+    fi
+    ;;
+esac
