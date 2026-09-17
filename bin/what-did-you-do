@@ -12,7 +12,7 @@ width=$(( ${COLUMNS:-$(tput cols 2>/dev/null || echo 120)} - 14 ))
 
 usage() {
   cat <<'USAGE'
-claude-log [options]
+what-did-you-do [options]
 
   (no args)      every action in the current session
   -n N           only the last N actions
@@ -63,7 +63,7 @@ fi
 
 if [ -n "$session" ]; then
   log=$(printf '%s\n' "$logs" | grep -- "$session" | head -n 1)
-  [ -n "$log" ] || { echo "No session matching '$session'. Try: claude-log -l" >&2; exit 1; }
+  [ -n "$log" ] || { echo "No session matching '$session'. Try: what-did-you-do -l" >&2; exit 1; }
 else
   log=$(printf '%s\n' "$logs" | head -n 1)
 fi
