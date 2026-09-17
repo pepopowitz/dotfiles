@@ -133,6 +133,7 @@ For each crux, in priority order, build a prototype or walking skeleton that sol
 - Do not write production-ready code at this stage. No polish, minimal error handling, tests only if they help you learn faster. The goal is to kill the riskiest unknowns as early and cheaply as possible.
 - Work each crux in isolation unless cruxes unavoidably interact.
 - If alternatives surface while prototyping, note them — they're cheap now and expensive later.
+- Same for unexpected discoveries unrelated to the crux: surface them to the user and ask whether to add them to the plan rather than fixing them here.
 
 Commit the prototype with `gkm "<message>"`.
 
@@ -146,5 +147,6 @@ Work through the remaining slices from the plan doc, one at a time:
 - Complete one slice fully — including how the user will verify it — before starting the next.
 - Commit each slice with `gkm "<message>"` as soon as it's done; never batch slices into one commit.
 - Check off the slice in the plan doc.
+- If something unexpected surfaces mid-slice — a bug, a bad pattern, a missing abstraction — and it isn't required to finish the current slice, don't fix it inline. Tell the user what you found and ask whether to add it to the plan's Slices list, then carry on with the slice at hand.
 
 **STOP** after each slice: present the commit and the verification path (what to click or call), and wait for review before the next slice.
