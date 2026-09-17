@@ -145,12 +145,41 @@
   "hooks": {
     "PreToolUse": [
       {
+        "matcher": "Edit|Write|NotebookEdit|Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/guard-claude-config.sh",
+            "timeout": 10
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
             "command": "~/.claude/scripts/deny-secret-commands.sh",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/log-action.sh",
+            "timeout": 10,
+            "async": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/log-action.sh",
+            "timeout": 10,
+            "async": true
           }
         ]
       }
@@ -182,6 +211,11 @@
           {
             "type": "command",
             "command": "INPUT=$(cat); RUNNING=$(echo \"$INPUT\" | jq '[(.background_tasks // [])[] | select(.status==\"running\")] | length'); if [ \"${RUNNING:-0}\" -eq 0 ]; then echo \"$INPUT\" | ~/.claude/scripts/notify.sh \"As you wish...\" \"All set chief...\" \"Baby come back...\" \"What's next???\"; fi"
+          },
+          {
+            "type": "command",
+            "command": "~/.claude/scripts/session-digest.sh",
+            "timeout": 15
           }
         ]
       }
