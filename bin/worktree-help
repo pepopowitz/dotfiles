@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+# Git worktree quick reference: viewing code in other worktrees, and lifecycle.
+cat <<'EOF'
+# View code in another worktree
+code .claude/worktrees/<name>        # open as its own VS Code window
+cd .claude/worktrees/<name>
+git show <branch>:path/to/file       # peek at a file without switching
+git diff main..<branch>
+git worktree list
+
+# Lifecycle
+/ce-worktree                         # in Claude: create + enter one
+claude --worktree <name>             # start Claude in a new worktree
+git worktree remove .claude/worktrees/<name>   # when the branch merges
+git worktree prune                   # after deleting a folder by hand
+
+# Gotchas
+# - one branch per worktree; `st restack` fails on branches checked out elsewhere
+# - each worktree needs its own `yarn install` and `yarn relay`
+EOF
