@@ -187,6 +187,41 @@ function dnst() {
   git checkout "$child_branch"
 }
 
+# Attach a PR to the current st-tracked branch, so `st submit` updates it instead of opening a new one.
+# Stand-in for an `st link` subcommand: same effect as `RemoteMetadata::new(pr_number)` in st.
+# Usage: st-link [pr-number]   (defaults to the PR gh finds for the current branch)
+function st-link() {
+  local branch=$(git branch --show-current)
+  local store="$(git rev-parse --show-toplevel)/.git/.st_store.toml"
+  local pr_number="${1:-$(gh pr view --json number -q .number)}"
+
+  if [[ ! "$pr_number" =~ ^[0-9]+$ ]]; then
+    echo "No PR number for $branch." >&2
+    return 1
+  fi
+
+  local branch_header="[branches.\"$branch\"]"
+  local remote_header="[branches.\"$branch\".remote]"
+  if ! grep -qxF -e "$branch_header" -e "[branches.$branch]" "$store"; then
+    echo "$branch is not tracked by st." >&2
+    return 1
+  fi
+
+  # Replace the whole remote table, dropping any stale comment-id, like st does on a new PR.
+  local tmp=$(mktemp)
+  awk -v quoted="$remote_header" -v bare="[branches.$branch.remote]" '
+    $0 == quoted || $0 == bare { skipping = 1; next }
+    skipping && /^\[/ { skipping = 0 }
+    skipping { next }
+    /^$/ { blanks++; next }
+    { while (blanks) { print ""; blanks-- } print }
+  ' "$store" > "$tmp"
+  printf '\n%s\npr-number = %s\n' "$remote_header" "$pr_number" >> "$tmp"
+  mv "$tmp" "$store"
+
+  echo "Linked $branch to PR #$pr_number."
+}
+
 # leanscaper: toggle env settings between local and staging databases
 # Usage: set-env <local|staging> [env-file-path]
 function set-env() {
