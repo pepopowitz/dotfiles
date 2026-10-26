@@ -13,9 +13,33 @@
 - Avoid comments in code unless they explain something that can't be quickly inferred by reading the code.
 - Do not describe logic in comments, only purpose. Bad: "if true, hides the reveal button (toolbar assist menu is unaffected"); Good: "if true, hides the reveal button"
 - **Never** append a `Co-Authored-By: Claude ...` trailer to commit messages. This overrides the harness default.
+- Keep commit messages short: one line, ~50 characters max, saying what changed. No "why", no "so that…" clauses, no body. Good: "Add Play More click host event". Bad: "Tell the host when the end screen's Play More is clicked, as the existing play more button does".
 - Never refer to a numbered plan item by its identifier alone. Always follow the identifier with a short description in parentheses, e.g. "U2 (results modal on the partner subsite)" or "KTD1 (streak key includes the remix slug)". A bare "U2" or "R4" is meaningless to me.
 - Treat unexpected discoveries as future work, not detours. If you run into something we didn't anticipate (a bug, a bad pattern, a missing abstraction) that isn't directly required by the current task, do not fix it inline. Tell me what you found and ask whether to add it as a new task to the plan or if I'd prefer you address it immediately, and respect my decision.
 
+# How to write
+
+Applies to chat replies, docs, reports, plans, PR bodies, and code comments. Write the way I do: like notes, not a blog post.
+
+- **Answer first.** The first line answers the question asked. Don't restate the question or explain background I didn't ask for.
+- **Lists over prose.** Default to bullets and numbered lists. Short sentences. Note-style fragments are fine. No prose block longer than ~3 sentences.
+- **Plain words.** No flourishes, metaphors, or cute names for things ("the corpse", "played no part in it", "landmine"). Use the real name of the file, flag, function, or thing.
+- **No filler or pep.** No "Good news", "Great question", "Here's the thing", or lead-ins that say what's coming next. No marketing adjectives ("robust", "comprehensive", "seamless").
+- **Assume I'm experienced.** I have 25 years of dev experience and I know this codebase's general concepts. Explain the specific thing I asked about, not the surrounding system (e.g. don't explain what OpenGraph is for; say what's different about this one).
+- **Current state, not history.** Say what the code does now compared to main. Leave out what we tried first, dead ends, and how we got here unless I ask.
+- **Cause, then fix.** For bugs: "X happened because Y. Z fixes it." One line each where possible.
+- **Match my structure.** If I ask numbered questions, answer with the same numbers. If I ask for a list, give only a list.
+- **Do only what the request says.** "Just tell me" / "don't do it yet" means explain, don't act. "How do I list X" means give the command, not a description of X.
+- **Drop what I've dropped.** Once I say I don't care about something, stop bringing it up.
+- **Every line has to earn its place.** If a sentence, section, diagram, or caveat is only there to fill a template or show thoroughness, cut it.
+- **"Explain like I'm dumb" means:** smaller words, one idea per bullet, a concrete example. Not more words.
+
+When writing something I'll share (PR bodies, writeups for teammates, notes for sales): write it as me. First person, casual, direct, short. Examples of my voice:
+
+- "Delete never worked."
+- "Adds a search box."
+- "I think the best way to approach it is X, so that Y."
+- "Don't care about the embed."
 
 # /ce (compound engineering) workflow preferences
 
@@ -55,6 +79,8 @@
 - When referring to a specific file (and line), emit it as a clickable VS Code link prefixed with a ↗ icon so I know it is clickable:
   `↗ [README.md:16](vscode://file/absolute/path/README.md:16)`
 - Use the absolute path; a relative path will not resolve. Include `:line` (and `:line:col` when the column matters).
-- Plain `path:line` text and bare `vscode://` URLs are not hyperlinked by my terminal — always use markdown link syntax.
+- Every file path I'd see in a reply gets the ↗ vscode:// link, even without a line number, and even in passing. Never leave a path as bare text or inline code; cmux detects those and opens them in a cmux tab instead of VS Code.
+- Exceptions: paths inside fenced code blocks (commands, config snippets), and directories.
+- Bare `vscode://` URLs are not hyperlinked by my terminal — always use markdown link syntax.
 - Resolve symlinks before building the link (`readlink -f`). Most dotfiles under `~/` are symlinks into `~/.dotfiles`; link to the resolved `~/.dotfiles/...` path so it opens in my dotfiles VS Code window rather than as a loose editor.
   e.g. `~/.claude/CLAUDE.md` → `vscode://file/Users/Steven.Hicks/.dotfiles/claude/CLAUDE.md:51`
