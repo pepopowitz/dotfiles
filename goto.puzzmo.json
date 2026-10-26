@@ -49,21 +49,6 @@
         ]
       },
       {
-        "name": "workshop",
-        "routes": [
-          {
-            "name": "dev",
-            "url": "http://localhost:8912",
-            "routes": []
-          },
-          {
-            "name": "prod",
-            "url": "https://workshop.puzzmo.com",
-            "routes": []
-          }
-        ]
-      },
-      {
         "name": "user-admin",
         "routes": [
           {
@@ -74,7 +59,7 @@
         ]
       },
       {
-        "name": "dev.puzzmo.com",
+        "name": "workshop (nee dev)",
         "routes": [
           {
             "name": "dev",
@@ -83,7 +68,7 @@
           },
           {
             "name": "prod",
-            "url": "https://dev.puzzmo.com",
+            "url": "https://workshop.puzzmo.com",
             "routes": []
           }
         ]
@@ -194,31 +179,6 @@
         ]
       },
       {
-        "name": "nakama",
-        "routes": [
-          {
-            "name": "api",
-            "routes": [
-              {
-                "name": "dev",
-                "url": "http://localhost:7350",
-                "routes": []
-              }
-            ]
-          },
-          {
-            "name": "console",
-            "routes": [
-              {
-                "name": "dev",
-                "url": "http://localhost:7351",
-                "routes": []
-              }
-            ]
-          }
-        ]
-      },
-      {
         "name": "pgadmin",
         "routes": [
           {
@@ -244,6 +204,11 @@
     "name": "gh (GitHub)",
     "url": "https://github.com",
     "routes": [
+      {
+        "name": "board",
+        "url": "https://github.com/orgs/puzzmo-com/projects/10/views/1",
+        "routes": []
+      },
       {
         "name": "pulls / prs / notifications",
         "url": "https://github.com/notifications",
